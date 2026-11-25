@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Giải mã bản thân</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f3d3e">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Giải mã bản thân">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: ấm, rõ ràng, như một cuốn sổ tự khám phá bản thân, không thần bí hóa
+   IDEA: tấm thẻ hồ sơ tính cách: bốn ô màu DISC và lưới 3x3 của biểu đồ ngày sinh
+   PICTURE: công cụ chính là hình: câu hỏi lớn, con số chủ đạo cỡ lớn, lưới số, chuỗi cặp số
+   COLOUR and TYPE: nền trắng, dải đầu xanh rêu đậm #0f3d3e; bốn màu DISC làm điểm nhấn; Be Vietnam Pro
+   LAYOUT: thanh tab ngang cuộn được, mỗi tab một cột form rồi kết quả; xếp dọc dưới 600px */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0d1717);--ink:light-dark(#142020,#e8efee);--mut:light-dark(#5a6b6b,#9fb2b0);--line:light-dark(#dfe7e6,#243433);--card:light-dark(#f4f8f7,#132222);--head:#0f3d3e;--acc:#f3b61f;
+--D:#d9482b;--I:#e0a100;--S:#2f9e66;--C:#2a78c8}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(24px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1040px;margin:0 auto}
+header{background:var(--head);color:#eaf4f2;padding:28px max(5vw,16px) 0}
+header h1{font-size:clamp(28px,4.4vw,44px);line-height:1.08;margin:0 0 6px;text-wrap:balance;font-weight:800}
+header p{margin:0 0 18px;color:#bcd6d2;max-width:62ch}
+nav{display:flex;gap:4px;overflow-x:auto}
+nav button{flex:none;font:inherit;font-weight:600;border:0;background:transparent;color:#bcd6d2;padding:12px 16px;min-height:44px;border-radius:10px 10px 0 0;cursor:pointer}
+nav button[aria-selected=true]{background:var(--bg);color:var(--ink)}
+nav button:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+section[hidden]{display:none}
+h2{font-size:28px;line-height:1.15;margin:0 0 8px;text-wrap:balance}
+h3{font-size:20px;margin:28px 0 8px}
+.lead{color:var(--mut);margin:0 0 20px;max-width:68ch}
+.note{font-size:14px;color:var(--mut);background:var(--card);border-radius:12px;padding:12px 16px;margin:16px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.card{background:var(--card);border-radius:16px;padding:18px 20px}
+.card h4{margin:0 0 6px;font-size:17px}
+.card p,.card ul{margin:6px 0}
+.card ul{padding-left:20px}
+label{display:block;font-weight:600;margin:14px 0 6px}
+input{font:inherit;font-size:16px;width:100%;max-width:420px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:48px}
+.btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px 20px;min-height:48px;cursor:pointer;background:var(--head);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+.err{color:var(--D);font-weight:600;margin-top:10px}
+/* DISC */
+.prog{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0 20px}
+.prog i{display:block;height:100%;background:var(--head);transition:width .3s}
+.q{font-size:clamp(20px,3vw,26px);font-weight:700;margin:0 0 16px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+.opt{font:inherit;font-size:18px;font-weight:600;text-align:left;padding:18px 20px;min-height:64px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opt:hover{border-color:var(--head)}
+.opt.sel{border-color:var(--head);background:var(--card)}
+.bars{display:grid;gap:12px;margin:16px 0}
+.bar{display:grid;grid-template-columns:7.5em minmax(0,1fr) 3.2em;gap:10px;align-items:center;font-weight:600}
+.bar b{display:block;height:28px;border-radius:8px;background:var(--line);overflow:hidden}
+.bar b i{display:block;height:100%}
+.bar span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+.big{font-size:clamp(72px,12vw,128px);font-weight:800;line-height:1;letter-spacing:-.02em}
+.tile{display:inline-flex;align-items:center;justify-content:center;width:1.4em;height:1.4em;border-radius:.25em;color:#fff}
+/* Lưới ngày sinh */
+.lg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-width:320px;aspect-ratio:1}
+.lg div{background:var(--card);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;font-weight:700;position:relative}
+.lg div small{position:absolute;top:6px;left:9px;font-size:13px;color:var(--mut);font-weight:500}
+.lg div.empty{color:var(--mut);font-weight:400;font-size:16px}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px;margin:16px 0}
+.num{background:var(--card);border-radius:16px;padding:16px 18px}
+.num .v{font-size:40px;font-weight:800;line-height:1.1}
+.num .k{font-size:14px;color:var(--mut);font-weight:600}
+.pairs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.pair{border-radius:10px;padding:8px 12px;font-weight:700;font-size:15px;line-height:1.25;text-align:center;border:2px solid transparent}
+.pair small{display:block;font-weight:500;font-size:13px}
+.good{background:light-dark(#e3f4ea,#173326);color:light-dark(#1d6b44,#9be0ba)}
+.bad{background:light-dark(#fbe6e1,#3a1d17);color:light-dark(#a33a22,#f2a796)}
+.neu{background:light-dark(#eef1f1,#1f2b2b);color:var(--ink)}
+.pair.last{border-color:currentColor}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.scroll{overflow-x:auto}
+.src li{margin:6px 0}
+a{color:var(--C)}
+footer{color:var(--mut);font-size:14px}
+select{font:inherit;font-size:16px;width:100%;max-width:420px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:48px}
+.chk{display:inline-flex;gap:8px;align-items:center;font-weight:500;margin:0;min-height:44px}
+.chk input{width:20px;height:20px;min-height:0}
+.tv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,minmax(190px,auto));gap:3px;min-width:720px;background:var(--line);border:3px solid var(--head);border-radius:8px;overflow:hidden}
+.cu{background:var(--bg);padding:6px 7px;font-size:13px;line-height:1.35;display:flex;flex-direction:column;gap:3px}
+.cu.me{background:light-dark(#fff7dc,#2a2410)}
+.cu .hd{display:flex;justify-content:space-between;gap:4px;font-size:13px;color:var(--mut)}
+.cu .pn{font-weight:800;color:var(--head);font-size:14px;text-align:center}
+:root[data-theme=dark] .cu .pn{color:#8fd3cc}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .cu .pn{color:#8fd3cc}}
+.cu .ms{font-weight:800;color:var(--D);text-align:center;font-size:14px}
+.cu .mn{display:grid;grid-template-columns:1fr 1fr;gap:0 6px;flex:1}
+.cu .mn .g{color:light-dark(#1d6b44,#9be0ba)}.cu .mn .b{color:light-dark(#a33a22,#f2a796)}
+.cu .ft{display:flex;justify-content:space-between;color:var(--mut);border-top:1px dashed var(--line);padding-top:3px}
+.hoa{display:inline-block;background:var(--head);color:#fff;border-radius:4px;padding:0 4px;font-size:12px;font-weight:700;margin-left:2px}
+.hoa.k{background:var(--D)}
+.tag{display:inline-block;border:1.5px solid var(--D);color:var(--D);border-radius:4px;padding:0 4px;font-weight:700;font-size:12px}
+.ctr{grid-area:2/2/4/4;background:var(--card);padding:14px 16px;font-size:14px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.ctr b.t{font-size:20px;color:var(--ink);text-align:center;margin-bottom:6px}
+.palist{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px}
+tr.now td{background:light-dark(#fff7dc,#2a2410);font-weight:700}
+@media(max-width:600px){.hero{grid-template-columns:1fr}.bar{grid-template-columns:6em minmax(0,1fr) 3em}table{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.prog i{transition:none}}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap">
+  <h1>Hiểu mình qua DISC và những con số</h1>
+  <p>Làm bài trắc nghiệm tính cách DISC, rồi tra thần số học từ ngày sinh, họ tên, số CCCD và số điện thoại. Mọi phép tính chạy ngay trên máy bạn, không gửi dữ liệu đi đâu.</p>
+  <nav role="tablist" aria-label="Các phần">
+   <button role="tab" data-t="disc" aria-selected="true">Trắc nghiệm DISC</button>
+   <button role="tab" data-t="than-so" aria-selected="false">Thần số học</button>
+   <button role="tab" data-t="cccd" aria-selected="false">Số CCCD</button>
+   <button role="tab" data-t="dien-thoai" aria-selected="false">Số điện thoại</button>
+   <button role="tab" data-t="tu-vi" aria-selected="false">Lá số tử vi</button>
+   <button role="tab" data-t="nguon" aria-selected="false">Nguồn và lưu ý</button>
+  </nav>
+ </div>
+</header>
+
+<main>
+<section id="p-disc" class="band"><div class="wrap">
+ <div id="discQuiz">
+  <h2>Trắc nghiệm DISC, 24 câu</h2>
+  <p class="lead">Mỗi câu có bốn từ. Chọn từ <b>giống bạn nhất</b> khi làm việc và giao tiếp hằng ngày, theo phản xạ đầu tiên. Mất khoảng 5 phút.</p>
+  <div class="row" style="margin:0;justify-content:space-between"><span id="qNo" style="font-weight:600"></span><span id="qPct" style="color:var(--mut)"></span></div>
+  <div class="prog"><i id="qBar" style="width:0"></i></div>
+  <p class="q">Tôi là người…</p>
+  <div class="opts" id="opts"></div>
+  <div class="row"><button class="btn ghost" id="back">Câu trước</button><button class="btn ghost" id="restart">Làm lại từ đầu</button></div>
+ </div>
+ <div id="discRes" hidden></div>
+</div></section>
+
+<section id="p-than-so" class="band" hidden><div class="wrap">
+ <h2>Phân tích thần số học đầy đủ</h2>
+ <p class="lead">Theo hệ Pythagoras, phổ biến qua sách của David A. Phillips. Họ tên không bắt buộc; nếu nhập, dùng họ tên khai sinh đầy đủ, có dấu hoặc không dấu đều được.</p>
+ <form id="fNum">
+  <label for="dob">Ngày tháng năm sinh</label>
+  <input id="dob" type="date" required min="1900-01-01" max="2099-12-31">
+  <label for="fullname">Họ và tên (không bắt buộc)</label>
+  <input id="fullname" type="text" autocomplete="off" placeholder="Ví dụ: Nguyễn Văn An">
+  <div class="row"><button class="btn" type="submit">Xem kết quả</button></div>
+  <div class="err" id="numErr"></div>
+ </form>
+ <div id="numRes"></div>
+</div></section>
+
+<section id="p-cccd" class="band" hidden><div class="wrap">
+ <h2>Phân tích số căn cước công dân</h2>
+ <p class="lead">Phần đầu giải mã cấu trúc số CCCD theo quy định của Bộ Công an, đây là thông tin có căn cứ pháp lý. Phần sau là các cách luận số dân gian, chỉ để tham khảo.</p>
+ <form id="fCccd">
+  <label for="cccd">Số CCCD (12 chữ số)</label>
+  <input id="cccd" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="0xx x xx xxxxxx">
+  <label for="dob2">Ngày sinh (không bắt buộc, để so với số chủ đạo)</label>
+  <input id="dob2" type="date" min="1900-01-01" max="2099-12-31">
+  <div class="row"><button class="btn" type="submit">Phân tích</button></div>
+  <div class="err" id="cccdErr"></div>
+ </form>
+ <div id="cccdRes"></div>
+</div></section>
+
+<section id="p-dien-thoai" class="band" hidden><div class="wrap">
+ <h2>Phân tích số điện thoại</h2>
+ <p class="lead">Ba cách đang được dùng nhiều trên mạng: Bát tinh (năng lượng cặp số), số nút và rút gọn theo thần số học. Các cách này không có cơ sở khoa học; dùng như một góc nhìn vui khi chọn số.</p>
+ <form id="fPhone">
+  <label for="phone">Số điện thoại</label>
+  <input id="phone" inputmode="tel" autocomplete="off" placeholder="0912 345 678">
+  <label for="dob3">Ngày sinh (không bắt buộc)</label>
+  <input id="dob3" type="date" min="1900-01-01" max="2099-12-31">
+  <div class="row"><button class="btn" type="submit">Phân tích</button></div>
+  <div class="err" id="phoneErr"></div>
+ </form>
+ <div id="phoneRes"></div>
+</div></section>
+
+<section id="p-tu-vi" class="band" hidden><div class="wrap">
+ <h2>Lá số Tử Vi Đẩu Số</h2>
+ <p class="lead">Chọn một trong hai trường phái: Việt Nam (Thái Thứ Lang, <i>Tử Vi Đẩu Số Tân Biên</i>) hoặc Trung Hoa (Trung Châu phái 中州派 của Vương Đình Chi, dựa trên <i>Tử Vi Đẩu Số Toàn Thư</i>), lá số chữ Hán có độ sáng sao (Miếu, Vượng, Đắc, Lợi, Bình, Bất, Hãm). Âm lịch đổi theo múi giờ Việt Nam. Cần giờ sinh để an được cung Mệnh.</p>
+ <form id="fTv">
+  <label for="tvName">Họ tên (không bắt buộc)</label>
+  <input id="tvName" type="text" autocomplete="off" placeholder="Ví dụ: Nguyễn Văn An">
+  <fieldset style="border:0;padding:0;margin:14px 0 0"><legend style="font-weight:600;margin-bottom:6px">Giới tính</legend>
+   <div class="row" style="margin:0"><label class="chk"><input type="radio" name="tvSex" value="1" checked> Nam</label><label class="chk"><input type="radio" name="tvSex" value="0"> Nữ</label></div></fieldset>
+  <fieldset style="border:0;padding:0;margin:14px 0 0"><legend style="font-weight:600;margin-bottom:6px">Trường phái lá số</legend>
+   <div class="row" style="margin:0"><label class="chk"><input type="radio" name="tvSch" value="vn" checked> Việt Nam (Thái Thứ Lang)</label><label class="chk"><input type="radio" name="tvSch" value="cn"> Trung Hoa (Trung Châu phái, chữ Hán)</label></div></fieldset>
+  <fieldset style="border:0;padding:0;margin:14px 0 0"><legend style="font-weight:600;margin-bottom:6px">Ngày sinh theo</legend>
+   <div class="row" style="margin:0"><label class="chk"><input type="radio" name="tvCal" value="s" checked> Dương lịch</label><label class="chk"><input type="radio" name="tvCal" value="l"> Âm lịch</label></div></fieldset>
+  <div id="tvSolar"><label for="tvDob">Ngày sinh dương lịch</label><input id="tvDob" type="date" min="1900-01-01" max="2099-12-31"></div>
+  <div id="tvLunar" hidden><label>Ngày sinh âm lịch</label>
+   <div class="row" style="margin:0"><input id="tvLd" type="number" min="1" max="30" placeholder="Ngày" style="max-width:110px"><input id="tvLm" type="number" min="1" max="12" placeholder="Tháng" style="max-width:110px"><input id="tvLy" type="number" min="1900" max="2099" placeholder="Năm" style="max-width:130px"><label class="chk"><input type="checkbox" id="tvLeap"> Tháng nhuận</label></div></div>
+  <label for="tvHour">Giờ sinh</label>
+  <select id="tvHour"></select>
+  <div class="row"><button class="btn" type="submit">Lập lá số</button></div>
+  <div class="err" id="tvErr"></div>
+ </form>
+ <div id="tvRes"></div>
+</div></section>
+
+<section id="p-nguon" class="band" hidden><div class="wrap">
+ <h2>Nguồn tham khảo và lưu ý</h2>
+ <div class="note"><b>Lưu ý quan trọng.</b> DISC là công cụ mô tả hành vi, hữu ích để giao tiếp và làm việc nhóm, nhưng bài 24 câu ở đây là bản rút gọn tự soạn, không phải bài đánh giá chuẩn hóa có bản quyền (như Everything DiSC). Thần số học, Bát tinh và số nút là hệ thống niềm tin dân gian, không được khoa học kiểm chứng. Đừng dùng kết quả để quyết định tuyển dụng, hôn nhân, đầu tư hay sức khỏe.</div>
+ <h3>Quyền riêng tư</h3>
+ <p>Ứng dụng không lưu số CCCD, số điện thoại hay ngày sinh, và không gửi chúng đến máy chủ nào. Chỉ đáp án DISC được nhớ trong trình duyệt của bạn để làm tiếp lần sau.</p>
+ <h3>DISC</h3>
+ <ul class="src">
+  <li>William Moulton Marston (1928), <i>Emotions of Normal People</i>: nguồn gốc lý thuyết bốn chiều hành vi.</li>
+  <li><a href="https://en.wikipedia.org/wiki/DISC_assessment">DISC assessment, Wikipedia</a></li>
+  <li><a href="https://www.discprofile.com/media/doc/ed/manual/History-of-DiSC-Excerpt.pdf">History of DiSC, Wiley/DiSC Profile</a></li>
+ </ul>
+ <h3>Thần số học Pythagoras</h3>
+ <ul class="src">
+  <li>David A. Phillips, <i>The Complete Book of Numerology</i> (biểu đồ ngày sinh và các mũi tên).</li>
+  <li><a href="https://fptshop.com.vn/tin-tuc/thu-thuat/cach-tinh-than-so-hoc-157199">Cách tính thần số học theo tên, ngày sinh, FPT Shop</a></li>
+  <li><a href="https://www.momo.vn/blog/than-so-hoc-khoa-hoc-kham-pha-ban-than-thong-qua-nhung-con-so-c117dt180">Thần số học là gì, MoMo</a></li>
+  <li><a href="https://hellobacsi.com/community/suc-khoe-tinh-than/so-chu-dao-la-gi-giai-ma-ban-than-qua-than-so-hoc-246861/">Số chủ đạo là gì, Hello Bacsi</a></li>
+ </ul>
+ <h3>Tử Vi Đẩu Số</h3>
+ <ul class="src">
+  <li>Vân Đằng Thái Thứ Lang, <i>Tử Vi Đẩu Số Tân Biên</i> (1950): cách an sao, Tứ Hóa, vòng Tràng Sinh, Bác Sĩ, Thái Tuế dùng trong app.</li>
+  <li>Hồ Ngọc Đức, <a href="https://www.informatik.uni-leipzig.de/~duc/amlich/">Thuật toán tính âm lịch Việt Nam</a> (đổi dương lịch sang âm lịch, múi giờ GMT+7).</li>
+  <li><a href="https://vi.wikipedia.org/wiki/T%E1%BB%AD_vi_%C4%91%E1%BA%A9u_s%E1%BB%91">Tử vi đẩu số, Wikipedia tiếng Việt</a></li>
+  <li>Hi Di Trần Đoàn (tương truyền), <i>紫微斗數全書 Tử Vi Đẩu Số Toàn Thư</i>; Vương Đình Chi, các sách phái Trung Châu (中州派): quy tắc lá số Trung Hoa.</li>
+  <li><a href="https://github.com/SylarLong/iztro">iztro</a> (mã nguồn mở, giấy phép MIT): bảng độ sáng sao và cách an tạp diệu theo phái Trung Châu được đối chiếu từ thư viện này.</li>
+  <li><a href="https://ziweihome.com/zh-hans/xingyao/miaowang">庙旺利陷总表, 紫微家</a>: bảng độ sáng 14 chính tinh để đối chiếu.</li>
+ </ul>
+ <h3>Số CCCD, số điện thoại</h3>
+ <ul class="src">
+  <li>Thông tư 07/2016/TT-BCA, nay là Thông tư 59/2021/TT-BCA: cấu trúc 12 số định danh cá nhân (mã tỉnh, mã giới tính và thế kỷ, năm sinh, số ngẫu nhiên).</li>
+  <li><a href="https://en.wikipedia.org/wiki/Chinese_numerology">Chinese numerology, Wikipedia</a> (nền tảng của Bát tinh / 数字能量学).</li>
+  <li><a href="https://cellphones.com.vn/sforum/bat-mi-y-nghia-cua-cac-con-so-khi-chon-sim-ma-ban-can-luu-y">Ý nghĩa các con số khi chọn sim, CellphoneS</a></li>
+ </ul>
+</div></section>
+</main>
+<footer class="band"><div class="wrap">Nội dung tổng hợp từ sách và các trang nêu ở mục Nguồn, mang tính tham khảo và giải trí.</div></footer>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- Tabs ---------- */
+const tabs=['disc','than-so','cccd','dien-thoai','tu-vi','nguon'];
+function show(t){if(!tabs.includes(t))t='disc';
+ document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));
+ tabs.forEach(x=>$('#p-'+x).hidden=x!==t);}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{location.hash=b.dataset.t;show(b.dataset.t)}));
+addEventListener('hashchange',()=>show(location.hash.slice(1)));
+show(location.hash.slice(1));
+
+/* ---------- DISC ---------- */
+const Q=[
+['Quyết đoán','Hoạt ngôn','Kiên nhẫn','Chính xác'],
+['Táo bạo','Nhiệt tình','Điềm tĩnh','Cẩn thận'],
+['Thích cạnh tranh','Giỏi thuyết phục','Trung thành','Lý trí, logic'],
+['Thẳng thắn','Lạc quan','Dễ chịu','Kỷ luật'],
+['Thích nắm quyền kiểm soát','Thích giao lưu','Thích sự ổn định','Thích làm theo quy trình'],
+['Mạnh mẽ','Vui vẻ','Biết lắng nghe','Tỉ mỉ'],
+['Hành động nhanh','Truyền cảm hứng','Hay giúp đỡ người khác','Phân tích kỹ'],
+['Dám mạo hiểm','Ngẫu hứng','Nhẫn nại','Thận trọng'],
+['Độc lập','Hòa đồng','Hợp tác','Có hệ thống'],
+['Tự tin','Hài hước','Khiêm tốn','Nghiêm túc'],
+['Thích thử thách','Thích được công nhận','Thích cảm giác an toàn','Thích làm đúng'],
+['Hay nóng vội','Hay nói nhiều','Ngại thay đổi','Hay cầu toàn'],
+['Đặt mục tiêu cao','Kết nối mọi người','Giữ hòa khí','Đặt tiêu chuẩn cao'],
+['Kiên quyết','Giàu biểu cảm','Ôn hòa','Kín đáo'],
+['Dẫn dắt','Cổ vũ','Chăm sóc','Kiểm tra'],
+['Giao việc rõ ràng','Thuyết trình','Lắng nghe','Viết tài liệu'],
+['Cần kết quả','Cần niềm vui','Cần sự hòa thuận','Cần chất lượng'],
+['Dễ áp đặt','Dễ mất tập trung','Dễ thụ động','Dễ chỉ trích'],
+['Ganh đua','Thân thiện','Bình thản','Khách quan'],
+['Thích bứt phá','Sôi nổi','Chu đáo','Ngăn nắp'],
+['Chủ động','Lôi cuốn','Đáng tin cậy','Chuẩn mực'],
+['Sợ bị lợi dụng','Sợ bị từ chối','Sợ mất an toàn','Sợ bị chê là sai'],
+['Nói thẳng vào việc','Hay kể chuyện','Hay hỏi han cảm xúc','Hay hỏi chi tiết, số liệu'],
+['Giải quyết thật nhanh','Ứng biến linh hoạt','Làm từng bước chắc chắn','Lên kế hoạch kỹ']];
+const K='DISC';
+const COL={D:'var(--D)',I:'var(--I)',S:'var(--S)',C:'var(--C)'};
+const NAME={D:'Thủ lĩnh (D)',I:'Người truyền cảm hứng (I)',S:'Người kiên định (S)',C:'Nhà phân tích (C)'};
+const SHORT={D:'D, Thống trị',I:'I, Ảnh hưởng',S:'S, Kiên định',C:'C, Tuân thủ'};
+const DESC={
+D:{core:'Hướng tới kết quả, thích thử thách và ra quyết định nhanh. Nhìn bức tranh lớn, chấp nhận rủi ro, nói thẳng.',
+ str:['Quyết đoán, dám chịu trách nhiệm','Giải quyết vấn đề nhanh','Thúc đẩy đội nhóm tiến lên','Không ngại xung đột khi cần'],
+ weak:['Thiếu kiên nhẫn, dễ nóng','Có thể áp đặt, ít lắng nghe','Xem nhẹ cảm xúc và chi tiết'],
+ mot:'Quyền chủ động, thử thách mới, kết quả nhìn thấy được.',fear:'Bị lợi dụng, mất quyền kiểm soát.',
+ talk:'Nói ngắn, vào thẳng vấn đề, đưa lựa chọn và kết quả; tránh vòng vo.',
+ job:'Quản lý, khởi nghiệp, kinh doanh, điều hành dự án, bán hàng doanh nghiệp.'},
+I:{core:'Hướng tới con người, giàu năng lượng, lạc quan và thích được ghi nhận. Giỏi tạo thiện cảm và lan tỏa ý tưởng.',
+ str:['Giao tiếp, thuyết phục tốt','Tạo không khí tích cực','Sáng tạo, nhiều ý tưởng','Mở rộng quan hệ nhanh'],
+ weak:['Thiếu tập trung, dễ bỏ dở','Hứa nhiều hơn làm','Ít chú ý chi tiết, thời hạn'],
+ mot:'Sự công nhận, tự do thể hiện, môi trường vui vẻ.',fear:'Bị từ chối, bị phớt lờ, mất hình ảnh.',
+ talk:'Thân thiện, cho họ thời gian chia sẻ, ghi nhận ý tưởng; chốt lại việc bằng văn bản.',
+ job:'Marketing, truyền thông, sự kiện, đào tạo, bán hàng, dịch vụ khách hàng.'},
+S:{core:'Điềm tĩnh, đáng tin cậy, coi trọng sự hài hòa và ổn định. Là người hỗ trợ bền bỉ, lắng nghe tốt.',
+ str:['Kiên nhẫn, trung thành','Làm việc nhóm tốt','Lắng nghe, thấu hiểu','Ổn định, nhất quán'],
+ weak:['Ngại thay đổi đột ngột','Khó nói "không"','Né tránh xung đột, chậm quyết định'],
+ mot:'An toàn, sự trân trọng chân thành, quan hệ bền lâu.',fear:'Mất ổn định, thay đổi bất ngờ, làm mất lòng người khác.',
+ talk:'Nhẹ nhàng, giải thích lý do, báo trước thay đổi, hỏi ý kiến và cho thời gian suy nghĩ.',
+ job:'Nhân sự, chăm sóc khách hàng, giáo dục, y tế, hành chính, hỗ trợ vận hành.'},
+C:{core:'Chú trọng chất lượng, độ chính xác và logic. Làm việc có hệ thống, dựa trên dữ liệu và tiêu chuẩn.',
+ str:['Phân tích sâu, cẩn thận','Đảm bảo chất lượng','Có tổ chức, theo quy trình','Khách quan'],
+ weak:['Cầu toàn, chậm vì quá kỹ','Dễ phê bình người khác và bản thân','Khó bày tỏ cảm xúc'],
+ mot:'Sự chính xác, quy tắc rõ ràng, thời gian để làm đúng.',fear:'Bị chỉ trích là sai, làm việc cẩu thả.',
+ talk:'Chuẩn bị số liệu, nói có cấu trúc, cho tài liệu đọc trước; tránh áp lực vội vàng.',
+ job:'Kế toán, kiểm toán, kỹ thuật, lập trình, nghiên cứu, pháp lý, quản lý chất lượng.'}};
+const COMBO={DI:'Người tiên phong lôi cuốn: hướng kết quả nhưng biết kéo người khác theo.',ID:'Người thuyết phục: nhiều năng lượng, thích dẫn dắt bằng cảm hứng.',
+DC:'Người thách thức: quyết liệt và đòi hỏi tiêu chuẩn cao.',CD:'Người cầu thị kết quả: kỹ lưỡng nhưng vẫn quyết đoán.',
+IS:'Người cổ vũ ấm áp: thân thiện, quan tâm, giữ không khí đội nhóm.',SI:'Người hòa giải: dịu dàng, dễ gần, giỏi hỗ trợ.',
+SC:'Người vững vàng cẩn trọng: ổn định, chính xác, đáng tin.',CS:'Người chuyên gia điềm tĩnh: theo quy trình, chắc chắn.',
+DS:'Người thực thi bền bỉ: có mục tiêu và kiên trì làm đến cùng.',SD:'Người đạt được: bình tĩnh nhưng có định hướng rõ.',
+IC:'Người đánh giá: vừa giao tiếp tốt vừa chú ý chất lượng.',CI:'Người tư vấn: nhiều phân tích, biết trình bày dễ hiểu.'};
+let ans=[];let qi=0;
+try{const s=JSON.parse(localStorage.getItem('disc-ans')||'[]');if(Array.isArray(s)){ans=s.slice(0,Q.length);qi=Math.min(ans.length,Q.length-1)}}catch(e){}
+const save=()=>{try{localStorage.setItem('disc-ans',JSON.stringify(ans))}catch(e){}};
+const order=i=>[0,1,2,3].map(k=>(k+i*3)%4).sort((a,b)=>((a*7+i*5)%11)-((b*7+i*5)%11));
+function renderQ(){
+ if(ans.length>=Q.length&&ans.every(a=>a!=null)){return renderRes()}
+ $('#discQuiz').hidden=false;$('#discRes').hidden=true;
+ $('#qNo').textContent=`Câu ${qi+1} / ${Q.length}`;
+ const done=ans.filter(a=>a!=null).length;
+ $('#qPct').textContent=`Đã trả lời ${done} câu`;
+ $('#qBar').style.width=(done/Q.length*100)+'%';
+ $('#opts').innerHTML=order(qi).map(k=>`<button class="opt${ans[qi]===k?' sel':''}" data-k="${k}">${Q[qi][k]}</button>`).join('');
+ $('#back').disabled=qi===0;}
+$('#opts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;
+ ans[qi]=+b.dataset.k;save();
+ const next=ans.findIndex((a,i)=>i>qi&&a==null);
+ if(qi<Q.length-1)qi=next>-1?next:Math.min(qi+1,Q.length-1);
+ if(ans.length>=Q.length&&ans.every(a=>a!=null))renderRes();else{if(ans[qi]!=null&&qi===Q.length-1){const f=ans.findIndex(a=>a==null);if(f>-1)qi=f}renderQ()}});
+$('#back').addEventListener('click',()=>{if(qi>0){qi--;renderQ()}});
+function restart(){ans=[];qi=0;save();renderQ();scrollTo(0,0)}
+$('#restart').addEventListener('click',restart);
+function renderRes(){
+ const sc={D:0,I:0,S:0,C:0};ans.forEach(a=>sc[K[a]]++);
+ const rank=[...K].sort((a,b)=>sc[b]-sc[a]);
+ const p=rank[0],s=rank[1];
+ const pc=k=>Math.round(sc[k]/Q.length*100);
+ const twin=sc[s]>=Q.length*0.25&&sc[p]-sc[s]<=4;
+ const d=DESC[p];
+ const block=k=>{const x=DESC[k];return `<div class="card"><h4><span class="tile" style="background:${COL[k]}">${k}</span> ${NAME[k]}</h4><p>${x.core}</p>
+ <p><b>Điểm mạnh:</b></p><ul>${x.str.map(t=>`<li>${t}</li>`).join('')}</ul>
+ <p><b>Điểm cần lưu ý:</b></p><ul>${x.weak.map(t=>`<li>${t}</li>`).join('')}</ul>
+ <p><b>Động lực:</b> ${x.mot}</p><p><b>Nỗi sợ thường gặp:</b> ${x.fear}</p>
+ <p><b>Cách giao tiếp với người nhóm ${k}:</b> ${x.talk}</p><p><b>Môi trường, nghề phù hợp:</b> ${x.job}</p></div>`};
+ $('#discQuiz').hidden=true;const r=$('#discRes');r.hidden=false;
+ r.innerHTML=`<div class="hero"><div class="big" style="color:${COL[p]}">${twin?p+s:p}</div>
+ <div><h2>Bạn thiên về nhóm ${NAME[p]}${twin?`, kết hợp ${NAME[s]}`:''}</h2>
+ <p class="lead" style="margin:0">${twin&&COMBO[p+s]?COMBO[p+s]+' ':''}${d.core}</p></div></div>
+ <div class="bars">${K.split('').map(k=>`<div class="bar"><span>${SHORT[k]}</span><b><i style="width:${pc(k)}%;background:${COL[k]}"></i></b><span>${pc(k)}%</span></div>`).join('')}</div>
+ <p class="note">Ai cũng có cả bốn nhóm, chỉ khác mức độ. Nhóm cao nhất cho biết cách bạn thường phản ứng tự nhiên, không phải giới hạn của bạn. Điểm từ 25% trở lên cũng là một nét đáng kể.</p>
+ <div class="grid2">${block(p)}${block(s)}</div>
+ <h3>Bốn nhóm DISC tóm tắt</h3>
+ <div class="scroll"><table><thead><tr><th>Nhóm</th><th>Tập trung vào</th><th>Tốc độ</th><th>Câu hỏi quen thuộc</th></tr></thead><tbody>
+ <tr><td><b style="color:var(--D)">D</b></td><td>Kết quả, mục tiêu</td><td>Nhanh</td><td>Cái gì? Khi nào xong?</td></tr>
+ <tr><td><b style="color:var(--I)">I</b></td><td>Con người, cảm hứng</td><td>Nhanh</td><td>Ai tham gia? Có vui không?</td></tr>
+ <tr><td><b style="color:var(--S)">S</b></td><td>Hòa hợp, ổn định</td><td>Chậm, chắc</td><td>Làm thế nào? Ảnh hưởng ai?</td></tr>
+ <tr><td><b style="color:var(--C)">C</b></td><td>Chất lượng, độ chính xác</td><td>Chậm, kỹ</td><td>Tại sao? Dựa trên dữ liệu nào?</td></tr></tbody></table></div>
+ <div class="row"><button class="btn" id="copyD">Sao chép kết quả</button><button class="btn ghost" id="redo">Làm lại bài</button><span id="copied" style="color:var(--mut)"></span></div>`;
+ $('#redo').onclick=restart;
+ $('#copyD').onclick=()=>{const t=`Kết quả DISC: ${K.split('').map(k=>k+' '+pc(k)+'%').join(', ')}. Nhóm nổi bật: ${NAME[p]}${twin?' + '+NAME[s]:''}.`;
+  navigator.clipboard.writeText(t).then(()=>$('#copied').textContent='Đã sao chép',()=>$('#copied').textContent=t)};}
+renderQ();
+
+/* ---------- Thần số học ---------- */
+const ds=n=>String(n).split('').reduce((a,c)=>a+(+c||0),0);
+const red=(n,m=true)=>{while(n>9&&!(m&&(n===11||n===22||n===33)))n=ds(n);return n};
+const base=n=>n>9?ds(n):n;
+const N={
+1:{t:'Người tiên phong',d:'Độc lập, chủ động, có ý chí mạnh và muốn tự đi con đường riêng.',s:'Khởi xướng, lãnh đạo, tự tin',w:'Cái tôi lớn, cứng đầu, dễ cô lập'},
+2:{t:'Người kết nối',d:'Nhạy cảm, giàu trực giác, giỏi hợp tác và hòa giải.',s:'Tinh tế, kiên nhẫn, làm việc nhóm',w:'Thiếu tự tin, dễ tổn thương, phụ thuộc'},
+3:{t:'Người sáng tạo',d:'Tư duy nhanh, giàu trí tưởng tượng, thích biểu đạt và giao tiếp.',s:'Hài hước, ham học, trình bày tốt',w:'Phân tán, hay phán xét, thiếu kiên trì'},
+4:{t:'Người xây dựng',d:'Thực tế, có tổ chức, chăm chỉ và đáng tin cậy.',s:'Kỷ luật, tỉ mỉ, bền bỉ',w:'Cứng nhắc, bảo thủ, dễ làm quá sức'},
+5:{t:'Người tự do',d:'Yêu tự do, thích trải nghiệm và thay đổi, cảm xúc dồi dào.',s:'Linh hoạt, thích nghi, nhiệt huyết',w:'Bốc đồng, thiếu kiên định, dễ chán'},
+6:{t:'Người chăm sóc',d:'Giàu tình yêu thương, trách nhiệm với gia đình và cộng đồng, có óc sáng tạo.',s:'Chu đáo, tận tâm, có thẩm mỹ',w:'Lo âu, ôm đồm, muốn kiểm soát người thân'},
+7:{t:'Người tìm kiếm',d:'Học qua trải nghiệm thực tế, sâu sắc, thích tìm hiểu bản chất vấn đề.',s:'Phân tích, độc lập, trực giác',w:'Hoài nghi, khép kín, hay phải học qua mất mát'},
+8:{t:'Người điều hành',d:'Độc lập, có năng lực quản lý, tài chính và đề cao sự công bằng.',s:'Bản lĩnh, tổ chức tốt, thực tế',w:'Thực dụng, áp lực thành tích, khó bày tỏ cảm xúc'},
+9:{t:'Người nhân đạo',d:'Lý tưởng, bao dung, có trách nhiệm với cộng đồng và tham vọng lớn.',s:'Rộng lượng, có tầm nhìn, truyền cảm hứng',w:'Mơ mộng, ôm việc, dễ vỡ mộng'},
+11:{t:'Bậc thầy trực giác (11/2)',d:'Trực giác và cảm hứng rất mạnh, có khả năng truyền cảm hứng và nâng đỡ tinh thần người khác.',s:'Nhạy bén, giàu lý tưởng, có sức ảnh hưởng',w:'Căng thẳng, kỳ vọng quá cao, dao động cảm xúc'},
+22:{t:'Kiến trúc sư bậc thầy (22/4)',d:'Biến tầm nhìn lớn thành công trình thực tế, kết hợp trực giác với kỷ luật.',s:'Tầm nhìn, năng lực tổ chức, bền bỉ',w:'Áp lực lớn, cầu toàn, dễ cực đoan'},
+33:{t:'Người thầy chữa lành (33/6)',d:'Yêu thương vô điều kiện, muốn phụng sự và nâng đỡ người khác.',s:'Bao dung, truyền cảm hứng, tận hiến',w:'Hy sinh quá mức, gánh trách nhiệm của người khác'}};
+const PY={1:'Khởi đầu mới: gieo hạt, bắt đầu dự án, chủ động.',2:'Hợp tác và kiên nhẫn: chăm sóc các mối quan hệ, chờ kết quả nảy mầm.',3:'Sáng tạo và mở rộng: giao tiếp, học hỏi, thể hiện bản thân.',4:'Xây nền móng: làm việc chăm chỉ, kỷ luật, sắp xếp lại.',5:'Thay đổi và tự do: di chuyển, cơ hội mới, linh hoạt.',6:'Gia đình và trách nhiệm: tình cảm, nhà cửa, chăm sóc.',7:'Suy ngẫm: học sâu, nghỉ ngơi, nhìn lại bản thân.',8:'Thu hoạch: sự nghiệp, tài chính, khẳng định vị thế.',9:'Khép lại chu kỳ: buông bỏ, hoàn tất, chuẩn bị cho chu kỳ mới.'};
+const GD={1:'Thể hiện bản thân, giao tiếp bằng lời',2:'Trực giác, nhạy cảm',3:'Trí nhớ, tư duy',4:'Thực tế, ngăn nắp',5:'Cảm xúc, ý chí, tự do',6:'Sáng tạo, gia đình',7:'Học qua trải nghiệm',8:'Độc lập, tổ chức',9:'Lý tưởng, trách nhiệm'};
+const ARR=[[[1,2,3],'Kế hoạch','Biết sắp xếp, làm việc có kế hoạch.',null],
+[[4,5,6],'Ý chí','Ý chí mạnh, kiên trì theo đuổi mục tiêu.','Uất giận: dễ thất vọng, cần học cách buông và đặt kỳ vọng hợp lý.'],
+[[7,8,9],'Hoạt động','Năng động, học bằng cách làm.','Thụ động: cần tự tạo động lực, tránh ngại bắt đầu.'],
+[[1,4,7],'Thực tế','Thực tế, khéo tay, giỏi hiện thực hóa.',null],
+[[2,5,8],'Cân bằng cảm xúc','Cảm xúc ổn định, tinh thần vững.','Nhạy cảm: dễ tổn thương, cần rèn sự tự tin.'],
+[[3,6,9],'Trí tuệ','Trí nhớ và tư duy tốt.','Trí nhớ ngắn hạn: cần ghi chép, ôn luyện.'],
+[[1,5,9],'Quyết tâm','Kiên định, quyết tâm đến cùng.','Trì hoãn: cần đặt hạn chót và chia nhỏ việc.'],
+[[3,5,7],'Nhạy bén','Thấu hiểu, giàu lòng trắc ẩn, trực giác tốt.','Hoài nghi: hay nghi ngờ, cần mở lòng hơn.']];
+function parseDob(v){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||'');if(!m)return null;return{y:+m[1],m:+m[2],d:+m[3],s:m[3]+m[2]+m[1]}}
+const strip=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toUpperCase().replace(/[^A-Z ]/g,'');
+const lv=c=>(c.charCodeAt(0)-65)%9+1;
+const VW='AEIOU';
+function nameNums(name){const words=strip(name).split(/\s+/).filter(Boolean);let all=0,v=0,c=0;
+ for(const w of words)for(let i=0;i<w.length;i++){const ch=w[i];const x=lv(ch);all+=x;
+  const isV=VW.includes(ch)||(ch==='Y'&&!VW.includes(w[i-1]||'')&&!VW.includes(w[i+1]||''));
+  if(isV)v+=x;else c+=x;}
+ return words.length?{exp:red(all),soul:red(v),pers:red(c)}:null}
+function chart(str){const g={};for(let i=1;i<=9;i++)g[i]=0;for(const ch of str)if(ch!=='0')g[ch]++;return g}
+function lifePath(b){return red(ds(b.s))}
+const card=(k,v,extra)=>`<div class="num"><div class="k">${k}</div><div class="v">${v}</div>${extra||''}</div>`;
+function numBlock(n){const x=N[n];return `<p style="margin:4px 0 0"><b>${x.t}.</b> ${x.d}</p>`}
+$('#fNum').addEventListener('submit',e=>{e.preventDefault();$('#numErr').textContent='';
+ const b=parseDob($('#dob').value);if(!b){$('#numErr').textContent='Vui lòng chọn ngày sinh.';return}
+ const raw=ds(b.s),lp=red(raw),bd=red(b.d),att=red(b.d+b.m);
+ const yr=new Date().getFullYear(),py=red(ds(b.d)+ds(b.m)+ds(yr),false);
+ const g=chart(b.s);const nm=nameNums($('#fullname').value);
+ const has=d=>g[d]>0;
+ const full=ARR.filter(a=>a[0].every(has)),empty=ARR.filter(a=>a[3]&&a[0].every(d=>!has(d)));
+ const L=[[3,6,9],[2,5,8],[1,4,7]];
+ const missing=[1,2,3,4,5,6,7,8,9].filter(d=>!has(d));
+ const lpx=N[lp];
+ $('#numRes').innerHTML=`<h3>Số chủ đạo (đường đời)</h3>
+ <div class="hero"><div class="big" style="color:var(--head)">${lp}</div><div><h2>${lpx.t}</h2><p style="margin:0">${lpx.d}</p>
+ <p style="margin:6px 0 0"><b>Điểm mạnh:</b> ${lpx.s}. <b>Thách thức:</b> ${lpx.w}.</p>
+ <p style="margin:6px 0 0;color:var(--mut);font-size:14px">Cách tính: cộng tất cả chữ số ${b.d}/${b.m}/${b.y} = ${raw}${raw!==lp?` rồi rút gọn còn ${lp}`:''}. Giữ nguyên 11, 22, 33 (số bậc thầy).</p></div></div>
+ <div class="nums">
+ ${card('Số ngày sinh (năng lực tự nhiên)',bd,numBlock(bd))}
+ ${card('Số thái độ (ấn tượng ban đầu)',att,numBlock(att))}
+ ${card('Năm cá nhân '+yr,py,`<p style="margin:4px 0 0">${PY[py]}</p>`)}
+ ${nm?card('Số sứ mệnh (từ cả họ tên)',nm.exp,numBlock(nm.exp))+card('Số linh hồn (nguyên âm)',nm.soul,numBlock(nm.soul))+card('Số nhân cách (phụ âm)',nm.pers,numBlock(nm.pers)):''}
+ </div>
+ <h3>Biểu đồ ngày sinh</h3>
+ <div class="grid2"><div class="lg" role="img" aria-label="Lưới 3x3 các chữ số trong ngày sinh">${L.flat().map(d=>`<div class="${g[d]?'':'empty'}"><small>${d}</small>${g[d]?String(d).repeat(g[d]):'trống'}</div>`).join('')}</div>
+ <div><p style="margin-top:0"><b>Mũi tên có trong biểu đồ:</b></p>
+ <ul>${full.map(a=>`<li><b>Mũi tên ${a[1]} (${a[0].join('-')})</b>: ${a[2]}</li>`).join('')||'<li>Không có mũi tên đầy đủ.</li>'}</ul>
+ ${empty.length?`<p><b>Mũi tên trống:</b></p><ul>${empty.map(a=>`<li><b>${a[0].join('-')}</b>, ${a[3]}</li>`).join('')}</ul>`:''}
+ </div></div>
+ <div class="scroll"><table><thead><tr><th>Số</th><th>Ý nghĩa</th><th>Trong ngày sinh</th></tr></thead><tbody>
+ ${[1,2,3,4,5,6,7,8,9].map(d=>`<tr><td><b>${d}</b></td><td>${GD[d]}</td><td>${g[d]?g[d]+' lần':'Thiếu, nên rèn thêm'}</td></tr>`).join('')}</tbody></table></div>
+ ${missing.length?`<p class="note">Số thiếu (${missing.join(', ')}) được hiểu là bài học cần rèn; số xuất hiện nhiều lần cho thấy đặc điểm đó mạnh, đôi khi quá mức.</p>`:''}`;
+
+ /* ---- Phân tích mở rộng ---- */
+ {const now=new Date(),cy=now.getFullYear(),cm=now.getMonth()+1,cd=now.getDate();
+  const one=n=>red(n,false),M=one(b.m),D=one(b.d),Y=one(ds(b.y));
+  const lp1=lp>9?ds(lp):lp;
+  const pk=[red(M+D),red(D+Y),0,red(M+Y)];pk[2]=red(one(pk[0])+one(pk[1]));
+  const end1=36-lp1,ages=[[0,end1],[end1+1,end1+9],[end1+10,end1+18],[end1+19,null]];
+  const ch=[Math.abs(M-D),Math.abs(D-Y),0,Math.abs(M-Y)];ch[2]=Math.abs(ch[0]-ch[1]);
+  const age=cy-b.y-((cm<b.m||(cm===b.m&&cd<b.d))?1:0);
+  const curP=ages.findIndex(a=>age>=a[0]&&(a[1]===null||age<=a[1]));
+  const pm=one(py+cm),pdn=one(pm+cd);
+  const PK={1:'tự lập, khẳng định bản thân, khởi nghiệp',2:'hợp tác, kiên nhẫn, chăm lo các mối quan hệ',3:'sáng tạo, giao tiếp, thể hiện tài năng',4:'làm việc chăm chỉ, xây nền móng vững chắc',5:'thay đổi, đi lại, mở rộng trải nghiệm',6:'gia đình, trách nhiệm, chăm sóc người thân',7:'học hỏi sâu, tìm hiểu bản thân, sống nội tâm',8:'sự nghiệp, tiền bạc, quyền hạn',9:'cống hiến, bao dung, hoàn tất những việc lớn',11:'trực giác, truyền cảm hứng, được nhiều người biết đến',22:'xây dựng công trình lớn, tầm ảnh hưởng rộng',33:'phụng sự, chữa lành, dạy dỗ'};
+  const CH={0:'Thử thách lựa chọn: có nhiều khả năng, khó quyết định nên tập trung vào đâu.',1:'Học cách tự tin, dám đứng lên vì mình mà không áp đặt người khác.',2:'Bớt nhạy cảm, không để lời người khác làm tổn thương quá mức.',3:'Dám bày tỏ cảm xúc và ý tưởng, tránh phân tán.',4:'Rèn tính kỷ luật, kiên trì, làm việc có kế hoạch.',5:'Cân bằng giữa tự do và trách nhiệm, tránh bốc đồng.',6:'Không ôm đồm việc của người khác, tránh cầu toàn trong gia đình.',7:'Học cách tin tưởng, mở lòng, bớt hoài nghi.',8:'Giữ cân bằng giữa tiền bạc, quyền lực và giá trị sống.'};
+  const CAREER={1:'quản lý, khởi nghiệp, kinh doanh, công việc tự chủ',2:'tư vấn, nhân sự, ngoại giao, chăm sóc khách hàng, trợ lý',3:'truyền thông, viết lách, nghệ thuật, giảng dạy, marketing',4:'kỹ thuật, kế toán, xây dựng, vận hành, quản lý dự án',5:'du lịch, bán hàng, truyền thông, sự kiện, công việc đi lại nhiều',6:'giáo dục, y tế, thiết kế, dịch vụ gia đình, nghệ thuật',7:'nghiên cứu, công nghệ, phân tích, tâm lý, chuyên gia',8:'tài chính, kinh doanh, quản lý, bất động sản, luật',9:'giáo dục, y tế, hoạt động xã hội, nghệ thuật, cộng đồng',11:'truyền cảm hứng, huấn luyện, tâm lý, nghệ thuật, tư vấn',22:'kiến trúc, quản lý dự án lớn, xây dựng tổ chức, chính sách',33:'giáo dục, chữa lành, công tác xã hội, nghệ thuật'};
+  const LOVE={1:'cần người tôn trọng sự độc lập của bạn; nên học cách lắng nghe nửa kia',2:'giàu tình cảm, chu đáo; cần người biết ghi nhận và cho bạn cảm giác an toàn',3:'vui vẻ, lãng mạn; cần người hiểu và chia sẻ niềm vui, tránh nói lời làm tổn thương',4:'chung thủy, thực tế; nên bày tỏ cảm xúc nhiều hơn',5:'thích mới mẻ; cần người cho bạn không gian và cùng trải nghiệm',6:'hết lòng vì gia đình; tránh hy sinh quá mức hoặc kiểm soát người thương',7:'kín đáo, cần thời gian để mở lòng; hợp người sâu sắc, tôn trọng khoảng riêng',8:'thực tế, bảo vệ người thương; đừng để công việc lấn át gia đình',9:'bao dung, lý tưởng; tránh kỳ vọng nửa kia hoàn hảo',11:'nhạy cảm, sâu sắc; cần người thấu hiểu thế giới nội tâm',22:'đáng tin cậy, có trách nhiệm; nên dành thời gian cho tình cảm',33:'yêu thương vô điều kiện; nhớ chăm sóc cả bản thân'};
+  const ADV={1:'chủ động bắt đầu việc mới, đặt mục tiêu rõ ràng',2:'kiên nhẫn, hợp tác, chưa nên vội quyết định lớn',3:'mở rộng giao tiếp, học kỹ năng mới, thể hiện bản thân',4:'làm việc chăm chỉ, sắp xếp tài chính và giấy tờ, giữ sức khỏe',5:'đón nhận thay đổi nhưng tránh liều lĩnh',6:'dành thời gian cho gia đình, chăm sóc nhà cửa và các mối quan hệ',7:'học sâu, nghỉ ngơi, nhìn lại bản thân; hạn chế đầu tư mạo hiểm',8:'tập trung sự nghiệp và tài chính, đây là năm gặt hái',9:'hoàn tất việc dang dở, buông bỏ điều không còn phù hợp'};
+  let nameHtml='';
+  if(nm){const words=strip($('#fullname').value).split(/\s+/).filter(Boolean),letters=words.join('');
+   const mat=red(one(lp)+one(nm.exp)),bal=red(words.reduce((a,w)=>a+lv(w[0]),0));
+   const cnt={};for(const c of letters){const x=lv(c);cnt[x]=(cnt[x]||0)+1}
+   const mx=Math.max(...Object.values(cnt)),pas=Object.keys(cnt).filter(k=>cnt[k]===mx).map(Number);
+   const miss=[1,2,3,4,5,6,7,8,9].filter(d=>!cnt[d]);
+   nameHtml=`<h3>Các con số từ họ tên</h3><div class="nums">
+   ${card('Số trưởng thành (sau tuổi 35–40)',mat,`<p style="margin:4px 0 0">Đường đời + sứ mệnh. Về sau bạn hướng tới: ${N[mat].t.toLowerCase()}, ${N[mat].s.toLowerCase()}.</p>`)}
+   ${card('Số cân bằng (chữ cái đầu)',bal,`<p style="margin:4px 0 0">Khi gặp khó khăn, hãy dùng thế mạnh: ${N[bal].s.toLowerCase()}.</p>`)}
+   ${card('Số đam mê ẩn',pas.join(', '),`<p style="margin:4px 0 0">Năng lượng xuất hiện nhiều nhất trong tên: ${pas.map(x=>GD[x].toLowerCase()).join('; ')}.</p>`)}
+   ${card('Bài học từ tên (số thiếu)',miss.length?miss.join(', '):'Không thiếu',`<p style="margin:4px 0 0">${miss.length?'Cần rèn thêm: '+miss.map(x=>GD[x].toLowerCase()).join('; ')+'.':'Tên có đủ các con số từ 1 đến 9, khá cân bằng.'}</p>`)}</div>`}
+  const cyc=[...Array(9)].map((_,i)=>{const y=cy+i;return{y,n:red(ds(b.d)+ds(b.m)+ds(y),false)}});
+  const curPk=pk[curP]??pk[3];
+  const extra=`<h3>Bốn đỉnh cao cuộc đời</h3><p class="lead" style="margin:0 0 8px">Mỗi đỉnh cao là một giai đoạn với chủ đề và cơ hội riêng. Đỉnh cao đầu kết thúc ở tuổi 36 trừ số chủ đạo.</p>
+  <div class="scroll"><table class="stack"><thead><tr><th>Giai đoạn</th><th>Tuổi</th><th>Số</th><th>Chủ đề, cơ hội</th><th>Thử thách</th></tr></thead><tbody>
+  ${pk.map((v,i)=>`<tr class="${i===curP?'now':''}"><td>Đỉnh cao ${i+1}${i===curP?' (hiện tại)':''}</td><td>${ages[i][0]}${ages[i][1]===null?' trở đi':'–'+ages[i][1]}</td><td>${v}</td><td>${PK[v]}</td><td>${ch[i]}: ${CH[ch[i]]}</td></tr>`).join('')}</tbody></table></div>
+  <h3>Chu kỳ 9 năm cá nhân</h3>
+  <div class="nums">${card(`Năm cá nhân ${cy}`,py,`<p style="margin:4px 0 0">${PY[py]}</p>`)}${card(`Tháng cá nhân (tháng ${cm})`,pm,`<p style="margin:4px 0 0">${PY[pm]}</p>`)}${card(`Ngày cá nhân (hôm nay ${cd}/${cm})`,pdn,`<p style="margin:4px 0 0">${PY[pdn]}</p>`)}</div>
+  <div class="scroll"><table><thead><tr><th>Năm</th><th>Năm cá nhân</th><th>Chủ đề</th></tr></thead><tbody>${cyc.map(c=>`<tr class="${c.y===cy?'now':''}"><td>${c.y}</td><td>${c.n}</td><td>${PY[c.n]}</td></tr>`).join('')}</tbody></table></div>
+  ${nameHtml}
+  <h3>Kết luận dễ hiểu</h3>
+  <div class="card"><p style="margin-top:0;font-size:17px"><b>Tóm lại:</b> bạn mang số chủ đạo <b>${lp}</b>, là <b>${lpx.t.toLowerCase()}</b>: ${lpx.d.charAt(0).toLowerCase()+lpx.d.slice(1)} Ở tuổi ${age}, bạn đang ở <b>đỉnh cao ${curP+1}</b>, giai đoạn của ${PK[curPk]}.</p>
+  <ul><li><b>Điểm mạnh nên phát huy:</b> ${lpx.s.toLowerCase()}${full.length?'; biểu đồ ngày sinh có mũi tên '+full.map(a=>a[1]).join(', '):''}.</li>
+  <li><b>Điều cần rèn:</b> ${lpx.w.toLowerCase()}${missing.length?'; các số thiếu '+missing.join(', ')+' ('+missing.map(x=>GD[x].toLowerCase()).join('; ')+')':''}.</li>
+  <li><b>Nghề nghiệp hợp:</b> ${CAREER[lp]}.</li>
+  <li><b>Tình cảm:</b> ${LOVE[lp]}.</li>
+  <li><b>Năm ${cy} (năm cá nhân ${py}):</b> nên ${ADV[py]}.</li></ul>
+  <p style="color:var(--mut);font-size:14px;margin:0">Thần số học mang tính tham khảo, giúp bạn nhìn lại bản thân; quyết định quan trọng nên dựa trên hoàn cảnh thực tế.</p></div>`;
+  $('#numRes').insertAdjacentHTML('beforeend',extra);}
+ $('#numRes').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
+
+/* ---------- Bát tinh & phân tích chuỗi số ---------- */
+const STAR={
+'Sinh Khí':{p:[14,41,67,76,39,93,28,82],g:'good',m:'Quý nhân, lạc quan, các mối quan hệ thuận lợi.'},
+'Thiên Y':{p:[13,31,68,86,49,94,27,72],g:'good',m:'Tài lộc, sức khỏe, hôn nhân êm ấm.'},
+'Diên Niên':{p:[19,91,78,87,34,43,26,62],g:'good',m:'Năng lực chuyên môn, trách nhiệm, khả năng lãnh đạo.'},
+'Phục Vị':{p:[11,22,33,44,66,77,88,99],g:'neu',m:'Ổn định, tích lũy, chờ thời; dễ bảo thủ.'},
+'Họa Hại':{p:[17,71,89,98,46,64,23,32],g:'bad',m:'Khẩu thiệt, dễ cãi vã, chi tiêu theo cảm xúc.'},
+'Lục Sát':{p:[16,61,47,74,38,83,29,92],g:'bad',m:'Cảm xúc thất thường, quan hệ phức tạp.'},
+'Ngũ Quỷ':{p:[18,81,79,97,36,63,24,42],g:'bad',m:'Biến động, nhiều ý tưởng nhưng thiếu ổn định.'},
+'Tuyệt Mệnh':{p:[12,21,69,96,48,84,37,73],g:'bad',m:'Liều lĩnh, tài chính lên xuống thất thường.'}};
+const P2S={};for(const n in STAR)for(const p of STAR[n].p)P2S[p]=n;
+function batTinh(str){const out=[];let prev=null,gap='';
+ for(const ch of str){if(ch==='0'||ch==='5'){if(prev!==null)gap+=ch;continue}
+  if(prev!==null){const n=P2S[+(prev+ch)];out.push({a:prev,b:ch,n,gap})}prev=ch;gap=''}
+ return out}
+function btHtml(str){const ps=batTinh(str);if(!ps.length)return '<p>Không đủ chữ số để ghép cặp.</p>';
+ const cnt={};ps.forEach(x=>cnt[x.n]=(cnt[x.n]||0)+1);
+ const good=ps.filter(x=>STAR[x.n].g==='good').length,bad=ps.filter(x=>STAR[x.n].g==='bad').length;
+ const last=ps[ps.length-1];
+ return `<div class="pairs">${ps.map((x,i)=>`<div class="pair ${STAR[x.n].g}${i===ps.length-1?' last':''}">${x.a}${x.gap}${x.b}<small>${x.n}${x.gap.includes('0')?' (ẩn)':''}${x.gap.includes('5')?' (mạnh)':''}</small></div>`).join('')}</div>
+ <p><b>${good}</b> cặp tốt, <b>${bad}</b> cặp xấu, <b>${ps.length-good-bad}</b> cặp trung tính trên tổng ${ps.length} cặp. Cặp cuối <b>${last.a}${last.gap}${last.b}</b> là <b>${last.n}</b>, thường được cho là ảnh hưởng rõ nhất.</p>
+ <div class="scroll"><table><thead><tr><th>Sao</th><th>Số cặp</th><th>Ý nghĩa theo quan niệm phổ biến</th></tr></thead><tbody>
+ ${Object.keys(cnt).map(n=>`<tr><td><span class="pair ${STAR[n].g}" style="padding:2px 8px">${n}</span></td><td>${cnt[n]}</td><td>${STAR[n].m}</td></tr>`).join('')}</tbody></table></div>
+ <p class="note">Quy tắc dùng: ghép từng cặp hai chữ số liền nhau; số 0 nằm giữa làm cặp bị “ẩn” (yếu đi), số 5 nằm giữa làm cặp “mạnh” lên; 0 và 5 không tự tạo cặp.</p>`}
+const GRP=[[3,6,9],[1,5,7],[2,4,8]];
+function compat(a,b){const x=base(a),y=base(b);if(x===y)return 'trùng với số chủ đạo, được xem là rất hợp';
+ return GRP.some(g=>g.includes(x)&&g.includes(y))?'cùng nhóm với số chủ đạo, được xem là hài hòa':'khác nhóm với số chủ đạo, trung tính'}
+function numerologyOf(str,dobV){const raw=ds(str),r=red(raw),b=parseDob(dobV);
+ let html=card('Tổng các chữ số rút gọn',r,`<p style="margin:4px 0 0">Tổng ${raw} → ${r}. ${N[r].t}: ${N[r].d}</p>`);
+ if(b){const lp=lifePath(b);html+=card('So với số chủ đạo '+lp,base(r)+' và '+base(lp),`<p style="margin:4px 0 0">Số này ${compat(r,lp)}. (Ba nhóm thường dùng: 3-6-9, 1-5-7, 2-4-8.)</p>`)}
+ return html}
+
+/* ---------- CCCD ---------- */
+const PROV={'001':'Hà Nội','002':'Hà Giang','004':'Cao Bằng','006':'Bắc Kạn','008':'Tuyên Quang','010':'Lào Cai','011':'Điện Biên','012':'Lai Châu','014':'Sơn La','015':'Yên Bái','017':'Hòa Bình','019':'Thái Nguyên','020':'Lạng Sơn','022':'Quảng Ninh','024':'Bắc Giang','025':'Phú Thọ','026':'Vĩnh Phúc','027':'Bắc Ninh','030':'Hải Dương','031':'Hải Phòng','033':'Hưng Yên','034':'Thái Bình','035':'Hà Nam','036':'Nam Định','037':'Ninh Bình','038':'Thanh Hóa','040':'Nghệ An','042':'Hà Tĩnh','044':'Quảng Bình','045':'Quảng Trị','046':'Thừa Thiên Huế','048':'Đà Nẵng','049':'Quảng Nam','051':'Quảng Ngãi','052':'Bình Định','054':'Phú Yên','056':'Khánh Hòa','058':'Ninh Thuận','060':'Bình Thuận','062':'Kon Tum','064':'Gia Lai','066':'Đắk Lắk','067':'Đắk Nông','068':'Lâm Đồng','070':'Bình Phước','072':'Tây Ninh','074':'Bình Dương','075':'Đồng Nai','077':'Bà Rịa - Vũng Tàu','079':'TP. Hồ Chí Minh','080':'Long An','082':'Tiền Giang','083':'Bến Tre','084':'Trà Vinh','086':'Vĩnh Long','087':'Đồng Tháp','089':'An Giang','091':'Kiên Giang','092':'Cần Thơ','093':'Hậu Giang','094':'Sóc Trăng','095':'Bạc Liêu','096':'Cà Mau'};
+$('#fCccd').addEventListener('submit',e=>{e.preventDefault();const out=$('#cccdRes');out.innerHTML='';$('#cccdErr').textContent='';
+ const v=$('#cccd').value.replace(/\D/g,'');
+ if(v.length!==12){$('#cccdErr').textContent='Số CCCD cần đúng 12 chữ số.';return}
+ const pv=PROV[v.slice(0,3)],gd=+v[3],yy=v.slice(4,6);
+ const century=1900+Math.floor(gd/2)*100,sex=gd%2?'Nữ':'Nam',year=century+ +yy;
+ const ok=gd<=9;
+ out.innerHTML=`<h3>Giải mã cấu trúc số</h3>
+ <div class="scroll"><table class="stack"><thead><tr><th>Phần</th><th>Chữ số</th><th>Ý nghĩa</th></tr></thead><tbody>
+ <tr><td>Mã nơi đăng ký khai sinh</td><td>${v.slice(0,3)}</td><td>${pv?pv:'Không có trong bảng mã tỉnh, kiểm tra lại số'}</td></tr>
+ <tr><td>Giới tính và thế kỷ sinh</td><td>${gd}</td><td>${ok?`${sex}, sinh thế kỷ ${century===1900?'20 (1900–1999)':century===2000?'21 (2000–2099)':'khác'}`:''}</td></tr>
+ <tr><td>Năm sinh</td><td>${yy}</td><td>${year}</td></tr>
+ <tr><td>Dãy ngẫu nhiên</td><td>${v.slice(6)}</td><td>Số thứ tự do hệ thống cấp</td></tr></tbody></table></div>
+ <p class="note">Mã tỉnh theo danh sách 63 tỉnh, thành trước đợt sắp xếp đơn vị hành chính năm 2025; số CCCD đã cấp giữ nguyên.</p>
+ <h3>Thần số học trên số CCCD</h3><div class="nums">${numerologyOf(v,$('#dob2').value)}</div>
+ <h3>Bát tinh trên dãy số</h3>${btHtml(v)}
+ <p class="note">Số CCCD do Nhà nước cấp và không đổi được, nên các luận giải trên chỉ để tham khảo cho vui. Không chia sẻ ảnh chụp hay số CCCD của bạn với ứng dụng hay người lạ.</p>`;
+ out.scrollIntoView({behavior:'smooth'});});
+
+/* ---------- Điện thoại ---------- */
+$('#fPhone').addEventListener('submit',e=>{e.preventDefault();const out=$('#phoneRes');out.innerHTML='';$('#phoneErr').textContent='';
+ let v=$('#phone').value.replace(/[^\d+]/g,'');if(v.startsWith('+84'))v='0'+v.slice(3);else if(v.startsWith('84')&&v.length===11)v='0'+v.slice(2);v=v.replace(/\D/g,'');
+ if(v.length<9||v.length>11){$('#phoneErr').textContent='Số điện thoại cần 10 chữ số (ví dụ 0912345678).';return}
+ const s=ds(v),nut=s%10||10,tail=v.slice(-4),tr=red(ds(tail));
+ const nutTxt=nut>=9?'được nhiều người coi là đẹp':nut>=7?'được coi là khá':'được coi là bình thường';
+ out.innerHTML=`<h3>Bát tinh (năng lượng cặp số)</h3>${btHtml(v)}
+ <h3>Số nút và thần số học</h3><div class="nums">
+ ${card('Số nút',nut+' nút',`<p style="margin:4px 0 0">Tổng các số là ${s}, lấy chữ số cuối${s%10===0?' (0 tính là 10 nút)':''}. ${nut} nút ${nutTxt} theo quan niệm dân gian, 10 nút là cao nhất.</p>`)}
+ ${numerologyOf(v,$('#dob3').value)}
+ ${card('Bốn số cuối '+tail,tr,`<p style="margin:4px 0 0">Bốn số cuối hay được xem là phần “đại diện” của số. Rút gọn được ${tr}: ${N[tr].t.toLowerCase()}.</p>`)}
+ </div>
+ <p class="note">Mỗi trường phái cho kết quả khác nhau, và không có bằng chứng số điện thoại ảnh hưởng đến vận may. Đừng trả thêm nhiều tiền cho “sim phong thủy” chỉ vì những phép tính này.</p>`;
+ out.scrollIntoView({behavior:'smooth'});});
+}
+</script>
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const md=(n,m=12)=>((n%m)+m)%m;
+/* --- Âm lịch: thuật toán Hồ Ngọc Đức, múi giờ 7 --- */
+const INT=Math.floor,PI=Math.PI,TZ=7;
+function jdFromDate(dd,mm,yy){const a=INT((14-mm)/12),y=yy+4800-a,m=mm+12*a-3;let jd=dd+INT((153*m+2)/5)+365*y+INT(y/4)-INT(y/100)+INT(y/400)-32045;if(jd<2299161)jd=dd+INT((153*m+2)/5)+365*y+INT(y/4)-32083;return jd}
+function newMoon(k){const T=k/1236.85,T2=T*T,T3=T2*T,dr=PI/180;let Jd1=2415020.75933+29.53058868*k+0.0001178*T2-0.000000155*T3;Jd1+=0.00033*Math.sin((166.56+132.87*T-0.009173*T2)*dr);
+ const M=359.2242+29.10535608*k-0.0000333*T2-0.00000347*T3,Mpr=306.0253+385.81691806*k+0.0107306*T2+0.00001236*T3,F=21.2964+390.67050646*k-0.0016528*T2-0.00000239*T3;const S=Math.sin;
+ let C1=(0.1734-0.000393*T)*S(M*dr)+0.0021*S(2*dr*M);C1=C1-0.4068*S(Mpr*dr)+0.0161*S(dr*2*Mpr);C1-=0.0004*S(dr*3*Mpr);C1=C1+0.0104*S(dr*2*F)-0.0051*S(dr*(M+Mpr));C1=C1-0.0074*S(dr*(M-Mpr))+0.0004*S(dr*(2*F+M));C1=C1-0.0004*S(dr*(2*F-M))-0.0006*S(dr*(2*F+Mpr));C1=C1+0.0010*S(dr*(2*F-Mpr))+0.0005*S(dr*(2*Mpr+M));
+ const dt=T<-11?0.001+0.000839*T+0.0002261*T2-0.00000845*T3-0.000000081*T*T3:-0.000278+0.000265*T+0.000262*T2;return INT(Jd1+C1-dt+0.5+TZ/24)}
+function sunLong(jdn){const T=(jdn-2451545.5-TZ/24)/36525,T2=T*T,dr=PI/180;const M=357.52910+35999.05030*T-0.0001559*T2-0.00000048*T*T2,L0=280.46645+36000.76983*T+0.0003032*T2;
+ let DL=(1.914600-0.004817*T-0.000014*T2)*Math.sin(dr*M);DL+=(0.019993-0.000101*T)*Math.sin(dr*2*M)+0.000290*Math.sin(dr*3*M);let L=(L0+DL)*dr;L-=PI*2*INT(L/(PI*2));return INT(L/PI*6)}
+function month11(yy){const off=jdFromDate(31,12,yy)-2415021,k=INT(off/29.530588853);let nm=newMoon(k);if(sunLong(nm)>=9)nm=newMoon(k-1);return nm}
+function leapOff(a11){const k=INT((a11-2415021.076998695)/29.530588853+0.5);let last=0,i=1,arc=sunLong(newMoon(k+i));do{last=arc;i++;arc=sunLong(newMoon(k+i))}while(arc!==last&&i<14);return i-1}
+function s2l(dd,mm,yy){const dn=jdFromDate(dd,mm,yy),k=INT((dn-2415021.076998695)/29.530588853);let ms=newMoon(k+1);if(ms>dn)ms=newMoon(k);let a11=month11(yy),b11=a11,ly;
+ if(a11>=ms){ly=yy;a11=month11(yy-1)}else{ly=yy+1;b11=month11(yy+1)}const ld=dn-ms+1,diff=INT((ms-a11)/29);let leap=0,lm=diff+11;
+ if(b11-a11>365){const lmd=leapOff(a11);if(diff>=lmd){lm=diff+10;if(diff===lmd)leap=1}}if(lm>12)lm-=12;if(lm>=11&&diff<4)ly-=1;return{d:ld,m:lm,y:ly,leap}}
+window.s2l=s2l;
+/* --- Danh mục --- */
+const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const GIO=['Tý (23h–1h)','Sửu (1h–3h)','Dần (3h–5h)','Mão (5h–7h)','Thìn (7h–9h)','Tỵ (9h–11h)','Ngọ (11h–13h)','Mùi (13h–15h)','Thân (15h–17h)','Dậu (17h–19h)','Tuất (19h–21h)','Hợi (21h–23h)'];
+$('#tvHour').innerHTML='<option value="">Chọn giờ sinh</option>'+GIO.map((g,i)=>`<option value="${i}">${g}</option>`).join('')+'<option value="12">Tý muộn (23h–24h, tính sang ngày hôm sau)</option>';
+document.querySelectorAll('input[name=tvCal]').forEach(r=>r.addEventListener('change',()=>{const l=document.querySelector('input[name=tvCal]:checked').value==='l';$('#tvSolar').hidden=l;$('#tvLunar').hidden=!l}));
+const CUNG=['Mệnh','Huynh Đệ','Phu Thê','Tử Tức','Tài Bạch','Tật Ách','Thiên Di','Nô Bộc','Quan Lộc','Điền Trạch','Phúc Đức','Phụ Mẫu'];
+const HANH=['','Kim','Thủy','Hỏa','Thổ','Mộc'];
+const NAPAM=['Hải Trung Kim','Lư Trung Hỏa','Đại Lâm Mộc','Lộ Bàng Thổ','Kiếm Phong Kim','Sơn Đầu Hỏa','Giản Hạ Thủy','Thành Đầu Thổ','Bạch Lạp Kim','Dương Liễu Mộc','Tuyền Trung Thủy','Ốc Thượng Thổ','Tích Lịch Hỏa','Tùng Bách Mộc','Trường Lưu Thủy','Sa Trung Kim','Sơn Hạ Hỏa','Bình Địa Mộc','Bích Thượng Thổ','Kim Bạch Kim','Phú Đăng Hỏa','Thiên Hà Thủy','Đại Trạch Thổ','Thoa Xuyến Kim','Tang Đố Mộc','Đại Khê Thủy','Sa Trung Thổ','Thiên Thượng Hỏa','Thạch Lựu Mộc','Đại Hải Thủy'];
+const hanhOf=(c,z)=>{let v=INT(c/2)+1+[0,0,1,1,2,2,0,0,1,1,2,2][z];if(v>5)v-=5;return HANH[v]};
+const CUC={Thủy:2,Mộc:3,Kim:4,Thổ:5,Hỏa:6};
+const SINH={Kim:'Thủy',Thủy:'Mộc',Mộc:'Hỏa',Hỏa:'Thổ',Thổ:'Kim'},KHAC={Kim:'Mộc',Mộc:'Thổ',Thổ:'Thủy',Thủy:'Hỏa',Hỏa:'Kim'};
+const MAIN=['Tử Vi','Thiên Cơ','Thái Dương','Vũ Khúc','Thiên Đồng','Liêm Trinh','Thiên Phủ','Thái Âm','Tham Lang','Cự Môn','Thiên Tướng','Thiên Lương','Thất Sát','Phá Quân'];
+const HOA={0:['Liêm Trinh','Phá Quân','Vũ Khúc','Thái Dương'],1:['Thiên Cơ','Thiên Lương','Tử Vi','Thái Âm'],2:['Thiên Đồng','Thiên Cơ','Văn Xương','Liêm Trinh'],3:['Thái Âm','Thiên Đồng','Thiên Cơ','Cự Môn'],4:['Tham Lang','Thái Âm','Hữu Bật','Thiên Cơ'],5:['Vũ Khúc','Tham Lang','Thiên Lương','Văn Khúc'],6:['Thái Dương','Vũ Khúc','Thái Âm','Thiên Đồng'],7:['Cự Môn','Thái Dương','Văn Khúc','Văn Xương'],8:['Thiên Lương','Tử Vi','Thiên Phủ','Vũ Khúc'],9:['Phá Quân','Cự Môn','Thái Âm','Tham Lang']};
+const HOAN=['Lộc','Quyền','Khoa','Kỵ'];
+const GOOD=new Set(['Tả Phù','Hữu Bật','Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Lộc Tồn','Thiên Mã','Long Trì','Phượng Các','Tam Thai','Bát Tọa','Ân Quang','Thiên Quý','Hồng Loan','Thiên Hỷ','Thiên Y','Long Đức','Phúc Đức','Thanh Long','Hỷ Thần','Bác Sĩ','Tấu Thư','Thiên Giải','Địa Giải','Giải Thần','Thiên Quan','Thiên Phúc']);
+const KW={'Tử Vi':'uy quyền, che chở','Thiên Cơ':'mưu trí, thay đổi','Thái Dương':'danh tiếng, quang minh','Vũ Khúc':'tài chính, quyết đoán','Thiên Đồng':'phúc hậu, hưởng thụ','Liêm Trinh':'nguyên tắc, tham vọng','Thiên Phủ':'kho tài, ổn định','Thái Âm':'tích lũy, tình cảm','Tham Lang':'giao tế, ham muốn','Cự Môn':'lời nói, thị phi','Thiên Tướng':'chính trực, giúp đỡ','Thiên Lương':'che chở, nguyên tắc','Thất Sát':'xông pha, biến động','Phá Quân':'phá cũ lập mới, hao tán'};
+const MENH={'Tử Vi':'Phong thái đường hoàng, tự trọng, thích được tôn trọng và có tố chất lãnh đạo. Gặp nhiều cát tinh phò tá (Tả Hữu, Khôi Việt, Xương Khúc) thì quý hiển; đứng một mình dễ cô độc, chủ quan.',
+'Thiên Cơ':'Thông minh, nhanh nhạy, giỏi tính toán và mưu lược, hợp nghề kỹ thuật, tham mưu, kế hoạch. Dễ lo nghĩ nhiều và hay thay đổi.',
+'Thái Dương':'Rộng rãi, thẳng thắn, nhiệt tình, thích giúp người và dễ có tiếng tăm. Thái Dương ở cung từ Dần đến Ngọ (sáng) thì tốt hơn; ở cung tối dễ vất vả, hao tâm.',
+'Vũ Khúc':'Cương nghị, quyết đoán, thực tế, có duyên với tài chính, kinh doanh, ngân hàng. Tính cứng, tình cảm đôi khi khô khan.',
+'Thiên Đồng':'Hiền hòa, dễ mến, thích an nhàn, giỏi thích nghi. Thời trẻ thay đổi nhiều, trung vận mới ổn định; cần tránh ỷ lại.',
+'Liêm Trinh':'Có nguyên tắc, tài tổ chức, nhiều tham vọng, hợp luật, quân đội, hành chính. Tính nóng; gặp sát tinh dễ dính thị phi, kiện tụng.',
+'Thiên Phủ':'Điềm đạm, rộng lượng, giỏi quản lý và giữ của, đời sống thường ổn định, sung túc. Có xu hướng bảo thủ, thích an toàn.',
+'Thái Âm':'Dịu dàng, tinh tế, giàu cảm xúc, có khiếu thẩm mỹ và giỏi tích lũy (nhà đất). Thái Âm ở cung từ Thân đến Tý (sáng) thì tốt hơn.',
+'Tham Lang':'Đa tài, giao thiệp rộng, nhiều ham muốn, hợp kinh doanh, nghệ thuật, ngoại giao. Cần tiết chế; thường trung niên mới phát.',
+'Cự Môn':'Ăn nói sắc sảo, giỏi lý luận, hợp luật, giáo dục, truyền thông, buôn bán. Dễ vướng thị phi; gặp Thái Dương sáng thì giải được.',
+'Thiên Tướng':'Chính trực, trọng nghĩa, hay giúp người, tướng mạo đoan chính, hợp công việc hành chính, phục vụ. Gặp Tuần, Triệt hay sát tinh thì kém vững.',
+'Thiên Lương':'Hiền lành, nguyên tắc, có lòng trắc ẩn, thích che chở người khác, hay gặp may giải nạn. Hợp y tế, giáo dục, tư vấn.',
+'Thất Sát':'Mạnh mẽ, gan dạ, độc lập, thích xông pha, cuộc đời nhiều thăng trầm. Hợp quân đội, kinh doanh mạo hiểm, kỹ thuật; cần kiềm chế nóng nảy.',
+'Phá Quân':'Dám phá cũ lập mới, ưa thay đổi, có tinh thần tiên phong, đời nhiều biến động. Thành công thường đến sau đổ vỡ; cần kiên nhẫn và tiết kiệm.'};
+const CUNGY={'Mệnh':'bản thân, tính cách, năng lực','Huynh Đệ':'anh chị em, người ngang hàng','Phu Thê':'hôn nhân, người bạn đời','Tử Tức':'con cái, sự sáng tạo','Tài Bạch':'tiền bạc, cách kiếm tiền','Tật Ách':'sức khỏe, bệnh tật, tai ách','Thiên Di':'ra ngoài, xã hội, đi xa','Nô Bộc':'bạn bè, đồng nghiệp, cấp dưới','Quan Lộc':'sự nghiệp, công danh','Điền Trạch':'nhà đất, tài sản tích lũy','Phúc Đức':'phúc phần dòng họ, đời sống tinh thần','Phụ Mẫu':'cha mẹ, học vấn, giấy tờ'};
+const THAN={'Mệnh':'Thân Mệnh đồng cung: tính cách nhất quán suốt đời, tự mình định đoạt nhiều việc.','Phúc Đức':'Thân cư Phúc Đức: coi trọng đời sống tinh thần, phúc phần dòng họ ảnh hưởng lớn.','Quan Lộc':'Thân cư Quan Lộc: càng về sau càng gắn bó và đặt nặng sự nghiệp.','Thiên Di':'Thân cư Thiên Di: hay đi xa, thành công nhờ môi trường bên ngoài.','Tài Bạch':'Thân cư Tài Bạch: tiền bạc chi phối nhiều quyết định trong đời.','Phu Thê':'Thân cư Phu Thê: cuộc đời chịu ảnh hưởng nhiều từ người bạn đời.'};
+const HOAY={Lộc:'tài lộc, thuận lợi, được hưởng',Quyền:'quyền hành, chủ động, có tiếng nói',Khoa:'danh tiếng, học vấn, được giải hạn',Kỵ:'trở ngại, lo âu, vướng mắc'};
+const MCHU=['Tham Lang','Cự Môn','Lộc Tồn','Văn Khúc','Liêm Trinh','Vũ Khúc','Phá Quân','Vũ Khúc','Liêm Trinh','Văn Khúc','Lộc Tồn','Cự Môn'];
+const TCHU=['Hỏa Tinh','Thiên Tướng','Thiên Lương','Thiên Đồng','Văn Xương','Thiên Cơ'];
+/* --- Phái Trung Châu (Trung Hoa): tên Hán, độ sáng (bảng lấy từ thư viện mã nguồn mở iztro, MIT, xếp từ Dần) --- */
+const HAN={'Tử Vi':'紫微','Thiên Cơ':'天機','Thái Dương':'太陽','Vũ Khúc':'武曲','Thiên Đồng':'天同','Liêm Trinh':'廉貞','Thiên Phủ':'天府','Thái Âm':'太陰','Tham Lang':'貪狼','Cự Môn':'巨門','Thiên Tướng':'天相','Thiên Lương':'天梁','Thất Sát':'七殺','Phá Quân':'破軍',
+'Lộc Tồn':'祿存','Kình Dương':'擎羊','Đà La':'陀羅','Tả Phù':'左輔','Hữu Bật':'右弼','Văn Xương':'文昌','Văn Khúc':'文曲','Địa Không':'地空','Địa Kiếp':'地劫','Thiên Khôi':'天魁','Thiên Việt':'天鉞','Hỏa Tinh':'火星','Linh Tinh':'鈴星','Thiên Mã':'天馬','Hàm Trì':'咸池','Hồng Loan':'紅鸞','Thiên Hỷ':'天喜','Thiên Khốc':'天哭','Thiên Hư':'天虛','Long Trì':'龍池','Phượng Các':'鳳閣','Tam Thai':'三台','Bát Tọa':'八座','Ân Quang':'恩光','Thiên Quý':'天貴','Thiên Hình':'天刑','Thiên Diêu':'天姚','Cô Thần':'孤辰','Quả Tú':'寡宿','Thiên Thương':'天傷','Thiên Sứ':'天使','Thiên Không':'天空',
+'Thai Phụ':'台輔','Phong Cáo':'封誥','Thiên Tài':'天才','Thiên Thọ':'天壽','Thiên Trù':'天廚','Phá Toái':'破碎','Phỉ Liêm':'蜚廉','Thiên Quan':'天官','Thiên Phúc':'天福','Thiên Đức':'天德','Nguyệt Đức':'月德','Thiên Vu':'天巫','Thiên Nguyệt':'天月','Âm Sát':'陰煞','Giải Thần':'解神','Niên Giải':'年解','Hoa Cái':'華蓋','Kiếp Sát':'劫殺','Đại Hao (năm)':'大耗','Tuần Không':'旬空','Triệt Không':'截空',
+'Mệnh':'命宮','Huynh Đệ':'兄弟','Phu Thê':'夫妻','Tử Tức':'子女','Tài Bạch':'財帛','Tật Ách':'疾厄','Thiên Di':'遷移','Nô Bộc':'交友','Quan Lộc':'官祿','Điền Trạch':'田宅','Phúc Đức':'福德','Phụ Mẫu':'父母',
+'Tràng Sinh':'長生','Mộc Dục':'沐浴','Quan Đới':'冠帶','Lâm Quan':'臨官','Đế Vượng':'帝旺','Suy':'衰','Bệnh':'病','Tử':'死','Mộ':'墓','Tuyệt':'絕','Thai':'胎','Dưỡng':'養','Lộc':'祿','Quyền':'權','Khoa':'科','Kỵ':'忌'};
+const CANH=['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'],CHIH=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const BSH=['博士','力士','青龍','小耗','將軍','奏書','飛廉','喜神','病符','大耗','伏兵','官府'];
+const SQH=['歲建','晦氣','喪門','貫索','官符','小耗','大耗','龍德','白虎','天德','弔客','病符'];
+const JQH=['將星','攀鞍','歲驛','息神','華蓋','劫煞','災煞','天煞','指背','咸池','月煞','亡神'];
+const BRN={miao:'廟',wang:'旺',de:'得',li:'利',ping:'平',bu:'不',xian:'陷'},BRV={miao:'Miếu',wang:'Vượng',de:'Đắc',li:'Lợi',ping:'Bình',bu:'Bất',xian:'Hãm'};
+const BRT={'Tử Vi':'wang wang de wang miao miao wang wang de wang ping miao','Thiên Cơ':'de wang li ping miao xian de wang li ping miao xian','Thái Dương':'wang miao wang wang wang de de ping bu xian xian bu','Vũ Khúc':'de li miao ping wang miao de li miao ping wang miao','Thiên Đồng':'li ping ping miao xian bu wang ping ping miao wang bu','Liêm Trinh':'miao ping li xian ping li miao ping li xian ping li','Thiên Phủ':'miao de miao de wang miao de wang miao de miao miao','Thái Âm':'wang xian xian xian bu bu li wang wang miao miao miao','Tham Lang':'ping li miao xian wang miao ping li miao xian wang miao','Cự Môn':'miao miao xian wang wang bu miao miao xian wang wang bu','Thiên Tướng':'miao xian de de miao de miao xian de de miao miao','Thiên Lương':'miao miao miao xian miao wang xian de miao xian miao wang','Thất Sát':'miao wang miao ping wang miao miao wang miao ping wang miao','Phá Quân':'de xian wang ping miao wang de xian wang ping miao wang','Văn Xương':'xian li de miao xian li de miao xian li de miao','Văn Khúc':'ping wang de miao xian wang de miao xian wang de miao','Hỏa Tinh':'miao li xian de miao li xian de miao li xian de','Linh Tinh':'miao li xian de miao li xian de miao li xian de','Kình Dương':'- xian miao - xian miao - xian miao - xian miao','Đà La':'xian - miao xian - miao xian - miao xian - miao'};
+const brOf=(n,z)=>{const t=BRT[n];if(!t)return '';const v=t.split(' ')[md(z-2)];return v==='-'?'':v};
+const GOODCN=new Set(['Thai Phụ','Phong Cáo','Thiên Tài','Thiên Thọ','Thiên Trù','Thiên Quan','Thiên Phúc','Thiên Đức','Nguyệt Đức','Thiên Vu','Giải Thần','Niên Giải','Hoa Cái']);
+
+function chart(L,hour,male,cn){
+ const yc=md(L.y-4,10),yz=md(L.y-4),duong=yc%2===0,thuan=duong===male;
+ let m=L.m;if(L.leap&&L.d>15)m=m%12+1;
+ const h=hour,P=Array.from({length:12},()=>({main:[],sub:[],ring:[]}));
+ const put=(z,n,k='sub')=>P[md(z)][k].push(n);
+ const menh=md(2+m-1-h),than=md(2+m-1+h);
+ const canDan=md((yc%5)*2+2,10),canOf=z=>md(canDan+md(z-2),10);
+ const cucH=hanhOf(canOf(menh),menh),cuc=CUC[cucH];
+ const ban=NAPAM[INT(md(6*yc-5*yz,60)/2)],banH=hanhOf(yc,yz);
+ // Tử Vi
+ let k=0;while((L.d+k)%cuc)k++;const q=(L.d+k)/cuc;const tv=md(2+q-1+(k%2?-k:k));
+ [[0,'Tử Vi'],[-1,'Thiên Cơ'],[-3,'Thái Dương'],[-4,'Vũ Khúc'],[-5,'Thiên Đồng'],[-8,'Liêm Trinh']].forEach(([o,n])=>put(tv+o,n,'main'));
+ const tp=md(4-tv);
+ [[0,'Thiên Phủ'],[1,'Thái Âm'],[2,'Tham Lang'],[3,'Cự Môn'],[4,'Thiên Tướng'],[5,'Thiên Lương'],[6,'Thất Sát'],[10,'Phá Quân']].forEach(([o,n])=>put(tp+o,n,'main'));
+ // Lộc Tồn, Kình, Đà, Bác Sĩ
+ const lt=[2,3,5,6,5,6,8,9,11,0][yc];put(lt,'Lộc Tồn');put(lt+1,'Kình Dương');put(lt-1,'Đà La');
+ const dir=thuan?1:-1;
+ if(cn){BSH.forEach((n,i)=>P[md(lt+dir*i)].bs=n);SQH.forEach((n,i)=>P[md(yz+i)].sq=n)}else{
+ ['Bác Sĩ','Lực Sĩ','Thanh Long','Tiểu Hao','Tướng Quân','Tấu Thư','Phi Liêm','Hỷ Thần','Bệnh Phù','Đại Hao','Phục Binh','Quan Phủ'].forEach((n,i)=>put(lt+dir*i,n));
+ ['Thái Tuế','Thiếu Dương','Tang Môn','Thiếu Âm','Quan Phù','Tử Phù','Tuế Phá','Long Đức','Bạch Hổ','Phúc Đức','Điếu Khách','Trực Phù'].forEach((n,i)=>put(yz+i,n))}
+ put(yz+1,'Thiên Không');
+ const tsStart={Thủy:8,Thổ:8,Mộc:11,Kim:5,Hỏa:2}[cucH];
+ ['Tràng Sinh','Mộc Dục','Quan Đới','Lâm Quan','Đế Vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng'].forEach((n,i)=>P[md(tsStart+dir*i)].ts=n);
+ const taPhu=md(4+m-1),huuBat=md(10-(m-1)),vx=md(10-h),vk=md(4+h);
+ put(taPhu,'Tả Phù');put(huuBat,'Hữu Bật');put(vx,'Văn Xương');put(vk,'Văn Khúc');
+ put(11-h,'Địa Không');put(11+h,'Địa Kiếp');
+ const kv=cn&&yc===6?[1,7]:[[1,7],[0,8],[11,9],[11,9],[1,7],[0,8],[6,2],[6,2],[3,5],[3,5]][yc];put(kv[0],'Thiên Khôi');put(kv[1],'Thiên Việt');
+ const grp=[0,1,2,3].find(g=>[[8,0,4],[2,6,10],[5,9,1],[11,3,7]][g].includes(yz));
+ const hl=[[2,10],[1,3],[3,10],[9,10]][grp];const hd=thuan?1:-1;if(cn){put(hl[0]+h,'Hỏa Tinh');put(hl[1]+h,'Linh Tinh')}else{put(hl[0]+hd*h,'Hỏa Tinh');put(hl[1]-hd*h,'Linh Tinh')}
+ put([2,8,11,5][grp],'Thiên Mã');put([9,3,6,0][grp],cn?'Hàm Trì':'Đào Hoa');
+ put(3-yz,'Hồng Loan');put(9-yz,'Thiên Hỷ');put(6-yz,'Thiên Khốc');put(6+yz,'Thiên Hư');put(4+yz,'Long Trì');put(10-yz,'Phượng Các');
+ put(taPhu+L.d-1,'Tam Thai');put(huuBat-(L.d-1),'Bát Tọa');put(vx+L.d-2,'Ân Quang');put(cn?vk+L.d-2:vk-(L.d-2),'Thiên Quý');
+ put(9+m-1,'Thiên Hình');put(1+m-1,'Thiên Diêu');if(!cn)put(1+m-1,'Thiên Y');
+ const ss=INT(md(yz+1)/3);put([2,5,8,11][ss],'Cô Thần');put([10,1,4,7][ss],'Quả Tú');
+ const swap=cn&&(yz%2)!==(male?0:1);put(md(menh-(swap?5:7)),'Thiên Thương');put(md(menh-(swap?7:5)),'Thiên Sứ');if(!cn){put(4,'Thiên La');put(10,'Địa Võng')}
+ // Tứ Hóa
+ const hoa={};HOA[yc].forEach((n,i)=>hoa[cn&&yc===8&&i===2?'Tả Phù':n]=HOAN[i]);
+ // Tuần Triệt
+ const triet=[[8,9],[6,7],[4,5],[2,3],[0,1]][yc%5];const ts0=md(yz-yc);const tuan=[md(ts0+10),md(ts0+11)];
+ if(cn){const mi=m-1;
+  [[6+h,'Thai Phụ'],[2+h,'Phong Cáo'],[menh+yz,'Thiên Tài'],[than+yz,'Thiên Thọ'],[[5,6,0,5,6,8,2,6,9,11][yc],'Thiên Trù'],[[5,1,9][yz%3],'Phá Toái'],[[8,9,10,5,6,7,2,3,4,11,0,1][yz],'Phỉ Liêm'],
+  [[7,4,5,2,3,9,11,9,10,6][yc],'Thiên Quan'],[[9,8,0,11,3,2,6,5,6,5][yc],'Thiên Phúc'],[9+yz,'Thiên Đức'],[5+yz,'Nguyệt Đức'],[[5,8,2,11][mi%4],'Thiên Vu'],[[10,5,4,2,7,3,11,7,2,6,10,2][mi],'Thiên Nguyệt'],
+  [[2,0,10,8,6,4][mi%6],'Âm Sát'],[[8,10,0,2,4,6][INT(mi/2)],'Giải Thần'],[10-yz,'Niên Giải'],[[4,10,1,7][grp],'Hoa Cái'],[[5,11,2,8][grp],'Kiếp Sát'],[[7,6,9,8,11,10,1,0,3,2,5,4][yz],'Đại Hao (năm)'],
+  [(yz%2===0?[8,6,4,2,0]:[9,7,5,3,1])[yc%5],'Triệt Không'],[tuan.find(z=>z%2===yz%2),'Tuần Không']].forEach(([z,n])=>put(z,n));
+  JQH.forEach((n,i)=>P[md([0,6,9,3][grp]+i)].jq=n)}
+ // Cung, đại vận
+ for(let i=0;i<12;i++){const z=md(menh-i);P[z].cung=CUNG[i]}
+ for(let i=0;i<12;i++){const z=md(menh+dir*i);P[z].dv=cuc+10*i}
+ return{P,yc,yz,duong,thuan,menh,than,cuc,cucH,ban,banH,hoa,triet,tuan,canOf,m,
+  mchu:MCHU[menh],tchu:TCHU[yz%6],tvPos:tv}}
+
+$('#fTv').addEventListener('submit',e=>{e.preventDefault();const err=$('#tvErr');err.textContent='';const out=$('#tvRes');out.innerHTML='';
+ const hv=$('#tvHour').value;if(hv===''){err.textContent='Vui lòng chọn giờ sinh.';return}
+ let hour=+hv;const male=document.querySelector('input[name=tvSex]:checked').value==='1';
+ const cal=document.querySelector('input[name=tvCal]:checked').value;let L,solar='';
+ if(cal==='s'){const v=/^(\d{4})-(\d{2})-(\d{2})$/.exec($('#tvDob').value);if(!v){err.textContent='Vui lòng chọn ngày sinh dương lịch.';return}
+  const dt=new Date(Date.UTC(+v[1],+v[2]-1,+v[3]));solar=`${+v[3]}/${+v[2]}/${+v[1]}`;
+  if(hour===12){dt.setUTCDate(dt.getUTCDate()+1);hour=0}
+  L=s2l(dt.getUTCDate(),dt.getUTCMonth()+1,dt.getUTCFullYear())}
+ else{const d=+$('#tvLd').value,mo=+$('#tvLm').value,y=+$('#tvLy').value;
+  if(!(d>=1&&d<=30&&mo>=1&&mo<=12&&y>=1900&&y<=2099)){err.textContent='Ngày âm lịch chưa hợp lệ.';return}
+  if(hour===12)hour=0;L={d,m:mo,y,leap:$('#tvLeap').checked?1:0}}
+ const cnm=document.querySelector('input[name=tvSch]:checked').value==='cn';
+ const C=chart(L,hour,male,cnm),P=C.P;
+ const cn=z=>cnm?CANH[C.canOf(z)]+CHIH[z]:CAN[C.canOf(z)]+' '+CHI[z];
+ const gzv=z=>CAN[C.canOf(z)]+' '+CHI[z];
+ const isG=n=>GOOD.has(n)||GOODCN.has(n);
+ const T=n=>cnm?(HAN[n]||n):n;
+ const brS=(n,z)=>{const b=cnm?brOf(n,z):'';return b?`<sup title="${BRV[b]}">${BRN[b]}</sup>`:''};
+ const brV=(n,z)=>{const b=cnm?brOf(n,z):'';return b?` (${BRV[b]})`:''};
+ const nowY=new Date().getFullYear(),age=nowY-L.y+1;
+ const tvStart=[4,10,7,1][[0,1,2,3].find(g=>[[2,6,10],[8,0,4],[5,9,1],[11,3,7]][g].includes(C.yz))];
+ const tieuVan=md(tvStart+(male?1:-1)*(age-1));
+ const curDV=Object.keys(P).find(z=>age>=P[z].dv&&age<P[z].dv+10);
+ const star=(n,z)=>`<span title="${n}">${T(n)}</span>${z!==undefined?brS(n,z):''}${C.hoa[n]?`<span class="hoa${C.hoa[n]==='Kỵ'?' k':''}">${T(C.hoa[n])}</span>`:''}`;
+ const starV=(n,z)=>`${n}${cnm&&HAN[n]?' '+HAN[n]:''}${z!==undefined?brV(n,z):''}${C.hoa[n]?`<span class="hoa${C.hoa[n]==='Kỵ'?' k':''}">${C.hoa[n]}</span>`:''}`;
+ const area={5:'1/1',6:'1/2',7:'1/3',8:'1/4',4:'2/1',9:'2/4',3:'3/1',10:'3/4',2:'4/1',1:'4/2',0:'4/3',11:'4/4'};
+ const cell=z=>{const p=P[z];const g=p.sub.filter(isG),b=p.sub.filter(n=>!isG(n));
+  const marks=(z===C.than?`<span class="tag">${cnm?'身':'Thân'}</span> `:'')+(!cnm&&C.tuan.includes(z)?'<span class="tag">Tuần</span> ':'')+(!cnm&&C.triet.includes(z)?'<span class="tag">Triệt</span>':'');
+  return `<div class="cu${z===C.menh?' me':''}" style="grid-area:${area[z]}"><div class="hd"><span>${cn(z)}</span><span>${marks}</span><b>${p.dv}</b></div>
+  <div class="pn">${cnm?`${HAN[p.cung]} <small style="font-weight:500;color:var(--mut)">${p.cung}</small>`:p.cung.toUpperCase()}</div><div class="ms">${p.main.map(n=>star(n,z)).join(', ')||`<span style="color:var(--mut);font-weight:500">${cnm?'空宮 (Vô chính diệu)':'Vô chính diệu'}</span>`}</div>
+  <div class="mn"><div class="g">${g.map(n=>star(n,z)).join('<br>')}</div><div class="b">${b.map(n=>star(n,z)).join('<br>')}</div></div>
+  ${cnm?`<div class="ft"><span>${p.sq}</span><span>${p.jq}</span></div>`:''}
+  <div class="ft"><span>${T(p.ts)}${cnm?' · '+p.bs:''}</span>${z==tieuVan?`<span>${cnm?'小限':'Tiểu vận'} ${nowY}</span>`:''}</div></div>`};
+ const cucRel=C.banH===C.cucH?'Cục và bản mệnh cùng hành (bình hòa): ổn định, ít trở lực.':SINH[C.cucH]===C.banH?'Cục sinh bản mệnh: được hoàn cảnh nâng đỡ, rất tốt.':SINH[C.banH]===C.cucH?'Bản mệnh sinh cục: phải bỏ nhiều công sức cho hoàn cảnh, vất vả hơn.':KHAC[C.cucH]===C.banH?'Cục khắc bản mệnh: hoàn cảnh hay gây sức ép, cần bền bỉ.':'Bản mệnh khắc cục: chế ngự được hoàn cảnh nhưng hao tâm sức.';
+ const nm=$('#tvName').value.trim();
+ const center=`<div class="ctr"><b class="t">${nm?esc(nm):'Lá số tử vi'}</b>
+  ${solar?`<div>Dương lịch: ${solar}</div>`:''}<div>Âm lịch: ${L.d}/${L.m}${L.leap?' (nhuận)':''}/${L.y}, giờ ${CHI[hour]}</div>
+  <div>Năm ${CAN[C.yc]} ${CHI[C.yz]}${cnm?` (${CANH[C.yc]}${CHIH[C.yz]}年)`:''}, ${C.duong?'Dương':'Âm'} ${male?'Nam':'Nữ'}${cnm?` (${C.duong?'陽':'陰'}${male?'男':'女'})`:''}</div>
+  <div>Bản mệnh: ${C.ban}</div><div>Cục: ${C.cucH} ${['','','nhị','tam','tứ','ngũ','lục'][C.cuc]} cục</div>
+  <div>Mệnh chủ: ${C.mchu}, Thân chủ: ${C.tchu}</div>${cnm?`<div>五行局: ${{Thủy:'水二局',Mộc:'木三局',Kim:'金四局',Thổ:'土五局',Hỏa:'火六局'}[C.cucH]} · 命主 ${HAN[C.mchu]} · 身主 ${HAN[C.tchu]}</div><div style="font-weight:700">Phái Trung Châu (中州派)</div>`:'<div style="font-weight:700">Phái Việt Nam (Thái Thứ Lang)</div>'}<div style="color:var(--mut);margin-top:4px">${cucRel}</div></div>`;
+ const Mz=C.menh,mainM=P[Mz].main,borrow=!mainM.length,useM=borrow?P[md(Mz+6)].main:mainM;
+ const tam=[Mz,md(Mz+4),md(Mz-4),md(Mz+6)];
+ const allIn=z=>[...P[z].main,...P[z].sub];
+ const lucCat=['Tả Phù','Hữu Bật','Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt'],lucSat=['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
+ const cat=tam.flatMap(allIn).filter(n=>lucCat.includes(n)),sat=tam.flatMap(allIn).filter(n=>lucSat.includes(n));
+ const hoaLoc=Object.keys(C.hoa).map(n=>{const z=+Object.keys(P).find(z=>allIn(z).includes(n));return `<li><b>Hóa ${C.hoa[n]}</b> đi với ${n} tại cung <b>${P[z].cung}</b>: ${HOAY[C.hoa[n]]} trong lĩnh vực ${CUNGY[P[z].cung]}.</li>`}).join('');
+ const order=[...Array(12)].map((_,i)=>md(Mz-i));
+ /* ---- Kết luận dễ hiểu ---- */
+ const CAREER={'Tử Vi':'quản lý, lãnh đạo, hành chính','Thiên Cơ':'kỹ thuật, công nghệ, kế hoạch, tư vấn','Thái Dương':'giáo dục, truyền thông, ngoại giao, công việc cần danh tiếng','Vũ Khúc':'tài chính, ngân hàng, kinh doanh','Thiên Đồng':'dịch vụ, giải trí, ăn uống, chăm sóc khách hàng','Liêm Trinh':'luật, quân đội, công an, hành chính','Thiên Phủ':'quản lý tài sản, kế toán, bất động sản','Thái Âm':'bất động sản, thiết kế, nghệ thuật, tài chính','Tham Lang':'kinh doanh, bán hàng, giải trí, ngoại giao','Cự Môn':'luật sư, giảng dạy, truyền thông, bán hàng','Thiên Tướng':'hành chính, nhân sự, dịch vụ công','Thiên Lương':'y tế, giáo dục, bảo hiểm, tư vấn','Thất Sát':'quân đội, kỹ thuật, kinh doanh dám mạo hiểm','Phá Quân':'khởi nghiệp, cải cách, kỹ thuật, vận tải'};
+ const MONEY={'Tử Vi':'tiền đến từ địa vị và khả năng quản lý','Thiên Cơ':'kiếm tiền bằng trí óc, thu nhập hay thay đổi','Thái Dương':'tiền đến nhờ uy tín, nhưng dễ chi rộng tay','Vũ Khúc':'giỏi kiếm và giữ tiền, hợp đầu tư bài bản','Thiên Đồng':'tiền đến khá tự nhiên, đủ dùng, cần tránh tiêu cho hưởng thụ','Liêm Trinh':'kiếm tiền bằng năng lực, cần minh bạch giấy tờ','Thiên Phủ':'giữ của tốt, tích lũy bền','Thái Âm':'tích lũy từ từ, hợp để dành và mua nhà đất','Tham Lang':'kiếm tiền qua quan hệ, dễ tiêu vì ham muốn','Cự Môn':'kiếm tiền nhờ lời nói, cạnh tranh; cẩn thận tranh chấp','Thiên Tướng':'thu nhập ổn định, hay giúp người khác','Thiên Lương':'tiền đến chậm nhưng bền, không hợp đầu cơ','Thất Sát':'thu nhập lên xuống mạnh, phải tự lực','Phá Quân':'kiếm nhanh tiêu nhanh, cần kỷ luật chi tiêu'};
+ const LOVE={'Tử Vi':'người bạn đời có cá tính, thích làm chủ','Thiên Cơ':'bạn đời thông minh, hai người cần trò chuyện nhiều để hiểu nhau','Thái Dương':'bạn đời nhiệt tình, rộng rãi','Vũ Khúc':'tình cảm thực tế, kết hôn muộn thường tốt hơn','Thiên Đồng':'hòa thuận, ngọt ngào','Liêm Trinh':'tình cảm mãnh liệt, dễ sóng gió','Thiên Phủ':'ổn định, bạn đời đảm đang','Thái Âm':'dịu dàng, lãng mạn','Tham Lang':'nhiều duyên, cần giữ sự chung thủy','Cự Môn':'dễ bất đồng lời nói, cần học cách lắng nghe','Thiên Tướng':'bạn đời tử tế, đáng tin','Thiên Lương':'bạn đời chín chắn, có thể lớn tuổi hơn','Thất Sát':'hai cá tính mạnh, dễ va chạm, nên kết hôn muộn','Phá Quân':'nhiều thay đổi, cần kiên nhẫn vun đắp'};
+ const HEALTH={'Tử Vi':'tỳ vị, tiêu hóa','Thiên Cơ':'gan, thần kinh, chân tay','Thái Dương':'mắt, tim, huyết áp','Vũ Khúc':'phổi, đường hô hấp','Thiên Đồng':'thận, bàng quang','Liêm Trinh':'máu huyết, tim mạch','Thiên Phủ':'dạ dày','Thái Âm':'thận, mắt, nội tiết','Tham Lang':'gan, hệ sinh dục','Cự Môn':'tiêu hóa, răng miệng','Thiên Tướng':'da, bàng quang','Thiên Lương':'dạ dày, tim','Thất Sát':'phổi, hô hấp, tai nạn khi vận động','Phá Quân':'tai nạn, máu huyết'};
+ const HOME={'Tử Vi':'có nhà cửa khang trang','Thiên Cơ':'hay đổi chỗ ở','Thái Dương':'nhà sáng sủa, có thể được thừa hưởng','Vũ Khúc':'tự mua được nhà nhờ tiền tích lũy','Thiên Đồng':'tay trắng làm nên, về sau ổn định','Liêm Trinh':'có tranh chấp nhỏ về nhà đất nếu không rõ giấy tờ','Thiên Phủ':'nhiều nhà đất, giữ được tài sản','Thái Âm':'rất có duyên với nhà đất','Tham Lang':'mua bán nhà đất nhiều lần','Cự Môn':'dễ có thị phi về nhà đất','Thiên Tướng':'nhà cửa ổn định','Thiên Lương':'được thừa hưởng hoặc che chở về nhà cửa','Thất Sát':'tự tay gây dựng, lúc đầu vất vả','Phá Quân':'tài sản biến động, nên giữ nhà làm của để dành'};
+ const CATS=['Tả Phù','Hữu Bật','Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Lộc Tồn','Thiên Mã'],SATS=['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp','Thiên Hình'];
+ const scoreOf=z=>{const opp=md(z+6);let s=0;const w=(zz,f)=>{const all=allIn(zz);
+   s+=f*all.filter(n=>CATS.includes(n)).length-f*all.filter(n=>SATS.includes(n)).length;
+   all.forEach(n=>{const x=C.hoa[n];if(x)s+=f*(x==='Kỵ'?-1.5:1)})};
+  w(z,1);w(opp,0.5);
+  if(cnm)P[z].main.forEach(n=>{const b=brOf(n,z);if(b==='miao'||b==='wang')s+=1;else if(b==='xian'||b==='bu')s-=1});
+  if(!P[z].main.length)s-=0.5;
+  if(!cnm&&(C.tuan.includes(z)||C.triet.includes(z)))s-=0.5;return s};
+ const rate=s=>s>=1.5?['good','Thuận lợi']:s<=-1?['bad','Cần lưu ý']:['neu','Trung bình'];
+ const zOf=name=>+Object.keys(P).find(z=>P[z].cung===name);
+ const mainOrOpp=z=>P[z].main.length?P[z].main:P[md(z+6)].main;
+ const lst=(arr,map)=>arr.map(n=>map[n]).filter(Boolean).join('; ');
+ const AREA=[['Tính cách','Mệnh',z=>`Bạn là người ${lst(mainOrOpp(z),KW)}. ${mainOrOpp(z).map(n=>MENH[n].split('. ')[0]).join('. ')}.`],
+  ['Sự nghiệp','Quan Lộc',z=>`Hợp với: ${lst(mainOrOpp(z),CAREER)}.`],
+  ['Tiền bạc','Tài Bạch',z=>`Cách kiếm và giữ tiền: ${lst(mainOrOpp(z),MONEY)}.`],
+  ['Tình cảm, hôn nhân','Phu Thê',z=>`Chuyện tình cảm: ${lst(mainOrOpp(z),LOVE)}.`],
+  ['Sức khỏe','Tật Ách',z=>`Nên chú ý: ${lst(mainOrOpp(z),HEALTH)}. Đây chỉ là gợi ý theo sách tử vi, không thay cho khám sức khỏe.`],
+  ['Nhà cửa, tài sản','Điền Trạch',z=>`Về nhà đất: ${lst(mainOrOpp(z),HOME)}.`]];
+ const areas=AREA.map(([t,c,f])=>{const z=zOf(c),s=scoreOf(z);return{t,c,z,s,r:rate(s),txt:f(z)}});
+ const best=[...areas].sort((a,b)=>b.s-a.s)[0],worst=[...areas].sort((a,b)=>a.s-b.s)[0];
+ const dvR=curDV!==undefined?rate(scoreOf(+curDV)):null,tvR=rate(scoreOf(tieuVan));
+ const kyN=Object.keys(C.hoa).find(n=>C.hoa[n]==='Kỵ'),kyZ=+Object.keys(P).find(z=>allIn(z).includes(kyN));
+ const locN=Object.keys(C.hoa).find(n=>C.hoa[n]==='Lộc'),locZ=+Object.keys(P).find(z=>allIn(z).includes(locN));
+ const advice=[`Phát huy thế mạnh ở mặt <b>${best.t.toLowerCase()}</b>: đây là nơi lá số thuận lợi nhất của bạn.`,
+  `Mặt <b>${worst.t.toLowerCase()}</b> cần chú ý hơn cả: làm chậm, tính kỹ và nhờ người có kinh nghiệm góp ý trước khi quyết định lớn.`,
+  `Hóa Kỵ nằm ở cung ${P[kyZ].cung}, nên chuyện ${CUNGY[P[kyZ].cung]} dễ khiến bạn lo nghĩ. Hóa Lộc ở cung ${P[locZ].cung} cho thấy may mắn thường đến từ ${CUNGY[P[locZ].cung]}.`];
+ const concl=`<h3>Kết luận dễ hiểu</h3>
+ <div class="card" style="margin-bottom:12px"><p style="margin:0;font-size:17px"><b>Tóm lại:</b> bạn là người ${lst(mainOrOpp(Mz),KW)||'linh hoạt, chịu ảnh hưởng nhiều của hoàn cảnh'}. Mặt thuận lợi nhất là <b>${best.t.toLowerCase()}</b>, mặt cần lưu ý nhất là <b>${worst.t.toLowerCase()}</b>.
+ ${dvR?` Giai đoạn ${P[curDV].dv}–${P[curDV].dv+9} tuổi hiện nay được đánh giá <b>${dvR[1].toLowerCase()}</b>`:''}${dvR?`, riêng năm ${nowY} ở mức <b>${tvR[1].toLowerCase()}</b>.`:` Năm ${nowY} ở mức <b>${tvR[1].toLowerCase()}</b>.`}</p></div>
+ <div class="palist">${areas.map(a=>`<div class="card"><h4>${a.t} <span class="pair ${a.r[0]}" style="padding:2px 8px;font-size:13px">${a.r[1]}</span></h4><p>${a.txt}</p><p style="color:var(--mut);font-size:14px;margin:0">Xét theo cung ${a.c} (${gzv(a.z)}).</p></div>`).join('')}</div>
+ <div class="card" style="margin-top:12px"><h4>Lời khuyên</h4><ul>${advice.map(x=>`<li>${x}</li>`).join('')}</ul>
+ <p style="color:var(--mut);font-size:14px;margin:0">Mức đánh giá được chấm tự động: cộng điểm cho cát tinh và Hóa Lộc, Quyền, Khoa; trừ điểm cho sát tinh, Hóa Kỵ${cnm?' và sao hãm địa':', Tuần, Triệt'}, có xét cả cung đối diện. Đây là cách đọc giản lược để dễ hiểu, không thay được thầy luận giải kỹ.</p></div>`;
+
+ out.innerHTML=`<h3>Lá số</h3><p style="color:var(--mut);font-size:14px;margin:0 0 8px">Trên điện thoại, vuốt ngang để xem đủ lá số. Số ở góc mỗi cung là tuổi bắt đầu đại vận.</p>
+ <div class="scroll"><div class="tv">${[...Array(12).keys()].map(cell).join('')}${center}</div></div>
+ ${concl}
+ <h3>Luận giải chi tiết</h3>
+ <div class="grid2"><div class="card"><h4>Cung Mệnh tại ${gzv(Mz)}: ${mainM.map(n=>starV(n,Mz)).join(', ')||'Vô chính diệu'}</h4>
+ ${cnm&&mainM.length?`<p>${mainM.map(n=>{const b=brOf(n,Mz);return `${n} ở thế <b>${BRV[b]}</b>: ${['miao','wang'].includes(b)?'sao phát huy tốt nhất, nét tích cực nổi trội.':['de','li'].includes(b)?'sao phát huy khá, cần thêm cát tinh để trọn vẹn.':b==='ping'?'sao ở mức trung bình.':'sao bị yếu, nét tiêu cực dễ lộ ra, rất cần cát tinh và Hóa Lộc, Quyền, Khoa hỗ trợ.'}`}).join(' ')}</p>`:''}
+ ${borrow?`<p>Mệnh vô chính diệu nên mượn chính tinh cung Thiên Di (${useM.join(', ')}) để luận. Người Mệnh vô chính diệu thường linh hoạt, chịu ảnh hưởng nhiều của hoàn cảnh; gặp Tuần, Triệt hoặc Không Kiếp lại được xem là tốt.</p>`:''}
+ ${useM.map(n=>`<p><b>${n}:</b> ${MENH[n]}</p>`).join('')}
+ <p>${THAN[P[C.than].cung]||''}</p></div>
+ <div class="card"><h4>Tam phương tứ chính của Mệnh</h4><p>Mệnh, Tài Bạch, Quan Lộc, Thiên Di cùng chiếu vào nhau, là khung chính để luận cả lá số.</p>
+ <p><b>Lục cát tinh hội về:</b> ${cat.join(', ')||'không có'}.<br><b>Lục sát tinh hội về:</b> ${sat.join(', ')||'không có'}.</p>
+ <p>${cat.length>sat.length?'Cát tinh nhiều hơn sát tinh: thường được giúp đỡ, gặp nhiều thuận lợi.':cat.length<sat.length?'Sát tinh nhiều hơn cát tinh: đời nhiều thử thách, phải tự lực, nhưng có thể làm nên việc lớn nếu chính tinh vững.':'Cát và sát cân bằng: thuận lợi và thử thách đan xen.'}</p></div>
+ <div class="card"><h4>Tứ Hóa năm ${CAN[C.yc]}</h4><ul>${hoaLoc}</ul></div>
+ <div class="card"><h4>Vận hạn năm ${nowY} (${age} tuổi âm)</h4>
+ <p>Đại vận hiện tại: cung <b>${curDV!==undefined?P[curDV].cung+' ('+gzv(+curDV)+'), từ '+P[curDV].dv+' đến '+(P[curDV].dv+9)+' tuổi':'chưa vào đại vận đầu'}</b>${curDV!==undefined?`, chính tinh: ${P[curDV].main.join(', ')||'vô chính diệu'}`:''}.</p>
+ <p>Tiểu vận năm nay ở cung <b>${P[tieuVan].cung}</b> (${gzv(tieuVan)}). Lưu Thái Tuế năm ${CAN[md(nowY-4,10)]} ${CHI[md(nowY-4)]} đóng tại cung <b>${P[md(nowY-4)].cung}</b>.</p></div></div>
+ <h3>Mười hai cung</h3><div class="palist">${order.map(z=>{const p=P[z];const g=p.sub.filter(isG),b=p.sub.filter(n=>!isG(n));
+  return `<div class="card"><h4>${p.cung} <span style="color:var(--mut);font-weight:500">· ${gzv(z)} · ${p.ts}</span></h4><p style="color:var(--mut);margin:0">Chủ về ${CUNGY[p.cung]}.</p>
+  <p><b>Chính tinh:</b> ${p.main.length?p.main.map(n=>`${starV(n,z)}: ${KW[n]}`).join('; '):'vô chính diệu, xem thêm cung đối diện '+P[md(z+6)].cung}.</p>
+  ${g.length?`<p><b>Cát tinh:</b> ${g.map(n=>starV(n,z)).join(', ')}.</p>`:''}${b.length?`<p><b>Sát, bại tinh:</b> ${b.map(n=>starV(n,z)).join(', ')}.</p>`:''}
+  ${!cnm&&(C.tuan.includes(z)||C.triet.includes(z))?`<p><b>${C.tuan.includes(z)?'Tuần':''}${C.tuan.includes(z)&&C.triet.includes(z)?', ':''}${C.triet.includes(z)?'Triệt':''}:</b> làm giảm cả tốt lẫn xấu của các sao trong cung.</p>`:''}</div>`}).join('')}</div>
+ <h3>Đại vận</h3><div class="scroll"><table><thead><tr><th>Tuổi</th><th>Cung</th><th>Chính tinh</th></tr></thead><tbody>
+ ${[...Array(12)].map((_,i)=>md(Mz+(C.thuan?1:-1)*i)).map(z=>`<tr class="${z==curDV?'now':''}"><td>${P[z].dv}–${P[z].dv+9}</td><td>${P[z].cung} (${gzv(z)})</td><td>${P[z].main.join(', ')||'Vô chính diệu'}</td></tr>`).join('')}</tbody></table></div>
+ <p class="note">Đây là phần luận đoán tự động dựa trên ý nghĩa cơ bản của từng sao. Luận một lá số đầy đủ còn xét độ sáng (miếu, vượng, đắc, hãm) của sao và nhiều cách cục kết hợp; các trường phái cũng khác nhau ở một số sao (phái Việt Nam an Hóa Khoa năm Nhâm ở Thiên Phủ, phái Trung Châu ở Tả Phù; phái Trung Châu an Hỏa, Linh luôn đi thuận, Thiên Quý đi thuận từ Văn Khúc, Khôi Việt năm Canh ở Sửu, Mùi; tháng nhuận ở đây tính: nửa đầu theo tháng đó, từ ngày 16 theo tháng sau). Chỉ nên xem để tham khảo.</p>`;
+ out.scrollIntoView({behavior:'smooth'});});
+}
+</script>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
+</body>
+</html>
