@@ -86,6 +86,36 @@ th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);verti
 .src li{margin:6px 0}
 a{color:var(--C)}
 footer{color:var(--mut);font-size:14px}
+/* Bàn cờ kết quả */
+:root{--sqL:light-dark(#f1f7f5,#16302f);--sqD:light-dark(#0f3d3e,#0b2425);--sqD2:light-dark(#145052,#102f30);--gold:#e8b931}
+.nums{gap:0;border:4px solid var(--head);border-radius:18px;overflow:hidden;grid-template-columns:repeat(4,minmax(0,1fr));box-shadow:0 14px 32px -22px rgba(15,61,62,.7)}
+.nums.b3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:760px){.nums,.nums.b3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.num{border-radius:0;background:var(--sqL);position:relative;padding:18px 16px 20px}
+.num .v{color:var(--c,var(--head))}
+.num .k{padding-right:20px}
+.num::after{content:'';position:absolute;top:14px;right:14px;width:11px;height:11px;border-radius:50%;background:var(--c,var(--head));box-shadow:0 0 0 3px color-mix(in srgb,var(--c,var(--head)) 25%,transparent)}
+.num.dk{background:var(--sqD);color:#e6f0ee}
+.num.dk .k{color:#a6c7c2}.num.dk .v{color:color-mix(in srgb,var(--c,#fff) 45%,#fff)}
+.num.dk a{color:#9fd0ff}
+.num.fill{background:repeating-linear-gradient(45deg,transparent 0 10px,rgba(127,127,127,.09) 10px 11px),var(--sqL)}
+.num.fill.dk{background:repeating-linear-gradient(45deg,transparent 0 10px,rgba(255,255,255,.06) 10px 11px),var(--sqD)}
+.num.fill::after{display:none}
+.num.now{box-shadow:inset 0 0 0 4px var(--gold)}
+.num ul{margin:6px 0 0;padding-left:18px}.num p{margin:6px 0 0}
+.num .sm{font-size:14px;opacity:.85}
+.badge{display:inline-block;background:var(--gold);color:#1d1a10;font-size:12px;font-weight:700;border-radius:6px;padding:1px 7px;vertical-align:middle}
+.dhero{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:28px;align-items:center;margin-bottom:8px}
+@media(max-width:700px){.dhero{grid-template-columns:1fr}}
+.dboard{display:grid;grid-template-columns:1fr 1fr;aspect-ratio:1;border:4px solid var(--head);border-radius:20px;overflow:hidden;box-shadow:0 18px 36px -22px rgba(15,61,62,.8);max-width:340px;width:100%}
+.dsq{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;position:relative;text-align:center;padding:8px}
+.dsq b{font-size:clamp(40px,9vw,60px);line-height:1}.dsq .p{font-size:24px;font-weight:800}.dsq small{font-size:13px;font-weight:600;opacity:.9}
+.dsq.top{box-shadow:inset 0 0 0 5px var(--gold)}.dsq .badge{position:absolute;top:8px;left:8px}
+.lpsq{aspect-ratio:1;max-width:340px;width:100%;border:4px solid var(--head);border-radius:20px;display:grid;place-items:center;color:var(--gold);font-size:clamp(84px,16vw,150px);font-weight:800;line-height:1;background:conic-gradient(var(--sqD) 25%,var(--sqD2) 0 50%,var(--sqD) 0 75%,var(--sqD2) 0) 0 0/50% 50%;box-shadow:0 18px 36px -22px rgba(15,61,62,.8);text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.lg{gap:0;border:4px solid var(--head);border-radius:16px;overflow:hidden}
+.lg div{border-radius:0;background:var(--sqL)}
+.lg div:nth-child(odd){background:var(--sqD);color:#f3d77a}
+.lg div:nth-child(odd) small{color:#a6c7c2}.lg div.empty:nth-child(odd){color:#6f9590}
 select{font:inherit;font-size:16px;width:100%;max-width:420px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:48px}
 .chk{display:inline-flex;gap:8px;align-items:center;font-weight:500;margin:0;min-height:44px}
 .chk input{width:20px;height:20px;min-height:0}
@@ -252,7 +282,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const tabs=['disc','than-so','cccd','dien-thoai','tu-vi','nguon'];
 function show(t){if(!tabs.includes(t))t='disc';
  document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));
- tabs.forEach(x=>$('#p-'+x).hidden=x!==t);}
+ tabs.forEach(x=>$('#p-'+x).hidden=x!==t);if(typeof boardify==='function')boardify();}
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{location.hash=b.dataset.t;show(b.dataset.t)}));
 addEventListener('hashchange',()=>show(location.hash.slice(1)));
 show(location.hash.slice(1));
@@ -346,29 +376,28 @@ function renderRes(){
  const pc=k=>Math.round(sc[k]/Q.length*100);
  const twin=sc[s]>=Q.length*0.25&&sc[p]-sc[s]<=4;
  const d=DESC[p];
- const block=k=>{const x=DESC[k];return `<div class="card"><h4><span class="tile" style="background:${COL[k]}">${k}</span> ${NAME[k]}</h4><p>${x.core}</p>
- <p><b>Điểm mạnh:</b></p><ul>${x.str.map(t=>`<li>${t}</li>`).join('')}</ul>
- <p><b>Điểm cần lưu ý:</b></p><ul>${x.weak.map(t=>`<li>${t}</li>`).join('')}</ul>
- <p><b>Động lực:</b> ${x.mot}</p><p><b>Nỗi sợ thường gặp:</b> ${x.fear}</p>
- <p><b>Cách giao tiếp với người nhóm ${k}:</b> ${x.talk}</p><p><b>Môi trường, nghề phù hợp:</b> ${x.job}</p></div>`};
+ const mix=k=>Math.round(18+pc(k)*1.1);
+ const sq=k=>{const m=Math.min(100,mix(k));const dark=m>=55;return `<div class="dsq${k===p?' top':''}" style="background:color-mix(in srgb,${COL[k]} ${m}%,var(--sqL));color:${dark?'#fff':'var(--ink)'}">${k===p?'<span class="badge">Nổi bật</span>':''}<b>${k}</b><span class="p">${pc(k)}%</span><small>${NAME[k].replace(/ \(.\)/,'')}</small></div>`};
+ const block=k=>{const x=DESC[k];const c=COL[k];return `<h3><span class="tile" style="background:${c}">${k}</span> ${NAME[k]}</h3><div class="nums">
+  ${card('Điểm mạnh','✓',`<ul>${x.str.map(t=>`<li>${t}</li>`).join('')}</ul>`,'',c)}
+  ${card('Điểm cần lưu ý','!',`<ul>${x.weak.map(t=>`<li>${t}</li>`).join('')}</ul>`,'',c)}
+  ${card('Động lực','↑',`<p>${x.mot}</p>`,'',c)}
+  ${card('Nỗi sợ thường gặp','?',`<p>${x.fear}</p>`,'',c)}
+  ${card(`Giao tiếp với người nhóm ${k}`,'“ ”',`<p>${x.talk}</p>`,'',c)}
+  ${card('Môi trường, nghề phù hợp','★',`<p>${x.job}</p>`,'',c)}</div>`};
  $('#discQuiz').hidden=true;const r=$('#discRes');r.hidden=false;
- r.innerHTML=`<div class="hero"><div class="big" style="color:${COL[p]}">${twin?p+s:p}</div>
+ r.innerHTML=`<div class="dhero"><div class="dboard" role="img" aria-label="Bàn cờ DISC: ${K.split('').map(k=>k+' '+pc(k)+'%').join(', ')}">${K.split('').map(sq).join('')}</div>
  <div><h2>Bạn thiên về nhóm ${NAME[p]}${twin?`, kết hợp ${NAME[s]}`:''}</h2>
- <p class="lead" style="margin:0">${twin&&COMBO[p+s]?COMBO[p+s]+' ':''}${d.core}</p></div></div>
- <div class="bars">${K.split('').map(k=>`<div class="bar"><span>${SHORT[k]}</span><b><i style="width:${pc(k)}%;background:${COL[k]}"></i></b><span>${pc(k)}%</span></div>`).join('')}</div>
- <p class="note">Ai cũng có cả bốn nhóm, chỉ khác mức độ. Nhóm cao nhất cho biết cách bạn thường phản ứng tự nhiên, không phải giới hạn của bạn. Điểm từ 25% trở lên cũng là một nét đáng kể.</p>
- <div class="grid2">${block(p)}${block(s)}</div>
+ <p class="lead" style="margin:0 0 10px">${twin&&COMBO[p+s]?COMBO[p+s]+' ':''}${d.core}</p>
+ <p class="note" style="margin:0">Ô càng đậm màu, nét đó càng rõ ở bạn. Ai cũng có cả bốn nhóm, chỉ khác mức độ; điểm từ 25% trở lên cũng là một nét đáng kể.</p></div></div>
+ ${block(p)}${block(s)}
  <h3>Bốn nhóm DISC tóm tắt</h3>
- <div class="scroll"><table><thead><tr><th>Nhóm</th><th>Tập trung vào</th><th>Tốc độ</th><th>Câu hỏi quen thuộc</th></tr></thead><tbody>
- <tr><td><b style="color:var(--D)">D</b></td><td>Kết quả, mục tiêu</td><td>Nhanh</td><td>Cái gì? Khi nào xong?</td></tr>
- <tr><td><b style="color:var(--I)">I</b></td><td>Con người, cảm hứng</td><td>Nhanh</td><td>Ai tham gia? Có vui không?</td></tr>
- <tr><td><b style="color:var(--S)">S</b></td><td>Hòa hợp, ổn định</td><td>Chậm, chắc</td><td>Làm thế nào? Ảnh hưởng ai?</td></tr>
- <tr><td><b style="color:var(--C)">C</b></td><td>Chất lượng, độ chính xác</td><td>Chậm, kỹ</td><td>Tại sao? Dựa trên dữ liệu nào?</td></tr></tbody></table></div>
+ <div class="nums">${[['D','Kết quả, mục tiêu','Nhanh','Cái gì? Khi nào xong?'],['I','Con người, cảm hứng','Nhanh','Ai tham gia? Có vui không?'],['S','Hòa hợp, ổn định','Chậm, chắc','Làm thế nào? Ảnh hưởng ai?'],['C','Chất lượng, độ chính xác','Chậm, kỹ','Tại sao? Dựa trên dữ liệu nào?']].map(([k,f,sp,qq])=>card(SHORT[k],k,`<p><b>Tập trung:</b> ${f}</p><p><b>Tốc độ:</b> ${sp}</p><p class="sm">“${qq}”</p>`,'',COL[k])).join('')}</div>
  <div class="row"><button class="btn" id="copyD">Sao chép kết quả</button><button class="btn ghost" id="redo">Làm lại bài</button><span id="copied" style="color:var(--mut)"></span></div>`;
+ boardify();
  $('#redo').onclick=restart;
  $('#copyD').onclick=()=>{const t=`Kết quả DISC: ${K.split('').map(k=>k+' '+pc(k)+'%').join(', ')}. Nhóm nổi bật: ${NAME[p]}${twin?' + '+NAME[s]:''}.`;
   navigator.clipboard.writeText(t).then(()=>$('#copied').textContent='Đã sao chép',()=>$('#copied').textContent=t)};}
-renderQ();
 
 /* ---------- Thần số học ---------- */
 const ds=n=>String(n).split('').reduce((a,c)=>a+(+c||0),0);
@@ -408,7 +437,15 @@ function nameNums(name){const words=strip(name).split(/\s+/).filter(Boolean);let
  return words.length?{exp:red(all),soul:red(v),pers:red(c)}:null}
 function chart(str){const g={};for(let i=1;i<=9;i++)g[i]=0;for(const ch of str)if(ch!=='0')g[ch]++;return g}
 function lifePath(b){return red(ds(b.s))}
-const card=(k,v,extra)=>`<div class="num"><div class="k">${k}</div><div class="v">${v}</div>${extra||''}</div>`;
+const PAL={1:'#d64933',2:'#e07b39',3:'#d9a21b',4:'#7a9a2e',5:'#1f9a7a',6:'#2381b8',7:'#5161c4',8:'#8a55b8',9:'#c04878'};
+const NC=v=>{const n=+v;if(!n)return 'var(--head)';return PAL[n>9?ds(n):n]||'var(--head)'};
+const card=(k,v,extra,cls='',col)=>`<div class="num ${cls}" style="--c:${col||NC(v)}"><div class="k">${k}${cls.includes('now')?' <span class="badge">Hiện tại</span>':''}</div><div class="v">${v}</div>${extra||''}</div>`;
+function boardify(){document.querySelectorAll('.nums').forEach(b=>{if(!b.offsetParent)return;b.querySelectorAll('.fill').forEach(f=>f.remove());
+ const cols=getComputedStyle(b).gridTemplateColumns.split(' ').length||1;const n=b.children.length;
+ for(let i=n;i%cols;i++)b.insertAdjacentHTML('beforeend','<div class="num fill" aria-hidden="true"></div>');
+ [...b.children].forEach((t,i)=>t.classList.toggle('dk',(Math.floor(i/cols)+i%cols)%2===1))})}
+addEventListener('resize',boardify);
+renderQ();
 function numBlock(n){const x=N[n];return `<p style="margin:4px 0 0"><b>${x.t}.</b> ${x.d}</p>`}
 $('#fNum').addEventListener('submit',e=>{e.preventDefault();$('#numErr').textContent='';
  const b=parseDob($('#dob').value);if(!b){$('#numErr').textContent='Vui lòng chọn ngày sinh.';return}
@@ -421,7 +458,7 @@ $('#fNum').addEventListener('submit',e=>{e.preventDefault();$('#numErr').textCon
  const missing=[1,2,3,4,5,6,7,8,9].filter(d=>!has(d));
  const lpx=N[lp];
  $('#numRes').innerHTML=`<h3>Số chủ đạo (đường đời)</h3>
- <div class="hero"><div class="big" style="color:var(--head)">${lp}</div><div><h2>${lpx.t}</h2><p style="margin:0">${lpx.d}</p>
+ <div class="dhero"><div class="lpsq" aria-label="Số chủ đạo ${lp}">${lp}</div><div><h2>${lpx.t}</h2><p style="margin:0">${lpx.d}</p>
  <p style="margin:6px 0 0"><b>Điểm mạnh:</b> ${lpx.s}. <b>Thách thức:</b> ${lpx.w}.</p>
  <p style="margin:6px 0 0;color:var(--mut);font-size:14px">Cách tính: cộng tất cả chữ số ${b.d}/${b.m}/${b.y} = ${raw}${raw!==lp?` rồi rút gọn còn ${lp}`:''}. Giữ nguyên 11, 22, 33 (số bậc thầy).</p></div></div>
  <div class="nums">
@@ -436,8 +473,8 @@ $('#fNum').addEventListener('submit',e=>{e.preventDefault();$('#numErr').textCon
  <ul>${full.map(a=>`<li><b>Mũi tên ${a[1]} (${a[0].join('-')})</b>: ${a[2]}</li>`).join('')||'<li>Không có mũi tên đầy đủ.</li>'}</ul>
  ${empty.length?`<p><b>Mũi tên trống:</b></p><ul>${empty.map(a=>`<li><b>${a[0].join('-')}</b>, ${a[3]}</li>`).join('')}</ul>`:''}
  </div></div>
- <div class="scroll"><table><thead><tr><th>Số</th><th>Ý nghĩa</th><th>Trong ngày sinh</th></tr></thead><tbody>
- ${[1,2,3,4,5,6,7,8,9].map(d=>`<tr><td><b>${d}</b></td><td>${GD[d]}</td><td>${g[d]?g[d]+' lần':'Thiếu, nên rèn thêm'}</td></tr>`).join('')}</tbody></table></div>
+ <h3>Ý nghĩa từng con số trong ngày sinh</h3>
+ <div class="nums b3">${[3,6,9,2,5,8,1,4,7].map(d=>card(GD[d],d,`<p class="sm">${g[d]?'Xuất hiện '+g[d]+' lần'+(g[d]>=3?', nét này rất mạnh':''):'Thiếu, nên rèn thêm'}</p>`)).join('')}</div>
  ${missing.length?`<p class="note">Số thiếu (${missing.join(', ')}) được hiểu là bài học cần rèn; số xuất hiện nhiều lần cho thấy đặc điểm đó mạnh, đôi khi quá mức.</p>`:''}`;
 
  /* ---- Phân tích mở rộng ---- */
@@ -469,11 +506,10 @@ $('#fNum').addEventListener('submit',e=>{e.preventDefault();$('#numErr').textCon
   const cyc=[...Array(9)].map((_,i)=>{const y=cy+i;return{y,n:red(ds(b.d)+ds(b.m)+ds(y),false)}});
   const curPk=pk[curP]??pk[3];
   const extra=`<h3>Bốn đỉnh cao cuộc đời</h3><p class="lead" style="margin:0 0 8px">Mỗi đỉnh cao là một giai đoạn với chủ đề và cơ hội riêng. Đỉnh cao đầu kết thúc ở tuổi 36 trừ số chủ đạo.</p>
-  <div class="scroll"><table class="stack"><thead><tr><th>Giai đoạn</th><th>Tuổi</th><th>Số</th><th>Chủ đề, cơ hội</th><th>Thử thách</th></tr></thead><tbody>
-  ${pk.map((v,i)=>`<tr class="${i===curP?'now':''}"><td>Đỉnh cao ${i+1}${i===curP?' (hiện tại)':''}</td><td>${ages[i][0]}${ages[i][1]===null?' trở đi':'–'+ages[i][1]}</td><td>${v}</td><td>${PK[v]}</td><td>${ch[i]}: ${CH[ch[i]]}</td></tr>`).join('')}</tbody></table></div>
+  <div class="nums">${pk.map((v,i)=>card(`Đỉnh cao ${i+1} · tuổi ${ages[i][0]}${ages[i][1]===null?'+':'–'+ages[i][1]}`,v,`<p>${PK[v]}</p><p class="sm"><b>Thử thách ${ch[i]}:</b> ${CH[ch[i]]}</p>`,i===curP?'now':'')).join('')}</div>
   <h3>Chu kỳ 9 năm cá nhân</h3>
   <div class="nums">${card(`Năm cá nhân ${cy}`,py,`<p style="margin:4px 0 0">${PY[py]}</p>`)}${card(`Tháng cá nhân (tháng ${cm})`,pm,`<p style="margin:4px 0 0">${PY[pm]}</p>`)}${card(`Ngày cá nhân (hôm nay ${cd}/${cm})`,pdn,`<p style="margin:4px 0 0">${PY[pdn]}</p>`)}</div>
-  <div class="scroll"><table><thead><tr><th>Năm</th><th>Năm cá nhân</th><th>Chủ đề</th></tr></thead><tbody>${cyc.map(c=>`<tr class="${c.y===cy?'now':''}"><td>${c.y}</td><td>${c.n}</td><td>${PY[c.n]}</td></tr>`).join('')}</tbody></table></div>
+  <div class="nums b3">${cyc.map(c=>card(`Năm ${c.y}`,c.n,`<p class="sm">${PY[c.n]}</p>`,c.y===cy?'now':'')).join('')}</div>
   ${nameHtml}
   <h3>Kết luận dễ hiểu</h3>
   <div class="card"><p style="margin-top:0;font-size:17px"><b>Tóm lại:</b> bạn mang số chủ đạo <b>${lp}</b>, là <b>${lpx.t.toLowerCase()}</b>: ${lpx.d.charAt(0).toLowerCase()+lpx.d.slice(1)} Ở tuổi ${age}, bạn đang ở <b>đỉnh cao ${curP+1}</b>, giai đoạn của ${PK[curPk]}.</p>
@@ -483,7 +519,7 @@ $('#fNum').addEventListener('submit',e=>{e.preventDefault();$('#numErr').textCon
   <li><b>Tình cảm:</b> ${LOVE[lp]}.</li>
   <li><b>Năm ${cy} (năm cá nhân ${py}):</b> nên ${ADV[py]}.</li></ul>
   <p style="color:var(--mut);font-size:14px;margin:0">Thần số học mang tính tham khảo, giúp bạn nhìn lại bản thân; quyết định quan trọng nên dựa trên hoàn cảnh thực tế.</p></div>`;
-  $('#numRes').insertAdjacentHTML('beforeend',extra);}
+  $('#numRes').insertAdjacentHTML('beforeend',extra);boardify();}
  $('#numRes').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
 
 /* ---------- Bát tinh & phân tích chuỗi số ---------- */
@@ -526,7 +562,7 @@ $('#fCccd').addEventListener('submit',e=>{e.preventDefault();const out=$('#cccdR
  const pv=PROV[v.slice(0,3)],gd=+v[3],yy=v.slice(4,6);
  const century=1900+Math.floor(gd/2)*100,sex=gd%2?'Nữ':'Nam',year=century+ +yy;
  const ok=gd<=9;
- out.innerHTML=`<h3>Giải mã cấu trúc số</h3>
+ setTimeout(boardify);out.innerHTML=`<h3>Giải mã cấu trúc số</h3>
  <div class="scroll"><table class="stack"><thead><tr><th>Phần</th><th>Chữ số</th><th>Ý nghĩa</th></tr></thead><tbody>
  <tr><td>Mã nơi đăng ký khai sinh</td><td>${v.slice(0,3)}</td><td>${pv?pv:'Không có trong bảng mã tỉnh, kiểm tra lại số'}</td></tr>
  <tr><td>Giới tính và thế kỷ sinh</td><td>${gd}</td><td>${ok?`${sex}, sinh thế kỷ ${century===1900?'20 (1900–1999)':century===2000?'21 (2000–2099)':'khác'}`:''}</td></tr>
@@ -544,7 +580,7 @@ $('#fPhone').addEventListener('submit',e=>{e.preventDefault();const out=$('#phon
  if(v.length<9||v.length>11){$('#phoneErr').textContent='Số điện thoại cần 10 chữ số (ví dụ 0912345678).';return}
  const s=ds(v),nut=s%10||10,tail=v.slice(-4),tr=red(ds(tail));
  const nutTxt=nut>=9?'được nhiều người coi là đẹp':nut>=7?'được coi là khá':'được coi là bình thường';
- out.innerHTML=`<h3>Bát tinh (năng lượng cặp số)</h3>${btHtml(v)}
+ setTimeout(boardify);out.innerHTML=`<h3>Bát tinh (năng lượng cặp số)</h3>${btHtml(v)}
  <h3>Số nút và thần số học</h3><div class="nums">
  ${card('Số nút',nut+' nút',`<p style="margin:4px 0 0">Tổng các số là ${s}, lấy chữ số cuối${s%10===0?' (0 tính là 10 nút)':''}. ${nut} nút ${nutTxt} theo quan niệm dân gian, 10 nút là cao nhất.</p>`)}
  ${numerologyOf(v,$('#dob3').value)}
