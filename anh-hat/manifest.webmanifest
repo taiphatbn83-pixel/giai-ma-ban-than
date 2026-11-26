@@ -1,0 +1,16 @@
+{
+  "name": "Sân Khấu Ảnh Hát",
+  "short_name": "Ảnh Hát",
+  "description": "Biến một bức ảnh và một bài hát thành video ca sĩ hát, miễn phí, ngay trong trình duyệt.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1c0f33",
+  "theme_color": "#1c0f33",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
