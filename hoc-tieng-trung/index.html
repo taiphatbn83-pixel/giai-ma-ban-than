@@ -173,6 +173,14 @@ mark{background:var(--gold);color:#3a2600;border-radius:3px;padding:0 1px}
 .vctl{display:flex;justify-content:center;gap:10px}
 .vz2{font-size:24px;margin:4px 0}.center{text-align:center}
 @media (prefers-reduced-motion:reduce){.talk .av,.eyes{animation:none}}
+.ytl2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.yt{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.ytp{position:relative;display:block;width:100%;aspect-ratio:16/9;border:0;padding:0;background:#000;cursor:pointer}
+.ytp img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}
+.ytb{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:48px;border-radius:14px;background:#e62117;color:#fff;font-size:24px;display:grid;place-items:center}
+.ytl{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.8);color:#fff;font-size:12px;border-radius:4px;padding:1px 5px}
+.ytf{aspect-ratio:16/9}.ytf iframe{width:100%;height:100%;border:0;display:block}
+.ytm{padding:10px 12px}.ytm b{display:block;font-size:15px}.ytm a{color:var(--red)}
 /* thanh tab dưới */
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:10}
 .tabbar a{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px;font-size:11px;color:var(--mut);text-decoration:none;font-weight:600;min-height:58px}
@@ -705,6 +713,25 @@ function vLesson(id,tab){const L=LESSONS.find(x=>x.id==id);if(!L)return vLessons
 function playAll(L,i=0){if(i===0)playing=true;if(!playing)return;document.querySelectorAll('.bub').forEach(b=>b.classList.remove('cur'));if(i>=L.lines.length){playing=false;return}
  const el=$('#ln'+i);el?.classList.add('cur');el?.scrollIntoView({behavior:'smooth',block:'center'});const sp=L.lines[i][0];speak(L.lines[i][1],{pitch:sp==='A'?1.15:sp==='B'?0.9:0.75,onend:()=>{if(playing)autoT=setTimeout(()=>playAll(L,i+1),700)}})}
 
+// Video YouTube nhúng theo bài (đã kiểm tra cho phép nhúng). [id, mô tả, kênh, thời lượng]
+const YTV={
+1:[['jIYwH8FEiaw','HSK1 bài 1: 你好 (giáo trình chuẩn)','Open Chinese','7:25'],['8o_97Terh6Y','Chào hỏi cơ bản: 你好 và 你好吗','Chinese Center','6:25']],
+2:[['i8VMYb9iZ1I','HSK1 bài 3: 你叫什么名字','Mr Sun Mandarin','11:16'],['zfif9B0SCcc','Tự giới thiệu ngắn gọn bằng tiếng Trung','VivaLing','0:58']],
+3:[['nAyMwFIaSOQ','你家有几口人？ hội thoại ngắn','汉语教程','1:06'],['KL6D4ZtiJpw','Nói về gia đình (HSK 1-2)','HSK - Daily Talk','14:21']],
+4:[['J4JgqQgdlZQ','Truyện HSK1: 买东西 đi mua sắm','Mandarin Click','4:16'],['3xx_ur4e-9c','15 hội thoại khi mua sắm (HSK 1-2)','Say Mandarin','24:00']],
+5:[['AH60U54jDvU','Thứ trong tuần: 星期几 (HSK1)','Self Study Mandarin','19:56'],['RTD_ynaopoY','Hỏi giờ, thứ, ngày tháng (HSK1)','Meow Chinese','6:12']],
+6:[['eL_d7h0KA9A','Cách gọi món ở nhà hàng','Free To Learn Chinese','4:15'],['JdENJSS3Yz4','Hội thoại ở nhà hàng (HSK 1-2)','宇杉','14:57']],
+7:[['T4TbUVow3iM','今天天气怎么样？ nói về thời tiết','Yeah Chinese','4:09'],['ffDKaLIHm6Q','HSK1 bài 12: thời tiết ngày mai','Mr Sun Mandarin','9:21']],
+8:[['hesqigYhshk','Hỏi và chỉ đường bằng tiếng Trung','Learn Chinese Online','9:25'],['LKGfAqblGNs','Luyện nghe: hội thoại hỏi đường (HSK 1-2)','Everyday Chinese Chat','9:31']],
+9:[['S9uS6ZwFw2U','HSK1 bài 9: 你儿子在哪儿工作 (có phụ đề Việt)','香港含子','2:55'],['vKz6ckrZW_Q','Nói về nghề nghiệp: 你做什么工作？','Xiaozhu Chinese','2:34']],
+10:[['uWbCGe7_JAw','Hội thoại hằng ngày: 打电话','Mandarin Click','2:08'],['ovxKebCgMic','Khẩu ngữ: gọi điện thoại','跟苗苗老师学汉语','2:11']],
+11:[['zCXH-OBJk7c','Hội thoại: 芊芊生病了 (bị ốm)','Learn Chinese Online','8:07'],['9pBWojtTGIg','看病 đi khám bác sĩ','Li\'s China Diary','4:40']],
+12:[['6UZ7mEDBFYI','Truyện HSK1: 去学校 đến trường','Hanyu Stories','3:05'],['Rw-jeMIPt3E','Truyện HSK1: một ngày ở trường','Panda Input Chinese','11:52']],
+13:[['ncOEtPqUWDM','Truyện: thú cưng nhà tôi (có phụ đề Việt)','Chinestory Club','10:46'],['rrm7XjW-81A','Gia đình, thú cưng, chỉ đường (HSK 1-2)','Real Mandarin','2:25']],
+14:[['3K0D2hHYi04','Hội thoại: cuối tuần trước bạn làm gì','Chinese Daily Podcast','13:04'],['AwxJxYZM2nU','你的周末怎么过？ cuối tuần thế nào','Chinese Teahouse','9:21']],
+};
+const ytCard=([id,t,c,len])=>`<div class="yt"><button class="ytp" data-act="ytplay" data-id="${id}" aria-label="Phát video ${esc(t)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="ytb">▶</span><span class="ytl">${len}</span></button><div class="ytm"><b>${esc(t)}</b><small>Nguồn: kênh ${esc(c)} trên YouTube · <a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">mở trên YouTube ↗</a></small></div></div>`;
+
 // --- Video hoạt cảnh hội thoại ---
 const SCENES={1:{bg:['#bfe3ff','#e9f7d9'],p:['🏫','🌳','☀️','🚲']},2:{bg:['#ffe3cf','#fff6e8'],p:['☕','🌸','🪴','🖼️']},3:{bg:['#e6dcff','#f7f2ff'],p:['🖼️','🛋️','🪴','☕']},4:{bg:['#ffe9b8','#fff8e1'],p:['🍎','🍵','🧺','🍌']},
  5:{bg:['#cdeefd','#f2fbff'],p:['🕘','📅','🌳','☁️']},6:{bg:['#ffd6c9','#fff1ea'],p:['🍜','🍚','🍵','🏮']},7:{bg:['#b9dcff','#e8f4ff'],p:['🌤️','🌧️','🎬','🌳']},8:{bg:['#d7e8d0','#f3f9ef'],p:['🚉','🏥','🚕','🚦']},
@@ -734,7 +761,8 @@ function vVideo(L){if(!V||V.id!==L.id)V={id:L.id,i:0,playing:false,started:false
  <div class="vctl"><button class="ib lg" data-act="vprev" aria-label="Câu trước">⏮</button><button class="ib lg vpp" data-act="vplay" aria-label="Phát hoặc tạm dừng">${V.playing?'⏸':'▶'}</button><button class="ib lg" data-act="vnext" aria-label="Câu sau">⏭</button><button class="ib lg" data-act="vfull" aria-label="Toàn màn hình">⛶</button></div>
  <div class="toggles"><button class="chip ${S.vRepeat?'on':''}" data-act="tog" data-k="vRepeat">🗣️ Dừng để nói theo</button><button class="chip ${S.slow?'on':''}" data-act="tog" data-k="slow">🐢 Đọc chậm</button><button class="chip ${S.showPy?'on':''}" data-act="tog" data-k="showPy">Pinyin</button><button class="chip ${S.showVi?'on':''}" data-act="tog" data-k="showVi">Phiên âm Việt</button><button class="chip ${S.showMean?'on':''}" data-act="tog" data-k="showMean">Nghĩa</button></div>
  <div id="vturn"></div></div>
- <div class="card"><b>📺 Xem thêm video trên mạng</b><p class="small">Mở YouTube với các video dạy cùng chủ đề. Video thuộc kênh của người đăng, mở trong ứng dụng YouTube.</p><div class="pbar">${[['Bài giảng tiếng Việt','học tiếng Trung giao tiếp chủ đề '+L.title.toLowerCase()],['Hội thoại tiếng Trung','HSK1 '+L.zh+' 对话 中文'],['Hoạt hình cho trẻ em','儿童 中文 '+L.zh+' 动画']].map(([n,q])=>`<a class="btn ghost" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}">${n} ↗</a>`).join('')}</div></div>`}
+ <h3>📺 Video bài giảng từ YouTube</h3><p class="small">Video của các kênh dạy tiếng Trung, phát ngay trong app. Bản quyền thuộc về kênh đăng video.</p><div class="ytl2">${(YTV[L.id]||[]).map(ytCard).join('')}</div>
+ <div class="pbar">${[['Tìm thêm bài giảng tiếng Việt','học tiếng Trung giao tiếp chủ đề '+L.title.toLowerCase()],['Tìm thêm hội thoại tiếng Trung','HSK1 '+L.zh+' 对话']].map(([n,q])=>`<a class="btn ghost" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}">${n} ↗</a>`).join('')}</div>`}
 const curL=()=>LESSONS.find(x=>x.id===V.id);
 function vShow(i){const L=curL(),l=L.lines[i];V.i=i;V.started=true;$('.vbig')?.remove();
  document.querySelectorAll('.vch').forEach(c=>{c.classList.remove('talk');c.classList.toggle('act',c.dataset.s===l[0])});
@@ -754,6 +782,7 @@ const ACT_V={};Object.assign(ACT_V,{
  vnext:()=>{const n=curL().lines.length;stopAll();if(V.i+1<n||!V.started){if(V.started)V.i++;vPlayLine()}else vEnd()},
  vprev:()=>{stopAll();V.i=Math.max(0,V.i-1);vPlayLine()},
  vgo:b=>{stopAll();V.i=+b.dataset.i;vPlayLine()},
+ ytplay:b=>{stopAll();b.parentElement.innerHTML=`<div class="ytf"><iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.id}?autoplay=1&rel=0&playsinline=1" title="Video YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`},
  vfull:()=>{const p=$('#vplayer');p.classList.toggle('vfull');document.body.classList.toggle('noscroll',p.classList.contains('vfull'))},
 });
 
