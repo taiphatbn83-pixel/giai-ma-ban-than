@@ -945,6 +945,480 @@ const LESSONS2 = [
 ]},
 ];
 
+const RAW_HSK3 = `
+# Danh từ
+阿姨|ā yí|cô, dì; cô giúp việc|
+爱好|ài hào|sở thích; yêu thích|
+班|bān|lớp; ca làm|
+办法|bàn fǎ|cách, biện pháp|
+办公室|bàn gōng shì|văn phòng|
+鼻子|bí zi|mũi|
+宾馆|bīn guǎn|khách sạn|
+冰箱|bīng xiāng|tủ lạnh|
+菜单|cài dān|thực đơn|
+草|cǎo|cỏ|
+超市|chāo shì|siêu thị|
+衬衫|chèn shān|áo sơ mi|
+成绩|chéng jì|thành tích, điểm số|
+城市|chéng shì|thành phố|
+厨房|chú fáng|nhà bếp|
+词语|cí yǔ|từ ngữ|
+蛋糕|dàn gāo|bánh ngọt, bánh kem|
+地方|dì fang|nơi, chỗ|
+地铁|dì tiě|tàu điện ngầm|
+地图|dì tú|bản đồ|
+灯|dēng|đèn|
+电梯|diàn tī|thang máy|
+动物|dòng wù|động vật|
+耳朵|ěr duo|tai|
+公园|gōng yuán|công viên|
+故事|gù shi|câu chuyện|
+关系|guān xi|quan hệ|
+国家|guó jiā|quốc gia, đất nước|
+果汁|guǒ zhī|nước ép trái cây|
+河|hé|sông|
+黑板|hēi bǎn|bảng đen|
+护照|hù zhào|hộ chiếu|
+花园|huā yuán|vườn hoa|
+画|huà|vẽ; bức tranh|
+环境|huán jìng|môi trường|
+黄|huáng|vàng (màu)|
+会议|huì yì|cuộc họp, hội nghị|
+机会|jī huì|cơ hội|
+季节|jì jié|mùa|
+角|jiǎo|góc; hào (1/10 đồng)|
+脚|jiǎo|chân, bàn chân|
+街道|jiē dào|đường phố|
+节目|jié mù|chương trình|
+节日|jié rì|ngày lễ|
+经理|jīng lǐ|giám đốc, quản lý|
+句子|jù zi|câu|
+客人|kè rén|khách|
+空调|kōng tiáo|điều hòa|
+裤子|kù zi|quần|
+筷子|kuài zi|đũa|
+礼物|lǐ wù|quà|
+历史|lì shǐ|lịch sử|
+脸|liǎn|mặt|
+邻居|lín jū|hàng xóm|
+楼|lóu|tầng; tòa nhà|
+马|mǎ|ngựa|
+帽子|mào zi|mũ|
+米|mǐ|gạo; mét|
+面包|miàn bāo|bánh mì|
+面条|miàn tiáo|mì sợi|
+奶奶|nǎi nai|bà nội|
+年级|nián jí|lớp, khối (năm học)|
+鸟|niǎo|chim|
+盘子|pán zi|cái đĩa|
+啤酒|pí jiǔ|bia|
+葡萄|pú tao|nho|
+普通话|pǔ tōng huà|tiếng phổ thông|
+铅笔|qiān bǐ|bút chì|
+裙子|qún zi|váy|
+伞|sǎn|ô, dù|
+声音|shēng yīn|âm thanh, giọng nói|
+世界|shì jiè|thế giới|
+叔叔|shū shu|chú|
+树|shù|cây|
+数学|shù xué|toán học|
+水平|shuǐ píng|trình độ|
+司机|sī jī|tài xế|
+太阳|tài yang|mặt trời|
+糖|táng|đường; kẹo|
+体育|tǐ yù|thể dục, thể thao|
+同事|tóng shì|đồng nghiệp|
+头发|tóu fa|tóc|
+图书馆|tú shū guǎn|thư viện|
+腿|tuǐ|chân (cẳng chân)|
+碗|wǎn|cái bát|
+文化|wén huà|văn hóa|
+习惯|xí guàn|thói quen; quen với|
+洗手间|xǐ shǒu jiān|nhà vệ sinh|
+香蕉|xiāng jiāo|chuối|
+校长|xiào zhǎng|hiệu trưởng|
+鞋|xié|giày|
+新闻|xīn wén|tin tức|
+信|xìn|thư; tin|
+行李箱|xíng li xiāng|vali|
+兴趣|xìng qù|hứng thú|
+熊猫|xióng māo|gấu trúc|
+眼镜|yǎn jìng|kính mắt|
+爷爷|yé ye|ông nội|
+音乐|yīn yuè|âm nhạc|
+银行|yín háng|ngân hàng|
+游戏|yóu xì|trò chơi|
+月亮|yuè liang|mặt trăng|
+云|yún|mây|
+照片|zhào piàn|bức ảnh|
+照相机|zhào xiàng jī|máy ảnh|
+字典|zì diǎn|từ điển|
+作业|zuò yè|bài tập về nhà|
+作用|zuò yòng|tác dụng|
+电子邮件|diàn zǐ yóu jiàn|thư điện tử, email|
+# Động từ
+搬|bān|chuyển, dọn (nhà)|
+帮忙|bāng máng|giúp đỡ|
+包|bāo|túi, gói; bao|
+比赛|bǐ sài|cuộc thi đấu|
+变化|biàn huà|thay đổi, biến đổi|
+表示|biǎo shì|biểu thị, bày tỏ|
+表演|biǎo yǎn|biểu diễn|
+参加|cān jiā|tham gia|
+迟到|chí dào|đến muộn|
+出现|chū xiàn|xuất hiện|
+打扫|dǎ sǎo|quét dọn|
+打算|dǎ suàn|dự định|
+带|dài|mang, đem theo; dẫn|
+担心|dān xīn|lo lắng|
+锻炼|duàn liàn|rèn luyện, tập thể dục|
+饿|è|đói|
+发烧|fā shāo|sốt|
+发现|fā xiàn|phát hiện|
+方便|fāng biàn|thuận tiện|
+放|fàng|đặt, để; thả|
+放心|fàng xīn|yên tâm|
+复习|fù xí|ôn tập|
+敢|gǎn|dám|
+感冒|gǎn mào|cảm cúm|
+关|guān|đóng, tắt|
+关心|guān xīn|quan tâm|
+过去|guò qù|quá khứ; đi qua|
+害怕|hài pà|sợ|
+花|huā|hoa; tiêu (tiền, thời gian)|
+换|huàn|đổi, thay|
+记得|jì de|nhớ|
+检查|jiǎn chá|kiểm tra|
+见面|jiàn miàn|gặp mặt|
+讲|jiǎng|nói, giảng|
+教|jiāo|dạy|
+接|jiē|đón; nhận (điện thoại)|
+结婚|jié hūn|kết hôn|
+结束|jié shù|kết thúc|
+解决|jiě jué|giải quyết|
+借|jiè|mượn; cho mượn|
+举行|jǔ xíng|tổ chức (sự kiện)|
+决定|jué dìng|quyết định|
+刻|kè|khắc (15 phút)|
+哭|kū|khóc|
+了解|liǎo jiě|hiểu rõ, tìm hiểu|
+离开|lí kāi|rời khỏi|
+练习|liàn xí|luyện tập; bài tập|
+满意|mǎn yì|hài lòng|
+明白|míng bai|hiểu; rõ ràng|
+拿|ná|cầm, lấy|
+爬山|pá shān|leo núi|
+奇怪|qí guài|kỳ lạ|
+骑|qí|cưỡi, đi (xe đạp, xe máy)|
+认为|rèn wéi|cho rằng|
+上网|shàng wǎng|lên mạng|
+使|shǐ|khiến, làm cho|
+疼|téng|đau|
+提高|tí gāo|nâng cao|
+同意|tóng yì|đồng ý|
+完成|wán chéng|hoàn thành|
+忘记|wàng jì|quên|
+洗澡|xǐ zǎo|tắm|
+相信|xiāng xìn|tin tưởng|
+像|xiàng|giống như|
+需要|xū yào|cần|
+选择|xuǎn zé|lựa chọn|
+要求|yāo qiú|yêu cầu|
+以为|yǐ wéi|tưởng rằng|
+应该|yīng gāi|nên|
+影响|yǐng xiǎng|ảnh hưởng|
+用|yòng|dùng|
+遇到|yù dào|gặp phải|
+愿意|yuàn yì|bằng lòng, sẵn lòng|
+站|zhàn|đứng; bến, trạm|
+照顾|zhào gu|chăm sóc|
+注意|zhù yì|chú ý|
+祝|zhù|chúc|
+刮风|guā fēng|gió thổi|
+刷牙|shuā yá|đánh răng|
+# Tính từ
+矮|ǎi|thấp, lùn|
+安静|ān jìng|yên tĩnh|
+饱|bǎo|no|
+差|chà|kém, thiếu; tồi|
+聪明|cōng ming|thông minh|
+低|dī|thấp|
+短|duǎn|ngắn|
+干净|gān jìng|sạch sẽ|
+坏|huài|hỏng, xấu|
+简单|jiǎn dān|đơn giản|
+健康|jiàn kāng|khỏe mạnh, sức khỏe|
+久|jiǔ|lâu|
+旧|jiù|cũ|
+可爱|kě ài|đáng yêu|
+渴|kě|khát|
+蓝|lán|xanh lam|
+老|lǎo|già, cũ; luôn|
+绿|lǜ|xanh lá|
+难|nán|khó|
+难过|nán guò|buồn|
+年轻|nián qīng|trẻ|
+努力|nǔ lì|cố gắng, chăm chỉ|
+胖|pàng|béo, mập|
+清楚|qīng chu|rõ ràng|
+热情|rè qíng|nhiệt tình|
+认真|rèn zhēn|nghiêm túc, chăm chú|
+容易|róng yì|dễ|
+生气|shēng qì|tức giận|
+瘦|shòu|gầy|
+舒服|shū fu|dễ chịu, thoải mái|
+甜|tián|ngọt|
+突然|tū rán|đột nhiên|
+相同|xiāng tóng|giống nhau|
+小心|xiǎo xīn|cẩn thận|
+新鲜|xīn xiān|tươi|
+一般|yì bān|bình thường, thông thường|
+有名|yǒu míng|nổi tiếng|
+着急|zháo jí|sốt ruột, vội|
+重要|zhòng yào|quan trọng|
+# Phó từ, liên từ & từ khác
+啊|a|à, ồ (cảm thán)|
+把|bǎ|cầm; (giới từ đưa tân ngữ lên trước)|
+半|bàn|nửa, rưỡi|
+北方|běi fāng|phía bắc, miền Bắc|
+被|bèi|bị, được (câu bị động)|
+比较|bǐ jiào|tương đối, khá; so sánh|
+必须|bì xū|bắt buộc, phải|
+别人|bié rén|người khác|
+才|cái|mới (muộn hơn dự kiến)|
+层|céng|tầng, lớp|
+除了|chú le|ngoài… ra|
+春|chūn|mùa xuân|
+当然|dāng rán|đương nhiên|
+地|de|(trợ từ trước động từ, như "một cách")|
+东|dōng|phía đông|
+冬|dōng|mùa đông|
+段|duàn|đoạn|
+多么|duō me|biết bao, thật là|
+而且|ér qiě|mà còn, hơn nữa|
+分|fēn|chia; điểm; phút|
+附近|fù jìn|gần đây, lân cận|
+刚才|gāng cái|vừa nãy|
+根据|gēn jù|căn cứ vào, dựa theo|
+跟|gēn|với, cùng; đi theo|
+更|gèng|càng, hơn|
+关于|guān yú|về, liên quan đến|
+还是|hái shi|vẫn; hay là; tốt hơn là|
+或者|huò zhě|hoặc|
+极|jí|cực kỳ|
+几乎|jī hū|hầu như, gần như|
+经常|jīng cháng|thường xuyên|
+经过|jīng guò|đi qua; trải qua|
+口|kǒu|miệng; (lượng từ người trong nhà)|
+辆|liàng|chiếc (lượng từ xe)|
+马上|mǎ shàng|ngay lập tức|
+南|nán|phía nam|
+其实|qí shí|thật ra|
+其他|qí tā|khác, cái khác|
+秋|qiū|mùa thu|
+然后|rán hòu|sau đó|
+如果|rú guǒ|nếu|
+双|shuāng|đôi|
+虽然|suī rán|tuy, mặc dù|
+特别|tè bié|đặc biệt|
+条|tiáo|cái, con (vật dài); điều|
+万|wàn|vạn (mười nghìn)|
+为了|wèi le|để, vì|
+为什么|wèi shén me|tại sao|
+位|wèi|vị (lượng từ người, lịch sự)|
+西|xī|phía tây|
+夏|xià|mùa hè|
+先|xiān|trước|
+一边|yì biān|vừa… vừa…; một bên|
+一定|yí dìng|nhất định|
+一共|yí gòng|tổng cộng|
+一会儿|yí huìr|một lát|
+一样|yí yàng|giống nhau|
+一直|yì zhí|luôn luôn; thẳng|
+以后|yǐ hòu|sau này|
+以前|yǐ qián|trước đây|
+又|yòu|lại|
+越|yuè|càng… càng…|
+只|zhǐ|chỉ|
+中间|zhōng jiān|ở giữa|
+终于|zhōng yú|cuối cùng|
+种|zhǒng|loại; trồng|
+周末|zhōu mò|cuối tuần|
+主要|zhǔ yào|chủ yếu|
+自己|zì jǐ|tự mình, bản thân|
+总是|zǒng shì|luôn luôn|
+最近|zuì jìn|gần đây|
+`;
+const LESSONS3 = [
+{id:29, lv:3, icon:'📦', title:'Chuyển nhà mới', zh:'搬家', zpy:'bān jiā', who:{A:'Lan',B:'Hàng xóm'},
+ scene:'Chuyển đến căn hộ mới và làm quen với hàng xóm.',
+ tip:'把 + vật + động từ + chỗ: 把冰箱放在厨房 = đặt tủ lạnh vào bếp. 又…又… = vừa… vừa…: 又安静又方便.',
+ extra:[['搬家','bān jiā','chuyển nhà',0],['又','yòu','lại; vừa…vừa…',3]],
+ lines:[
+ ['B','你好！你是新搬来的邻居吧？','Nǐ hǎo! Nǐ shì xīn bān lái de lín jū ba?','Chào bạn! Bạn là hàng xóm mới chuyển đến phải không?'],
+ ['A','是的，我住在八层。东西太多了，电梯又小。','Shì de, wǒ zhù zài bā céng. Dōng xi tài duō le, diàn tī yòu xiǎo.','Vâng, tôi ở tầng tám. Đồ đạc nhiều quá, thang máy lại nhỏ.'],
+ ['B','别着急，我来帮忙。这个冰箱放在哪儿？','Bié zháo jí, wǒ lái bāng máng. Zhè ge bīng xiāng fàng zài nǎr?','Đừng vội, để tôi giúp. Cái tủ lạnh này để ở đâu?'],
+ ['A','请把冰箱放在厨房里。太谢谢你了！','Qǐng bǎ bīng xiāng fàng zài chú fáng li. Tài xiè xie nǐ le!','Bạn đặt tủ lạnh vào trong bếp giúp tôi. Cảm ơn bạn nhiều!'],
+ ['B','不客气。这儿又安静又方便，附近有超市和银行。','Bú kè qi. Zhèr yòu ān jìng yòu fāng biàn, fù jìn yǒu chāo shì hé yín háng.','Không có gì. Ở đây vừa yên tĩnh vừa tiện, gần đây có siêu thị và ngân hàng.'],
+ ['A','太好了。房间里的空调是新的吗？','Tài hǎo le. Fáng jiān li de kōng tiáo shì xīn de ma?','Tuyệt quá. Điều hòa trong phòng là mới phải không?'],
+ ['B','是新的。如果有问题，你可以找我。','Shì xīn de. Rú guǒ yǒu wèn tí, nǐ kě yǐ zhǎo wǒ.','Mới đấy. Nếu có vấn đề gì, bạn cứ tìm tôi.'],
+ ['A','好的！等我打扫干净了，请你来喝茶。','Hǎo de! Děng wǒ dǎ sǎo gān jìng le, qǐng nǐ lái hē chá.','Vâng! Đợi tôi dọn dẹp sạch sẽ xong, mời bạn sang uống trà.'],
+]},
+{id:30, lv:3, icon:'🍽️', title:'Gọi món ở quán', zh:'点菜', zpy:'diǎn cài', who:{A:'Minh',B:'Phục vụ'},
+ scene:'Đói bụng, vào quán gọi món và thanh toán.',
+ tip:'又饿又渴 = vừa đói vừa khát. 除了…还… = ngoài… ra còn…. 吃饱了 = ăn no rồi (động từ + bổ ngữ kết quả).',
+ extra:[['点菜','diǎn cài','gọi món',0],['刷卡','shuā kǎ','quẹt thẻ',0]],
+ lines:[
+ ['A','服务员，我又饿又渴，请给我菜单。','Fú wù yuán, wǒ yòu è yòu kě, qǐng gěi wǒ cài dān.','Phục vụ ơi, tôi vừa đói vừa khát, cho tôi xem thực đơn.'],
+ ['B','好的。我们的牛肉面条特别有名。','Hǎo de. Wǒ men de niú ròu miàn tiáo tè bié yǒu míng.','Vâng. Mì bò của quán chúng tôi rất nổi tiếng.'],
+ ['A','那我要一碗面条。除了面条，还有什么？','Nà wǒ yào yì wǎn miàn tiáo. Chú le miàn tiáo, hái yǒu shén me?','Vậy cho tôi một bát mì. Ngoài mì ra còn có gì nữa?'],
+ ['B','还有面包和蛋糕，蛋糕不太甜。喝什么？','Hái yǒu miàn bāo hé dàn gāo, dàn gāo bú tài tián. Hē shén me?','Còn có bánh mì và bánh ngọt, bánh không ngọt lắm. Anh uống gì?'],
+ ['A','一杯果汁吧。水果新鲜吗？','Yì bēi guǒ zhī ba. Shuǐ guǒ xīn xiān ma?','Một cốc nước ép nhé. Trái cây có tươi không?'],
+ ['B','当然新鲜，都是今天早上买的。','Dāng rán xīn xiān, dōu shì jīn tiān zǎo shang mǎi de.','Đương nhiên là tươi, đều mua sáng nay.'],
+ ['A','我吃饱了。一共多少钱？可以刷卡吗？','Wǒ chī bǎo le. Yí gòng duō shao qián? Kě yǐ shuā kǎ ma?','Tôi ăn no rồi. Tổng cộng bao nhiêu tiền? Quẹt thẻ được không?'],
+ ['B','一共五十八块，可以刷卡。','Yí gòng wǔ shí bā kuài, kě yǐ shuā kǎ.','Tổng cộng năm mươi tám đồng, quẹt thẻ được ạ.'],
+]},
+{id:31, lv:3, icon:'🤧', title:'Bị cảm, đi khám', zh:'感冒了', zpy:'gǎn mào le', who:{A:'Bác sĩ',B:'Hùng'},
+ scene:'Bị cảm sốt, đến gặp bác sĩ.',
+ tip:'应该 = nên. 一定要 = nhất định phải. 越来越 + tính từ = ngày càng…: 越来越健康.',
+ extra:[['头','tóu','đầu',0],['越来越','yuè lái yuè','ngày càng',0],['好像','hǎo xiàng','hình như',4],['严重','yán zhòng','nghiêm trọng, nặng',4]],
+ lines:[
+ ['A','你哪儿不舒服？','Nǐ nǎr bù shū fu?','Anh thấy khó chịu ở đâu?'],
+ ['B','我头疼，鼻子也不舒服，好像发烧了。','Wǒ tóu téng, bí zi yě bù shū fu, hǎo xiàng fā shāo le.','Tôi đau đầu, mũi cũng khó chịu, hình như bị sốt.'],
+ ['A','我检查一下。你感冒了，有一点儿发烧。','Wǒ jiǎn chá yí xià. Nǐ gǎn mào le, yǒu yì diǎnr fā shāo.','Để tôi khám xem. Anh bị cảm rồi, hơi sốt một chút.'],
+ ['B','严重吗？我有点儿担心。','Yán zhòng ma? Wǒ yǒu diǎnr dān xīn.','Có nặng không? Tôi hơi lo.'],
+ ['A','放心，不严重。你应该多喝水，多休息。','Fàng xīn, bù yán zhòng. Nǐ yīng gāi duō hē shuǐ, duō xiū xi.','Yên tâm, không nặng. Anh nên uống nhiều nước, nghỉ ngơi nhiều.'],
+ ['B','我最近工作太忙了，很少锻炼。','Wǒ zuì jìn gōng zuò tài máng le, hěn shǎo duàn liàn.','Gần đây tôi bận việc quá, ít tập thể dục.'],
+ ['A','以后一定要注意身体，经常锻炼才能越来越健康。','Yǐ hòu yí dìng yào zhù yì shēn tǐ, jīng cháng duàn liàn cái néng yuè lái yuè jiàn kāng.','Sau này nhất định phải chú ý sức khỏe, thường xuyên tập luyện mới ngày càng khỏe được.'],
+ ['B','明白了，谢谢医生！','Míng bai le, xiè xie yī shēng!','Tôi hiểu rồi, cảm ơn bác sĩ!'],
+]},
+{id:32, lv:3, icon:'🧳', title:'Ra sân bay', zh:'去机场', zpy:'qù jī chǎng', who:{A:'Vợ',B:'Chồng'},
+ scene:'Vội vàng ra sân bay và suýt quên hộ chiếu.',
+ tip:'别忘了 = đừng quên. 才 = mới (muộn hơn mong đợi): 九点才到. 终于 = cuối cùng thì.',
+ extra:[['起飞','qǐ fēi','cất cánh',0],['堵车','dǔ chē','tắc đường',0],['别忘了','bié wàng le','đừng quên',0]],
+ lines:[
+ ['A','快点儿！飞机十点起飞，我们要迟到了！','Kuài diǎnr! Fēi jī shí diǎn qǐ fēi, wǒ men yào chí dào le!','Nhanh lên! Máy bay mười giờ cất cánh, chúng ta sắp muộn rồi!'],
+ ['B','马上就好。行李箱我已经拿下楼了。','Mǎ shàng jiù hǎo. Xíng li xiāng wǒ yǐ jīng ná xià lóu le.','Xong ngay đây. Vali anh mang xuống tầng rồi.'],
+ ['A','护照带了吗？别忘了照相机和地图。','Hù zhào dài le ma? Bié wàng le zhào xiàng jī hé dì tú.','Mang hộ chiếu chưa? Đừng quên máy ảnh và bản đồ.'],
+ ['B','哎呀，护照还在桌子上！我去拿。','Āi yā, hù zhào hái zài zhuō zi shang! Wǒ qù ná.','Ôi, hộ chiếu vẫn còn trên bàn! Anh đi lấy.'],
+ ['A','坐地铁去机场比较快，出租车可能会遇到堵车。','Zuò dì tiě qù jī chǎng bǐ jiào kuài, chū zū chē kě néng huì yù dào dǔ chē.','Đi tàu điện ngầm ra sân bay nhanh hơn, taxi có thể gặp tắc đường.'],
+ ['B','好，那我们换地铁吧。','Hǎo, nà wǒ men huàn dì tiě ba.','Được, vậy mình đổi sang đi tàu điện ngầm.'],
+ ['A','终于到了！还有四十分钟。','Zhōng yú dào le! Hái yǒu sì shí fēn zhōng.','Cuối cùng cũng đến! Còn bốn mươi phút.'],
+ ['B','我们先照一张照片吧！','Wǒ men xiān zhào yì zhāng zhào piàn ba!','Mình chụp một tấm ảnh trước đã!'],
+]},
+{id:33, lv:3, icon:'🍂', title:'Bốn mùa, thời tiết', zh:'季节', zpy:'jì jié', who:{A:'Lan',B:'Lý Minh'},
+ scene:'So sánh thời tiết bốn mùa ở Bắc Kinh và Hà Nội.',
+ tip:'A 跟 B 一样 = A giống B. A 没有 B + tính từ = A không… bằng B. 虽然…但是… = tuy… nhưng….',
+ extra:[['河内','Hé nèi','Hà Nội',0],['秋天','qiū tiān','mùa thu',0],['冬天','dōng tiān','mùa đông',0],['夏天','xià tiān','mùa hè',0],['春天','chūn tiān','mùa xuân',0]],
+ lines:[
+ ['A','北京一年有几个季节？','Běi jīng yì nián yǒu jǐ ge jì jié?','Bắc Kinh một năm có mấy mùa?'],
+ ['B','有春、夏、秋、冬四个季节，变化很大。','Yǒu chūn, xià, qiū, dōng sì ge jì jié, biàn huà hěn dà.','Có bốn mùa xuân, hạ, thu, đông, thay đổi rất lớn.'],
+ ['A','你最喜欢哪个季节？','Nǐ zuì xǐ huan nǎ ge jì jié?','Bạn thích mùa nào nhất?'],
+ ['B','秋天。天上没有云，太阳不太热，晚上的月亮特别漂亮。','Qiū tiān. Tiān shang méi yǒu yún, tài yang bú tài rè, wǎn shang de yuè liang tè bié piào liang.','Mùa thu. Trời không có mây, nắng không gắt, trăng buổi tối đặc biệt đẹp.'],
+ ['A','冬天呢？经常刮风吗？','Dōng tiān ne? Jīng cháng guā fēng ma?','Còn mùa đông? Có hay gió không?'],
+ ['B','冬天经常刮风，非常冷。河内的冬天跟北京一样冷吗？','Dōng tiān jīng cháng guā fēng, fēi cháng lěng. Hé nèi de dōng tiān gēn Běi jīng yí yàng lěng ma?','Mùa đông hay có gió, rất lạnh. Mùa đông Hà Nội có lạnh như Bắc Kinh không?'],
+ ['A','河内的冬天没有北京冷，但是夏天比较热，经常下雨。','Hé nèi de dōng tiān méi yǒu Běi jīng lěng, dàn shì xià tiān bǐ jiào rè, jīng cháng xià yǔ.','Mùa đông Hà Nội không lạnh bằng Bắc Kinh, nhưng mùa hè khá nóng, hay mưa.'],
+ ['B','那去河内要记得带伞！','Nà qù Hé nèi yào jì de dài sǎn!','Vậy đi Hà Nội phải nhớ mang ô!'],
+]},
+{id:34, lv:3, icon:'📊', title:'Họp ở công ty', zh:'开会', zpy:'kāi huì', who:{A:'Giám đốc',B:'Nhân viên'},
+ scene:'Giám đốc giao việc sau cuộc họp.',
+ tip:'把 + việc + 完成 = làm xong việc gì. 关于 = về (chủ đề): 关于这个会议. 只要…就… = chỉ cần… là….',
+ extra:[['差不多','chà bu duō','gần như, xấp xỉ',4],['产品','chǎn pǐn','sản phẩm',5],['邮件','yóu jiàn','thư, email',0],['只要','zhǐ yào','chỉ cần',4]],
+ lines:[
+ ['A','小李，下个星期的会议你准备得怎么样了？','Xiǎo Lǐ, xià ge xīng qī de huì yì nǐ zhǔn bèi de zěn me yàng le?','Tiểu Lý, cuộc họp tuần sau em chuẩn bị đến đâu rồi?'],
+ ['B','差不多了，我已经给大家发了电子邮件。','Chà bu duō le, wǒ yǐ jīng gěi dà jiā fā le diàn zǐ yóu jiàn.','Gần xong rồi ạ, em đã gửi email cho mọi người.'],
+ ['A','很好。这次会议很重要，经理们都要参加。','Hěn hǎo. Zhè cì huì yì hěn zhòng yào, jīng lǐ men dōu yào cān jiā.','Tốt lắm. Cuộc họp lần này rất quan trọng, các trưởng phòng đều phải tham gia.'],
+ ['B','会议在几层的办公室举行？','Huì yì zài jǐ céng de bàn gōng shì jǔ xíng?','Cuộc họp tổ chức ở văn phòng tầng mấy ạ?'],
+ ['A','十二层。还有，关于新产品的问题，你想出办法了吗？','Shí èr céng. Hái yǒu, guān yú xīn chǎn pǐn de wèn tí, nǐ xiǎng chū bàn fǎ le ma?','Tầng mười hai. Còn nữa, vấn đề về sản phẩm mới, em nghĩ ra cách chưa?'],
+ ['B','我打算先了解一下客人的要求，然后再决定。','Wǒ dǎ suàn xiān liǎo jiě yí xià kè rén de yāo qiú, rán hòu zài jué dìng.','Em định tìm hiểu yêu cầu của khách trước, sau đó mới quyết định.'],
+ ['A','好，只要你认真做，一定能解决。','Hǎo, zhǐ yào nǐ rèn zhēn zuò, yí dìng néng jiě jué.','Được, chỉ cần em làm nghiêm túc thì nhất định giải quyết được.'],
+ ['B','请放心，我星期五以前把它完成。','Qǐng fàng xīn, wǒ xīng qī wǔ yǐ qián bǎ tā wán chéng.','Anh yên tâm, trước thứ Sáu em sẽ hoàn thành.'],
+]},
+{id:35, lv:3, icon:'👗', title:'Chọn quần áo', zh:'选衣服', zpy:'xuǎn yī fu', who:{A:'Hoa',B:'Lan'},
+ scene:'Hai chị em đi mua quần áo và giày.',
+ tip:'A 比 B + tính từ + 一点儿 = A … hơn B một chút. 一双鞋 = một đôi giày, 一条裙子 = một chiếc váy. 像 = giống như.',
+ extra:[['试','shì','thử',3],['合适','hé shì','vừa, hợp',4]],
+ lines:[
+ ['A','你看，这条裙子怎么样？','Nǐ kàn, zhè tiáo qún zi zěn me yàng?','Chị xem, chiếc váy này thế nào?'],
+ ['B','颜色很漂亮，但是有点儿短。','Yán sè hěn piào liang, dàn shì yǒu diǎnr duǎn.','Màu rất đẹp, nhưng hơi ngắn.'],
+ ['A','那我换一条长的。黄的、蓝的、绿的，你选择哪个？','Nà wǒ huàn yì tiáo cháng de. Huáng de, lán de, lǜ de, nǐ xuǎn zé nǎ ge?','Vậy em đổi chiếc dài. Vàng, xanh lam, xanh lá, chị chọn cái nào?'],
+ ['B','蓝的吧，跟你的衬衫一样。','Lán de ba, gēn nǐ de chèn shān yí yàng.','Màu xanh lam đi, giống với áo sơ mi của em.'],
+ ['A','我最近胖了，不知道合适不合适。','Wǒ zuì jìn pàng le, bù zhī dào hé shì bu hé shì.','Dạo này em béo lên, không biết có vừa không.'],
+ ['B','你一点儿也不胖！去试试吧。','Nǐ yì diǎnr yě bú pàng! Qù shì shi ba.','Em có béo chút nào đâu! Đi thử đi.'],
+ ['A','很合适，我很满意。我还想买一双鞋和一顶帽子。','Hěn hé shì, wǒ hěn mǎn yì. Wǒ hái xiǎng mǎi yì shuāng xié hé yì dǐng mào zi.','Rất vừa, em rất hài lòng. Em còn muốn mua một đôi giày và một chiếc mũ.'],
+ ['B','你穿这条裙子，像电影里的人一样！','Nǐ chuān zhè tiáo qún zi, xiàng diàn yǐng li de rén yí yàng!','Em mặc chiếc váy này trông như người trong phim vậy!'],
+]},
+{id:36, lv:3, icon:'📚', title:'Học tập ở trường', zh:'学习', zpy:'xué xí', who:{A:'Hiệu trưởng',B:'Học sinh'},
+ scene:'Thầy hiệu trưởng hỏi chuyện học của một học sinh.',
+ tip:'对…感兴趣 = có hứng thú với…. 越…越… = càng… càng…: 越学越有意思. 一边…一边… = vừa… vừa….',
+ extra:[['查','chá','tra, kiểm tra',0],['感兴趣','gǎn xìng qù','có hứng thú',0],['有意思','yǒu yì si','thú vị',0]],
+ lines:[
+ ['A','你今年上几年级了？','Nǐ jīn nián shàng jǐ nián jí le?','Năm nay em học lớp mấy rồi?'],
+ ['B','三年级了，校长。','Sān nián jí le, xiào zhǎng.','Lớp ba rồi ạ, thưa thầy hiệu trưởng.'],
+ ['A','你的成绩怎么样？数学难不难？','Nǐ de chéng jì zěn me yàng? Shù xué nán bu nán?','Thành tích của em thế nào? Toán có khó không?'],
+ ['B','数学比较容易，历史有点儿难。我对普通话最感兴趣。','Shù xué bǐ jiào róng yì, lì shǐ yǒu diǎnr nán. Wǒ duì pǔ tōng huà zuì gǎn xìng qù.','Toán khá dễ, lịch sử hơi khó. Em hứng thú nhất với tiếng phổ thông.'],
+ ['A','你每天怎么复习？','Nǐ měi tiān zěn me fù xí?','Mỗi ngày em ôn bài thế nào?'],
+ ['B','我一边听老师讲，一边写句子。不明白的词语就查字典。','Wǒ yì biān tīng lǎo shī jiǎng, yì biān xiě jù zi. Bù míng bai de cí yǔ jiù chá zì diǎn.','Em vừa nghe thầy cô giảng vừa viết câu. Từ nào không hiểu thì tra từ điển.'],
+ ['A','很好！认真做作业，水平一定能提高。','Hěn hǎo! Rèn zhēn zuò zuò yè, shuǐ píng yí dìng néng tí gāo.','Tốt lắm! Làm bài tập nghiêm túc thì trình độ nhất định sẽ nâng cao.'],
+ ['B','我觉得汉语越学越有意思！','Wǒ jué de Hàn yǔ yuè xué yuè yǒu yì si!','Em thấy tiếng Trung càng học càng thú vị!'],
+]},
+{id:37, lv:3, icon:'👴', title:'Thăm ông bà', zh:'看爷爷奶奶', zpy:'kàn yé ye nǎi nai', who:{A:'Bà nội',B:'Cháu'},
+ scene:'Cuối tuần về thăm ông bà nội.',
+ tip:'以前 = trước đây, 以后 = sau này. 被 dùng trong câu bị động: 被奶奶发现了 = bị bà phát hiện. 自己 = tự mình.',
+ extra:[['戴','dài','đeo (kính, mũ)',4],['孙子','sūn zi','cháu nội',0]],
+ lines:[
+ ['A','孙子，你终于回来了！你又瘦了。','Sūn zi, nǐ zhōng yú huí lái le! Nǐ yòu shòu le.','Cháu ơi, cuối cùng cháu cũng về! Cháu lại gầy đi rồi.'],
+ ['B','奶奶，我很健康。爷爷呢？','Nǎi nai, wǒ hěn jiàn kāng. Yé ye ne?','Bà ơi, cháu khỏe mà. Ông đâu ạ?'],
+ ['A','爷爷在花园里看书，他戴着眼镜呢。','Yé ye zài huā yuán li kàn shū, tā dài zhe yǎn jìng ne.','Ông đang đọc sách trong vườn, ông đeo kính đấy.'],
+ ['B','奶奶，这是我给你们买的礼物。','Nǎi nai, zhè shì wǒ gěi nǐ men mǎi de lǐ wù.','Bà ơi, đây là quà cháu mua cho ông bà.'],
+ ['A','你自己工作也不容易，别花这么多钱。','Nǐ zì jǐ gōng zuò yě bù róng yì, bié huā zhè me duō qián.','Cháu tự đi làm cũng không dễ dàng gì, đừng tiêu nhiều tiền thế.'],
+ ['B','没关系。叔叔和阿姨下午也来吗？','Méi guān xi. Shū shu hé ā yí xià wǔ yě lái ma?','Không sao ạ. Chú và cô chiều nay cũng đến chứ ạ?'],
+ ['A','来。你叔叔去年结婚了，他的孩子非常可爱，也很聪明。','Lái. Nǐ shū shu qù nián jié hūn le, tā de hái zi fēi cháng kě ài, yě hěn cōng ming.','Có. Chú cháu năm ngoái lấy vợ, con chú rất đáng yêu, cũng rất thông minh.'],
+ ['B','以前都是你们照顾我，以后我来照顾你们。','Yǐ qián dōu shì nǐ men zhào gu wǒ, yǐ hòu wǒ lái zhào gu nǐ men.','Trước đây đều là ông bà chăm sóc cháu, sau này cháu sẽ chăm sóc ông bà.'],
+]},
+{id:38, lv:3, icon:'🐼', title:'Đi công viên, sở thích', zh:'去公园', zpy:'qù gōng yuán', who:{A:'Minh',B:'Hoa'},
+ scene:'Rủ nhau đi công viên ngắm gấu trúc và nói về sở thích.',
+ tip:'除了…以外，还… = ngoài… ra còn…. 骑自行车 = đi xe đạp. 一会儿 = một lát.',
+ extra:[['出发','chū fā','xuất phát',4],['以外','yǐ wài','ngoài ra',0],['动物园','dòng wù yuán','vườn thú',0]],
+ lines:[
+ ['A','这个周末你有什么打算？','Zhè ge zhōu mò nǐ yǒu shén me dǎ suàn?','Cuối tuần này bạn có dự định gì?'],
+ ['B','我想去动物园看熊猫，或者去爬山。','Wǒ xiǎng qù dòng wù yuán kàn xióng māo, huò zhě qù pá shān.','Mình muốn đi vườn thú xem gấu trúc, hoặc đi leo núi.'],
+ ['A','动物园旁边有一个公园，有很多树和草，河边还有很多鸟。','Dòng wù yuán páng biān yǒu yí ge gōng yuán, yǒu hěn duō shù hé cǎo, hé biān hái yǒu hěn duō niǎo.','Cạnh vườn thú có một công viên, có nhiều cây và cỏ, bên sông còn có nhiều chim.'],
+ ['B','太好了！我们骑自行车去吧。','Tài hǎo le! Wǒ men qí zì xíng chē qù ba.','Hay quá! Chúng ta đi xe đạp đi.'],
+ ['A','好。你的爱好是什么？','Hǎo. Nǐ de ài hào shì shén me?','Được. Sở thích của bạn là gì?'],
+ ['B','除了体育以外，我还喜欢音乐和游戏。','Chú le tǐ yù yǐ wài, wǒ hái xǐ huan yīn yuè hé yóu xì.','Ngoài thể thao ra, mình còn thích âm nhạc và trò chơi.'],
+ ['A','公园里下午有表演节目，还有一个比赛。','Gōng yuán li xià wǔ yǒu biǎo yǎn jié mù, hái yǒu yí ge bǐ sài.','Buổi chiều trong công viên có tiết mục biểu diễn, còn có một cuộc thi.'],
+ ['B','那我们一会儿就出发，别迟到！','Nà wǒ men yí huìr jiù chū fā, bié chí dào!','Vậy lát nữa mình xuất phát luôn, đừng đến muộn!'],
+]},
+{id:39, lv:3, icon:'🏮', title:'Ngày lễ, văn hóa', zh:'节日', zpy:'jié rì', who:{A:'Lan',B:'Thầy Vương'},
+ scene:'Hỏi thầy giáo về Tết Trung thu ở Trung Quốc.',
+ tip:'在…的时候 = vào lúc…. 为了 = để, nhằm. 一直 = luôn luôn, suốt.',
+ extra:[['中秋节','Zhōng qiū jié','Tết Trung thu',0],['月饼','yuè bing','bánh trung thu',0],['越南','Yuè nán','Việt Nam',0]],
+ lines:[
+ ['A','王老师，中国最有名的节日有哪些？','Wáng lǎo shī, Zhōng guó zuì yǒu míng de jié rì yǒu nǎ xiē?','Thầy Vương ơi, những ngày lễ nổi tiếng nhất của Trung Quốc là gì ạ?'],
+ ['B','春节和中秋节。中秋节的时候，大家一起看月亮，吃月饼。','Chūn jié hé Zhōng qiū jié. Zhōng qiū jié de shí hou, dà jiā yì qǐ kàn yuè liang, chī yuè bing.','Tết Nguyên đán và Tết Trung thu. Vào Tết Trung thu, mọi người cùng ngắm trăng, ăn bánh trung thu.'],
+ ['A','越南也有中秋节！我们的文化有很多相同的地方。','Yuè nán yě yǒu Zhōng qiū jié! Wǒ men de wén huà yǒu hěn duō xiāng tóng de dì fang.','Việt Nam cũng có Tết Trung thu! Văn hóa hai nước có nhiều điểm giống nhau.'],
+ ['B','对，两个国家的历史关系很久了。','Duì, liǎng ge guó jiā de lì shǐ guān xi hěn jiǔ le.','Đúng vậy, quan hệ lịch sử giữa hai nước đã rất lâu đời.'],
+ ['A','我一直想去中国过一次中秋节。','Wǒ yì zhí xiǎng qù Zhōng guó guò yí cì Zhōng qiū jié.','Em luôn muốn sang Trung Quốc đón Tết Trung thu một lần.'],
+ ['B','为了了解中国文化，你应该去看看。','Wèi le liǎo jiě Zhōng guó wén huà, nǐ yīng gāi qù kàn kan.','Để hiểu văn hóa Trung Quốc, em nên đi xem thử.'],
+ ['A','如果有机会，我一定去！','Rú guǒ yǒu jī huì, wǒ yí dìng qù!','Nếu có cơ hội, em nhất định sẽ đi!'],
+]},
+{id:40, lv:3, icon:'📖', title:'Thư viện, ngân hàng', zh:'图书馆和银行', zpy:'tú shū guǎn hé yín háng', who:{A:'Minh',B:'Nhân viên'},
+ scene:'Mượn sách ở thư viện, sau đó ra ngân hàng đổi tiền.',
+ tip:'借 = mượn/cho mượn; 还 (huán) = trả lại. 先…然后… = trước… sau đó…. Động từ + 错 = làm nhầm: 走错.',
+ extra:[['还书','huán shū','trả sách',0],['人民币','rén mín bì','nhân dân tệ',0],['越南盾','Yuè nán dùn','đồng Việt Nam',0]],
+ lines:[
+ ['A','你好，我想借这两本书。','Nǐ hǎo, wǒ xiǎng jiè zhè liǎng běn shū.','Chào chị, tôi muốn mượn hai cuốn sách này.'],
+ ['B','可以，一次可以借三个星期。','Kě yǐ, yí cì kě yǐ jiè sān ge xīng qī.','Được, mỗi lần mượn được ba tuần.'],
+ ['A','如果我忘记还书，会怎么样？','Rú guǒ wǒ wàng jì huán shū, huì zěn me yàng?','Nếu tôi quên trả sách thì sao?'],
+ ['B','我们会给你发电子邮件。请注意，图书馆里要安静。','Wǒ men huì gěi nǐ fā diàn zǐ yóu jiàn. Qǐng zhù yì, tú shū guǎn li yào ān jìng.','Chúng tôi sẽ gửi email cho bạn. Xin lưu ý, trong thư viện phải giữ yên tĩnh.'],
+ ['A','好的。请问附近有银行吗？我要换钱。','Hǎo de. Qǐng wèn fù jìn yǒu yín háng ma? Wǒ yào huàn qián.','Vâng. Xin hỏi gần đây có ngân hàng không? Tôi muốn đổi tiền.'],
+ ['B','有，出门先向东走，然后经过一条街道就到了。','Yǒu, chū mén xiān xiàng dōng zǒu, rán hòu jīng guò yì tiáo jiē dào jiù dào le.','Có, ra cửa đi về phía đông trước, sau đó đi qua một con phố là tới.'],
+ ['A','我想把越南盾换成人民币。','Wǒ xiǎng bǎ Yuè nán dùn huàn chéng rén mín bì.','Tôi muốn đổi tiền Việt sang nhân dân tệ.'],
+ ['B','别着急，银行五点才关门。','Bié zháo jí, yín háng wǔ diǎn cái guān mén.','Đừng vội, năm giờ ngân hàng mới đóng cửa.'],
+]},
+];
+
 </script>
 <script>
 // ===== ỨNG DỤNG =====
@@ -958,8 +1432,11 @@ const pick=(a,n)=>shuffle(a).slice(0,n);
 
 // --- Từ điển ---
 const BANK=[],DICT={},TOPICS={};
-const RAWS={1:RAW_HSK1};if(typeof RAW_HSK2!=='undefined')RAWS[2]=RAW_HSK2;
-if(typeof LESSONS2!=='undefined')LESSONS.push(...LESSONS2);
+const RAWS={1:RAW_HSK1};try{RAWS[2]=RAW_HSK2;LESSONS.push(...LESSONS2)}catch(e){}
+try{RAWS[3]=RAW_HSK3;LESSONS.push(...LESSONS3)}catch(e){}
+try{RAWS[4]=RAW_HSK4;LESSONS.push(...LESSONS4)}catch(e){}
+try{RAWS[5]=RAW_HSK5;LESSONS.push(...LESSONS5)}catch(e){}
+try{RAWS[6]=RAW_HSK6;LESSONS.push(...LESSONS6)}catch(e){}
 function autoWords(L){const ex=new Set((L.extra||[]).map(e=>e[0]));const out=[];L.lines.forEach(l=>segment(l[1]).forEach(z=>{const w=DICT[z];if(w&&(w.lv===L.lv||ex.has(z))&&!out.includes(z))out.push(z)}));return out}
 (()=>{for(const lv in RAWS){let topic='';TOPICS[lv]=[];RAWS[lv].trim().split('\n').forEach(l=>{l=l.trim();if(!l)return;if(l[0]==='#'){topic=l.slice(1).trim();TOPICS[lv].push(topic);return}
   const [zh,py,mean,em]=l.split('|');if(DICT[zh])return;const w={zh,py,mean,em:em||'',topic,lv:+lv};BANK.push(w);DICT[zh]=w})}
@@ -1083,6 +1560,18 @@ function playAll(L,i=0){if(i===0)playing=true;if(!playing)return;document.queryS
 
 // Video YouTube nhúng theo bài (đã kiểm tra cho phép nhúng). [id, mô tả, kênh, thời lượng]
 const YTV={
+29:[['uLklp2x-axg','Truyện HSK3: 找房子 tìm nhà','Mandarin Click','5:26'],['IghhCjQPVZs','搬家 ngày chuyển nhà (HSK3)','Siyun\'s Chinese Stories','2:28']],
+30:[['Cd78_uuxfvs','Hội thoại ở nhà hàng (HSK 1-3)','Otis Chinese','15:58'],['wQWzDV7Cd44','在餐厅点菜 gọi món ở nhà hàng','The Chinese Learning Journey','4:32']],
+31:[['GYEcDtwg5sU','Truyện HSK3: 小明发烧了 Tiểu Minh bị sốt','Lyra','5:56'],['xXDTygJHzRg','Nói về cảm cúm, sốt và đi khám','Chinese Easy01','0:38']],
+32:[['XluESrK9H1M','Tiếng Trung ở sân bay (HSK 3-4)','Chinese Podcast Zone','13:26'],['SMJyb4lAU9U','Hội thoại chậm: ở sân bay','Learn Chinese with XiDe','7:05']],
+33:[['OKbB-rA1HZ8','Nói về thời tiết (HSK 3-4)','Chinese Podcast For Learning','11:28'],['U7VBZhyD1cE','Bài đọc HSK3: thời tiết Bắc Kinh','Capsule Mandarin 胶囊中文','6:29']],
+34:[['dJYYeyTVL90','HSK3 bài 11: 在会议室 ở phòng họp','Confucius Institute Bangor','1:00'],['Pmeyzb-rcPw','8 hội thoại văn phòng (HSK3)','Learn Chinese with Pipo','39:28']],
+35:[['RcUVUmwnauk','Truyện chậm: 买衣服 mua quần áo','Mandarin Click','6:28'],['kypaX1ch7g0','Mua sắm ở cửa hàng quần áo','FluentU Chinese','6:34']],
+36:[['8GIrvxQmRHs','HSK3 bài 14: hội thoại có âm thanh','HSK Solution','5:36'],['iB-AqtVyHK4','Đề mẫu HSK3: phần nghe','Learn Chinese For Free','34:59']],
+37:[['1-Rky663eZ0','Truyện HSK3: 河边爷爷 ông cụ bên sông','Chinative','15:51'],['EwAK9sv6WEE','Truyện ngắn: 爷爷奶奶的故事 (có tiếng Việt)','Fanshiyin','3:53']],
+38:[['erJzQcSVHx0','Luyện nghe: cuối tuần đi công viên','Easy Chinese Minutes','8:49'],['yaeECV1JRjM','Hội thoại dã ngoại cuối tuần (HSK 2-3)','Chinese Daily Podcast','13:43']],
+39:[['WqKPzmI0M6s','Hội thoại Tết Trung thu','Learn Chinese Online','6:35'],['25QNtxu6o3k','中秋节 là gì? (HSK 1-3)','Chinese Daily Podcast','13:36']],
+40:[['PAo5gYeAV2Q','Ở thư viện (HSK 1-3)','Otis Chinese','14:36'],['BS88y2raH2s','Luyện nghe: hội thoại ở thư viện','Living Chinese','7:23']],
 15:[['PJeTTsUIJ-I','HSK2 giáo trình chuẩn: 生日快乐','Daily Zhongwen 每日中文','6:09'],['tzzTibSA-F0','Luyện nói phản xạ: chúc mừng sinh nhật','Chạm HSK','7:01']],
 16:[['Vx0ezX3DpM4','HSK2 bài 4: 你们喜欢什么运动','MandarinAi Learn Chinese','8:09'],['wcEOSoMDy7w','Nói về thể thao (HSK 2-3)','Chinese Podcast For Learning','13:49']],
 17:[['q20bGH4oj_E','Hội thoại nhận phòng khách sạn','Learn Chinese Online','10:06'],['e8axxyWFSGQ','办理入住 làm thủ tục nhận phòng','All About Chinese','4:04']],
@@ -1115,7 +1604,7 @@ const YTV={
 const ytCard=([id,t,c,len])=>`<div class="yt"><button class="ytp" data-act="ytplay" data-id="${id}" aria-label="Phát video ${esc(t)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="ytb">▶</span><span class="ytl">${len}</span></button><div class="ytm"><b>${esc(t)}</b><small>Nguồn: kênh ${esc(c)} trên YouTube · <a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">mở trên YouTube ↗</a></small></div></div>`;
 
 // --- Video hoạt cảnh hội thoại ---
-const SCENES={28:{bg:['#fff0c2','#fffaea'],p:['🏫','🚲','🚪','✏️']},15:{bg:['#ffe0ec','#fff5f9'],p:['🎂','🎁','🎈','🎉']},16:{bg:['#d4f1dc','#f1fbf3'],p:['🏃','⚽','🏀','🌳']},17:{bg:['#e9e1d4','#faf6ef'],p:['🏨','🛎️','🛏️','🧳']},18:{bg:['#cfe8ff','#f1f8ff'],p:['✈️','🏯','🧳','☁️']},19:{bg:['#ffe4d6','#fff6f0'],p:['👕','👗','🏷️','🛍️']},20:{bg:['#fff1c9','#fffbec'],p:['🍳','🥛','🍉','☕']},21:{bg:['#d9f3ef','#f2fcfa'],p:['🤒','💊','📱','🛌']},22:{bg:['#d7e8d0','#f3f9ef'],p:['🚌','🚏','🏪','🚦']},23:{bg:['#dde6ef','#f6f9fc'],p:['🏢','💻','📱','📋']},24:{bg:['#fff0c2','#fffaea'],p:['📝','✏️','📚','🏫']},25:{bg:['#dcecff','#f5faff'],p:['❄️','☃️','📞','🏠']},26:{bg:['#f1e0ff','#fbf5ff'],p:['🎤','💃','🎶','📰']},27:{bg:['#d6f0ff','#f3fbff'],p:['🐟','🍖','⚖️','⛴️']},1:{bg:['#bfe3ff','#e9f7d9'],p:['🏫','🌳','☀️','🚲']},2:{bg:['#ffe3cf','#fff6e8'],p:['☕','🌸','🪴','🖼️']},3:{bg:['#e6dcff','#f7f2ff'],p:['🖼️','🛋️','🪴','☕']},4:{bg:['#ffe9b8','#fff8e1'],p:['🍎','🍵','🧺','🍌']},
+const SCENES={29:{bg:['#e8eefc','#f7f9ff'],p:["📦", "🛗", "🧊", "🏢"]},30:{bg:['#ffe1d1','#fff5ee'],p:["🍜", "🥤", "🍰", "🍞"]},31:{bg:['#d9f3ef','#f2fcfa'],p:["🤧", "🌡️", "💊", "🏥"]},32:{bg:['#cfe8ff','#f1f8ff'],p:["✈️", "🧳", "🛂", "🚇"]},33:{bg:['#ffe6c7','#fff7ea'],p:["🍂", "☀️", "❄️", "🌕"]},34:{bg:['#dde6ef','#f6f9fc'],p:["📊", "💻", "📧", "🏢"]},35:{bg:['#ffe4ef','#fff6fa'],p:["👗", "👠", "🧢", "👔"]},36:{bg:['#fff0c2','#fffaea'],p:["📚", "📐", "✏️", "🏫"]},37:{bg:['#e3f4d3','#f6fcef'],p:["👴", "👵", "🌷", "🎁"]},38:{bg:['#d4f1dc','#f1fbf3'],p:["🐼", "🌳", "🚲", "🐦"]},39:{bg:['#ffe0c7','#fff4ea'],p:["🏮", "🌕", "🥮", "🎎"]},40:{bg:['#e6e0f8','#f8f6ff'],p:["📖", "🏦", "💴", "📚"]},28:{bg:['#fff0c2','#fffaea'],p:['🏫','🚲','🚪','✏️']},15:{bg:['#ffe0ec','#fff5f9'],p:['🎂','🎁','🎈','🎉']},16:{bg:['#d4f1dc','#f1fbf3'],p:['🏃','⚽','🏀','🌳']},17:{bg:['#e9e1d4','#faf6ef'],p:['🏨','🛎️','🛏️','🧳']},18:{bg:['#cfe8ff','#f1f8ff'],p:['✈️','🏯','🧳','☁️']},19:{bg:['#ffe4d6','#fff6f0'],p:['👕','👗','🏷️','🛍️']},20:{bg:['#fff1c9','#fffbec'],p:['🍳','🥛','🍉','☕']},21:{bg:['#d9f3ef','#f2fcfa'],p:['🤒','💊','📱','🛌']},22:{bg:['#d7e8d0','#f3f9ef'],p:['🚌','🚏','🏪','🚦']},23:{bg:['#dde6ef','#f6f9fc'],p:['🏢','💻','📱','📋']},24:{bg:['#fff0c2','#fffaea'],p:['📝','✏️','📚','🏫']},25:{bg:['#dcecff','#f5faff'],p:['❄️','☃️','📞','🏠']},26:{bg:['#f1e0ff','#fbf5ff'],p:['🎤','💃','🎶','📰']},27:{bg:['#d6f0ff','#f3fbff'],p:['🐟','🍖','⚖️','⛴️']},1:{bg:['#bfe3ff','#e9f7d9'],p:['🏫','🌳','☀️','🚲']},2:{bg:['#ffe3cf','#fff6e8'],p:['☕','🌸','🪴','🖼️']},3:{bg:['#e6dcff','#f7f2ff'],p:['🖼️','🛋️','🪴','☕']},4:{bg:['#ffe9b8','#fff8e1'],p:['🍎','🍵','🧺','🍌']},
  5:{bg:['#cdeefd','#f2fbff'],p:['🕘','📅','🌳','☁️']},6:{bg:['#ffd6c9','#fff1ea'],p:['🍜','🍚','🍵','🏮']},7:{bg:['#b9dcff','#e8f4ff'],p:['🌤️','🌧️','🎬','🌳']},8:{bg:['#d7e8d0','#f3f9ef'],p:['🚉','🏥','🚕','🚦']},
  9:{bg:['#dde6ef','#f6f9fc'],p:['🏢','💻','📊','☕']},10:{bg:['#ffe0ec','#fff4f8'],p:['📞','🏠','📱','🕒']},11:{bg:['#d9f3ef','#f2fcfa'],p:['🏥','🩺','💊','💧']},12:{bg:['#fff0c2','#fffaea'],p:['📚','✏️','🀄','🏫']},
  13:{bg:['#e3f4d3','#f6fcef'],p:['🏠','🐶','🪑','🐱']},14:{bg:['#cfe0ff','#f0f5ff'],p:['🏙️','✈️','🛍️','📺']}};
