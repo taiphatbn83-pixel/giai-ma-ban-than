@@ -48,7 +48,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .chip.on{background:var(--red);border-color:var(--red);color:#fff}
 .tag{font-size:11px;font-weight:700;background:var(--gold);color:#4a3000;border-radius:6px;padding:1px 6px;vertical-align:2px}
 .ok{color:var(--ok)}.bad{color:var(--bad)}.mid{color:#c07a00}
-.hide-py .py,.hide-py .bub .pyb{display:none}.hide-vi .vi{display:none}.hide-mean .bub .mean{display:none}
+.hide-py .py,.hide-py .bub .pyb{display:none}.hide-vi .vi{display:none}.hide-mean .bub .mean,.hide-mean .vsub .mean{display:none}
 .vi{color:var(--mut);font-size:14px;font-style:italic}
 .pyb{color:var(--red);font-weight:600}
 @media (prefers-color-scheme:dark){.pyb{color:#ff8a7a}}
@@ -92,8 +92,8 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .lt{flex:1;display:flex;flex-direction:column}.ls{display:flex;flex-direction:column;align-items:flex-end}
 .back{display:inline-block;color:var(--red);text-decoration:none;font-weight:600;padding:6px 0;background:none;border:0;font:600 15px inherit;font-family:inherit;cursor:pointer}
 .lhead{display:flex;gap:12px;align-items:center;margin:4px 0 10px}.lhead h2{margin:0}
-.seg{display:grid;grid-template-columns:repeat(4,1fr);background:var(--soft);border-radius:14px;padding:4px;gap:4px;margin-bottom:14px;position:sticky;top:60px;z-index:4}
-.seg a{text-align:center;padding:9px 2px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:13px;font-weight:600}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);background:var(--soft);border-radius:14px;padding:4px;gap:4px;margin-bottom:14px;position:sticky;top:60px;z-index:4}
+.seg a{text-align:center;padding:9px 1px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:12.5px;font-weight:600;line-height:1.25}
 .seg a.on{background:var(--red);color:#fff}
 /* thẻ */
 .fcbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
@@ -145,6 +145,34 @@ mark{background:var(--gold);color:#3a2600;border-radius:3px;padding:0 1px}
 .fb{border-radius:16px;padding:14px;margin:14px 0;text-align:center}.fb.ok{background:var(--okbg);color:inherit}.fb.bad{background:var(--badbg);color:inherit}
 .fbz{font-size:26px;display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0}
 .result{text-align:center}.rs{font-size:64px}
+/* video */
+.vplayer{background:var(--bg)}
+.vplayer.vfull{position:fixed;inset:0;z-index:50;overflow:auto;padding:calc(10px + env(safe-area-inset-top)) 10px 10px}
+.noscroll{overflow:hidden}
+.vstage{position:relative;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,var(--b1),var(--b2));height:clamp(420px,62vh,560px);color:#2a1a17;box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.vfull .vstage{height:calc(100vh - 230px);min-height:380px}
+.vprops span{position:absolute;font-size:clamp(28px,7vw,44px);opacity:.85}
+.vtitle{position:absolute;left:12px;top:10px;background:rgba(255,255,255,.8);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700;z-index:2}
+.vfloor{position:absolute;left:0;right:0;top:66%;height:6px;background:rgba(0,0,0,.06)}
+.vchars{position:absolute;left:0;right:0;top:18%;display:flex;justify-content:space-around;align-items:flex-end;padding:0 4%;z-index:1}
+.vch{position:relative;display:flex;flex-direction:column;align-items:center;width:30%;max-width:150px;transition:transform .3s,opacity .3s;opacity:.75}
+.vch.act{opacity:1;transform:translateY(-6px) scale(1.06)}
+.av{width:100%;height:auto;display:block}
+.vname{font-size:12px;font-weight:700;background:rgba(255,255,255,.85);border-radius:999px;padding:1px 8px;margin-top:-6px;white-space:nowrap}
+.vbub{position:absolute;bottom:100%;margin-bottom:6px;background:#fff;border-radius:14px;padding:6px 10px;font-size:clamp(15px,4vw,20px);box-shadow:0 3px 10px rgba(0,0,0,.15);width:max-content;max-width:min(230px,60vw);opacity:0;transform:translateY(6px);transition:.25s;pointer-events:none}
+.vch.me .vbub{right:0}.vch:not(.me) .vbub{left:0}
+.vbub.on{opacity:1;transform:none}
+.vbub::after{content:"";position:absolute;bottom:-7px;left:24px;border:7px solid transparent;border-bottom:0;border-top-color:#fff}.vch.me .vbub::after{left:auto;right:24px}
+.mouth{transform-box:fill-box;transform-origin:center}.talk .mouth{animation:talk .2s infinite alternate}@keyframes talk{to{transform:scaleY(3.4)}}
+.eyes{transform-box:fill-box;transform-origin:center;animation:blink 4s infinite}@keyframes blink{0%,95%,100%{transform:none}97%{transform:scaleY(.1)}}
+.talk .av{animation:bob .45s infinite alternate}@keyframes bob{to{transform:translateY(-3px)}}
+.vsub{position:absolute;left:0;right:0;bottom:0;background:rgba(20,12,10,.78);color:#fff;padding:10px 14px 12px;text-align:center;min-height:30%;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.vsub .vz{font-size:clamp(22px,6vw,30px);line-height:1.3}.vsub .py{color:#ffcf6e;font-weight:600}.vsub .vi{color:#e7dcd8}.vsub .mean{color:#fff;font-size:15px}
+.vbig{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:84px;height:84px;border-radius:50%;border:0;background:var(--red);color:#fff;font-size:36px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);z-index:3}
+.vprog{display:flex;gap:4px;margin:10px 0}.vdot{flex:1;height:8px;border:0;border-radius:4px;background:var(--line);cursor:pointer;padding:0}.vdot.past{background:#e9a197}.vdot.cur{background:var(--red)}
+.vctl{display:flex;justify-content:center;gap:10px}
+.vz2{font-size:24px;margin:4px 0}.center{text-align:center}
+@media (prefers-reduced-motion:reduce){.talk .av,.eyes{animation:none}}
 /* thanh tab dưới */
 .tabbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom);z-index:10}
 .tabbar a{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 2px;font-size:11px;color:var(--mut);text-decoration:none;font-weight:600;min-height:58px}
@@ -553,7 +581,7 @@ const FINALS = [['a','啊','ā'],['o','喔','ō'],['e','鹅','é'],['i','衣','y
 <script>
 // ===== ỨNG DỤNG =====
 const KEY='hoc-tieng-trung-v1';
-const S=Object.assign({done:{},best:{},known:{},wrong:{},slow:false,showPy:true,showVi:true,showMean:true},JSON.parse(localStorage.getItem(KEY)||'{}'));
+const S=Object.assign({vRepeat:false,done:{},best:{},known:{},wrong:{},slow:false,showPy:true,showVi:true,showMean:true},JSON.parse(localStorage.getItem(KEY)||'{}'));
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -596,7 +624,7 @@ const zhVoice=()=>VOICES.find(v=>/zh[-_]CN/i.test(v.lang))||VOICES.find(v=>/^(zh
 let speakTok=0;
 function speak(text,o={}){if(!window.speechSynthesis){o.onend&&o.onend();return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';const v=zhVoice();if(v)u.voice=v;
   u.rate=o.rate??(S.slow?0.55:0.85);u.pitch=o.pitch??1;const tok=++speakTok;const done=()=>{if(tok===speakTok&&o.onend)o.onend()};u.onend=done;u.onerror=done;speechSynthesis.speak(u)}
-function stopAll(){speakTok++;window.speechSynthesis&&speechSynthesis.cancel();clearTimeout(autoT);auto=false;playing=false}
+function stopAll(){speakTok++;window.speechSynthesis&&speechSynthesis.cancel();clearTimeout(autoT);auto=false;playing=false;typeof vStop==='function'&&vStop()}
 
 // --- Nhận giọng nói (luyện nói) ---
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -647,7 +675,7 @@ function tgView(){if(!toneGame)return`<p class="small">Máy đọc một chữ, 
 function tgNew(){const s=Math.random()*5|0,t=Math.random()*4|0;toneGame.cur={zh:TONE_SETS[s][t],py:TONE_SET_PY[s][t],t:t+1};toneGame.ans=null;speak(toneGame.cur.zh)}
 
 // --- Danh sách bài ---
-function vLessons(){return`<h2>Bài học HSK1</h2><p class="lead">Mỗi bài có 4 bước: học từ bằng hình và âm thanh, nghe hội thoại, xem từ mới trong bài, rồi làm bài kiểm tra. Đạt từ 70% là hoàn thành bài.</p>
+function vLessons(){return`<h2>Bài học HSK1</h2><p class="lead">Mỗi bài có 5 bước: học từ bằng hình và âm thanh, xem video hoạt cảnh, luyện từng câu hội thoại, xem từ mới trong bài, rồi làm bài kiểm tra. Đạt từ 70% là hoàn thành bài.</p>
  <a class="lrow" href="#pinyin"><span class="li">拼</span><span class="lt"><b>Bài 0 · Pinyin và thanh điệu</b><small>Nền tảng phát âm, học trước tiên</small></span><span class="ls">›</span></a>
  ${LESSONS.map(L=>`<a class="lrow ${S.done[L.id]?'done':''}" href="#lesson/${L.id}/learn"><span class="li">${L.icon}</span><span class="lt"><b>Bài ${L.id} · ${esc(L.title)}</b><small><span class="zh">${L.zh}</span> · ${L.words.length} từ · ${L.lines.length} câu thoại</small></span><span class="ls">${S.done[L.id]?'✅':''}${S.best[L.id]!=null?`<small>${S.best[L.id]}%</small>`:''}</span></a>`).join('')}
  <div class="note">HSK2 đến HSK6 đang được soạn tiếp theo cùng cấu trúc này.</div>`}
@@ -662,10 +690,11 @@ function runAuto(){if(!auto||!C)return;const w=C.pool[C.i];speak(w.zh,{onend:()=
 
 // --- Bài học ---
 let playing=false;
-function lessonTabs(L,tab){const T=[['learn','1. Học từ'],['dialog','2. Hội thoại'],['new','3. Từ mới'],['quiz','4. Kiểm tra']];return`<div class="seg">${T.map(([k,n])=>`<a href="#lesson/${L.id}/${k}" class="${k===tab?'on':''}">${n}</a>`).join('')}</div>`}
+function lessonTabs(L,tab){const T=[['learn','Học từ'],['video','🎬 Video'],['dialog','Hội thoại'],['new','Từ mới'],['quiz','Kiểm tra']];return`<div class="seg">${T.map(([k,n])=>`<a href="#lesson/${L.id}/${k}" class="${k===tab?'on':''}">${n}</a>`).join('')}</div>`}
 function vLesson(id,tab){const L=LESSONS.find(x=>x.id==id);if(!L)return vLessons();tab=tab||'learn';
  let body='';
  if(tab==='learn'){if(!C||C.key!=='L'+id)C={key:'L'+id,pool:lessonWords(L),i:0};body=`<p class="lead">Nhìn hình, nghe, rồi nói theo từng từ. Bật "Tự động nghe" để nghe lặp lại như trẻ em nghe mẹ nói.</p><div id="cards">${cardView()}</div>`}
+ else if(tab==='video'){body=vVideo(L)}
  else if(tab==='dialog'){body=`<p class="lead">🎬 ${esc(L.scene)}</p>${toggles()}<div class="pbar"><button class="btn" data-act="playAll" data-id="${L.id}">▶ Nghe cả bài</button><button class="btn ghost" data-act="stop">⏹ Dừng</button></div>
   <div class="dlg">${L.lines.map((l,i)=>`<div class="bub ${l[0]==='A'?'me':''}" id="ln${i}"><div class="who">${esc(L.who[l[0]]||l[0])}</div><div class="zh dz" data-act="say" data-zh="${esc(l[1])}">${esc(l[1])}</div>${pyLine(l[2])}<div class="mean">${esc(l[3])}</div><div class="bact">${btnSay(l[1])}${btnSlow(l[1])}${btnMic(l[1])}</div></div>`).join('')}</div>
   <div class="card tip"><b>💡 Ghi nhớ</b><p>${esc(L.tip)}</p></div>`}
@@ -675,6 +704,58 @@ function vLesson(id,tab){const L=LESSONS.find(x=>x.id==id);if(!L)return vLessons
  return`<a class="back" href="#lessons">‹ Danh sách bài</a><div class="lhead"><span class="li">${L.icon}</span><div><small>Bài ${L.id}</small><h2>${esc(L.title)} <span class="zh">${L.zh}</span></h2></div></div>${lessonTabs(L,tab)}${body}`}
 function playAll(L,i=0){if(i===0)playing=true;if(!playing)return;document.querySelectorAll('.bub').forEach(b=>b.classList.remove('cur'));if(i>=L.lines.length){playing=false;return}
  const el=$('#ln'+i);el?.classList.add('cur');el?.scrollIntoView({behavior:'smooth',block:'center'});const sp=L.lines[i][0];speak(L.lines[i][1],{pitch:sp==='A'?1.15:sp==='B'?0.9:0.75,onend:()=>{if(playing)autoT=setTimeout(()=>playAll(L,i+1),700)}})}
+
+// --- Video hoạt cảnh hội thoại ---
+const SCENES={1:{bg:['#bfe3ff','#e9f7d9'],p:['🏫','🌳','☀️','🚲']},2:{bg:['#ffe3cf','#fff6e8'],p:['☕','🌸','🪴','🖼️']},3:{bg:['#e6dcff','#f7f2ff'],p:['🖼️','🛋️','🪴','☕']},4:{bg:['#ffe9b8','#fff8e1'],p:['🍎','🍵','🧺','🍌']},
+ 5:{bg:['#cdeefd','#f2fbff'],p:['🕘','📅','🌳','☁️']},6:{bg:['#ffd6c9','#fff1ea'],p:['🍜','🍚','🍵','🏮']},7:{bg:['#b9dcff','#e8f4ff'],p:['🌤️','🌧️','🎬','🌳']},8:{bg:['#d7e8d0','#f3f9ef'],p:['🚉','🏥','🚕','🚦']},
+ 9:{bg:['#dde6ef','#f6f9fc'],p:['🏢','💻','📊','☕']},10:{bg:['#ffe0ec','#fff4f8'],p:['📞','🏠','📱','🕒']},11:{bg:['#d9f3ef','#f2fcfa'],p:['🏥','🩺','💊','💧']},12:{bg:['#fff0c2','#fffaea'],p:['📚','✏️','🀄','🏫']},
+ 13:{bg:['#e3f4d3','#f6fcef'],p:['🏠','🐶','🪑','🐱']},14:{bg:['#cfe0ff','#f0f5ff'],p:['🏙️','✈️','🛍️','📺']}};
+const MALE=/Minh|Hùng|Tài xế|Bác sĩ|Người đi đường|Đồng nghiệp|Tiểu Vương|Khách|Bạn mới/;
+const ROLE_EM={'Bác sĩ':'🩺','Phục vụ':'🍽️','Tài xế':'🚕','Người bán':'🧺','Người nghe máy':'📞','Lý Minh':'📱'};
+function avatar(name,k){const m=MALE.test(name);const skin=['#f6d3b3','#efc39c','#f3cba8'][k%3];const hair=['#2b1d16','#4a2c18','#1c1c1c'][k%3];const shirt=['#e0533d','#2f7dd1','#2e9e6a'][k%3];
+ return`<svg viewBox="0 0 120 165" class="av" aria-hidden="true"><rect x="22" y="108" width="76" height="62" rx="32" fill="${shirt}"/><rect x="51" y="90" width="18" height="22" rx="6" fill="${skin}"/>
+ ${m?'':`<path d="M27 62 Q27 18 60 17 Q93 18 93 62 L97 112 Q60 122 23 112 Z" fill="${hair}"/>`}<ellipse cx="60" cy="62" rx="30" ry="34" fill="${skin}"/>
+ ${m?`<path d="M29 58 Q28 22 60 22 Q92 22 91 58 Q84 38 60 39 Q38 38 29 58Z" fill="${hair}"/>`:`<path d="M30 60 Q31 25 60 25 Q89 25 90 60 Q76 40 54 42 Q38 44 30 60Z" fill="${hair}"/>`}
+ <g class="eyes"><ellipse cx="48" cy="65" rx="3.6" ry="4.6" fill="#222"/><ellipse cx="72" cy="65" rx="3.6" ry="4.6" fill="#222"/></g>
+ <ellipse cx="41" cy="77" rx="5" ry="3" fill="#f08a7a" opacity=".45"/><ellipse cx="79" cy="77" rx="5" ry="3" fill="#f08a7a" opacity=".45"/><ellipse class="mouth" cx="60" cy="83" rx="7" ry="2.4" fill="#a8322a"/></svg>`}
+let V=null;
+function vVideo(L){if(!V||V.id!==L.id)V={id:L.id,i:0,playing:false,started:false};const sc=SCENES[L.id]||SCENES[1];
+ const sp=['B','C','A'].filter(s=>L.who[s]);
+ return`<p class="lead">🎬 Xem hoạt cảnh: nhân vật nói từng câu, phụ đề hiện bên dưới. Bật "Dừng để nói theo" để tập nói lại từng câu giống trẻ em bắt chước người lớn.</p>
+ <div class="vplayer" id="vplayer"><div class="vstage" style="--b1:${sc.bg[0]};--b2:${sc.bg[1]}">
+  <div class="vprops">${sc.p.map((e,i)=>`<span style="left:${[6,30,62,84][i]}%;top:${[10,4,8,14][i]}%">${e}</span>`).join('')}</div>
+  <div class="vtitle">Bài ${L.id} · ${esc(L.title)} <span class="zh">${L.zh}</span></div>
+  <div class="vchars">${sp.map((s,k)=>`<div class="vch ${s==='A'?'me':''}" data-s="${s}"><div class="vbub zh" id="vb_${s}"></div>${avatar(L.who[s],s==='A'?0:s==='B'?1:2)}<div class="vname">${ROLE_EM[L.who[s]]||''} ${esc(L.who[s])}</div></div>`).join('')}</div>
+  <div class="vfloor"></div>
+  <div class="vsub" id="vsub">${V.started?'':`<div class="mean">${esc(L.scene)}</div>`}</div>
+  ${V.started?'':`<button class="vbig" data-act="vplay" aria-label="Phát">▶</button>`}
+ </div>
+ <div class="vprog">${L.lines.map((_,i)=>`<button class="vdot ${i<V.i?'past':''}" data-act="vgo" data-i="${i}" aria-label="Câu ${i+1}"></button>`).join('')}</div>
+ <div class="vctl"><button class="ib lg" data-act="vprev" aria-label="Câu trước">⏮</button><button class="ib lg vpp" data-act="vplay" aria-label="Phát hoặc tạm dừng">${V.playing?'⏸':'▶'}</button><button class="ib lg" data-act="vnext" aria-label="Câu sau">⏭</button><button class="ib lg" data-act="vfull" aria-label="Toàn màn hình">⛶</button></div>
+ <div class="toggles"><button class="chip ${S.vRepeat?'on':''}" data-act="tog" data-k="vRepeat">🗣️ Dừng để nói theo</button><button class="chip ${S.slow?'on':''}" data-act="tog" data-k="slow">🐢 Đọc chậm</button><button class="chip ${S.showPy?'on':''}" data-act="tog" data-k="showPy">Pinyin</button><button class="chip ${S.showVi?'on':''}" data-act="tog" data-k="showVi">Phiên âm Việt</button><button class="chip ${S.showMean?'on':''}" data-act="tog" data-k="showMean">Nghĩa</button></div>
+ <div id="vturn"></div></div>
+ <div class="card"><b>📺 Xem thêm video trên mạng</b><p class="small">Mở YouTube với các video dạy cùng chủ đề. Video thuộc kênh của người đăng, mở trong ứng dụng YouTube.</p><div class="pbar">${[['Bài giảng tiếng Việt','học tiếng Trung giao tiếp chủ đề '+L.title.toLowerCase()],['Hội thoại tiếng Trung','HSK1 '+L.zh+' 对话 中文'],['Hoạt hình cho trẻ em','儿童 中文 '+L.zh+' 动画']].map(([n,q])=>`<a class="btn ghost" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}">${n} ↗</a>`).join('')}</div></div>`}
+const curL=()=>LESSONS.find(x=>x.id===V.id);
+function vShow(i){const L=curL(),l=L.lines[i];V.i=i;V.started=true;$('.vbig')?.remove();
+ document.querySelectorAll('.vch').forEach(c=>{c.classList.remove('talk');c.classList.toggle('act',c.dataset.s===l[0])});
+ document.querySelectorAll('.vbub').forEach(b=>b.classList.remove('on'));const bub=$('#vb_'+l[0]);if(bub){bub.textContent=l[1];bub.classList.add('on')}
+ $('#vsub').innerHTML=`<div class="zh vz">${esc(l[1])}</div>${pyLine(l[2])}<div class="mean">${esc(l[3])}</div>`;
+ document.querySelectorAll('.vdot').forEach((d,k)=>{d.classList.toggle('past',k<i);d.classList.toggle('cur',k===i)});$('#vturn').innerHTML=''}
+const vBtn=()=>{const b=$('.vpp');if(b)b.textContent=V.playing?'⏸':'▶'};
+function vPlayLine(){const L=curL(),l=L.lines[V.i];vShow(V.i);const ch=document.querySelector(`.vch[data-s="${l[0]}"]`);ch?.classList.add('talk');V.playing=true;vBtn();
+ speak(l[1],{pitch:l[0]==='A'?1.15:l[0]==='B'?0.9:0.75,onend:()=>{ch?.classList.remove('talk');if(!V.playing)return;
+  if(S.vRepeat){V.playing=false;vBtn();$('#vturn').innerHTML=`<div class="speak"><p><b>🗣️ Đến lượt bạn:</b> nói lại câu này</p><p class="zh vz2">${esc(l[1])}</p>${btnMic(l[1])}<div class="pbar center">${btnSay(l[1],'🔊 Nghe lại','txt')}<button class="btn" data-act="vnext">Câu tiếp ▶</button></div></div>`;return}
+  autoT=setTimeout(()=>{if(!V.playing)return;if(V.i+1<L.lines.length){V.i++;vPlayLine()}else vEnd()},900)}})}
+function vEnd(){V.playing=false;vBtn();document.querySelectorAll('.vdot').forEach(d=>d.classList.add('past'));
+ $('#vturn').innerHTML=`<div class="card center"><p><b>🎉 Xem xong bài ${V.id}!</b> Xem lại thêm một lần, rồi luyện tiếp.</p><div class="pbar center"><button class="btn ghost" data-act="vgo" data-i="0">🔁 Xem lại</button><a class="btn ghost" href="#lesson/${V.id}/dialog">Luyện từng câu</a><a class="btn" href="#lesson/${V.id}/quiz">Làm kiểm tra</a></div></div>`}
+function vStop(){if(V)V.playing=false;document.querySelectorAll('.vch.talk').forEach(c=>c.classList.remove('talk'));vBtn()}
+const ACT_V={};Object.assign(ACT_V,{
+ vplay:()=>{if(V.playing){stopAll()}else{stopAll();vPlayLine()}},
+ vnext:()=>{const n=curL().lines.length;stopAll();if(V.i+1<n||!V.started){if(V.started)V.i++;vPlayLine()}else vEnd()},
+ vprev:()=>{stopAll();V.i=Math.max(0,V.i-1);vPlayLine()},
+ vgo:b=>{stopAll();V.i=+b.dataset.i;vPlayLine()},
+ vfull:()=>{const p=$('#vplayer');p.classList.toggle('vfull');document.body.classList.toggle('noscroll',p.classList.contains('vfull'))},
+});
 
 // --- Từ vựng ---
 let WF={lv:1,topic:'',q:''};
@@ -777,6 +858,7 @@ const ACT={
  quitQuiz:()=>{stopAll();history.length>1?history.back():location.hash='#review'},
  reset:()=>{if(confirm('Xóa toàn bộ tiến độ học?')){S.done={};S.best={};S.known={};S.wrong={};save();render()}},
 };
+Object.assign(ACT,ACT_V);
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;e.preventDefault();ACT[b.dataset.act]?.(b,e)});
 document.addEventListener('input',e=>{if(e.target.id==='wq'){WF.q=e.target.value;$('#wl').innerHTML=wlView();applyPrefs()}});
 document.querySelector('.tabbar').innerHTML=TABS.map(([k,i,n])=>`<a href="#${k}" data-t="${k}"><span>${i}</span>${n}</a>`).join('');
