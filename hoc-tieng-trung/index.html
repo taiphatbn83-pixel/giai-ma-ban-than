@@ -585,11 +585,371 @@ const TONE_SET_PY = [['mā','má','mǎ','mà'],['bā','bá','bǎ','bà'],['yī',
 const INITIALS = [['b','波','bō'],['p','坡','pō'],['m','摸','mō'],['f','佛','fó'],['d','得','dé'],['t','特','tè'],['n','讷','nè'],['l','乐','lè'],['g','哥','gē'],['k','科','kē'],['h','喝','hē'],['j','鸡','jī'],['q','七','qī'],['x','西','xī'],['zh','知','zhī'],['ch','吃','chī'],['sh','诗','shī'],['r','日','rì'],['z','字','zì'],['c','次','cì'],['s','四','sì'],['y','鸭','yā'],['w','我','wǒ']];
 const FINALS = [['a','啊','ā'],['o','喔','ō'],['e','鹅','é'],['i','衣','yī'],['u','乌','wū'],['ü','鱼','yú'],['ai','爱','ài'],['ei','黑','hēi'],['ao','好','hǎo'],['ou','欧','ōu'],['an','安','ān'],['en','恩','ēn'],['ang','昂','áng'],['eng','灯','dēng'],['ong','东','dōng'],['er','二','èr'],['ia','家','jiā'],['ie','谢','xiè'],['iao','小','xiǎo'],['iu','六','liù'],['ian','天','tiān'],['in','新','xīn'],['iang','想','xiǎng'],['ing','星','xīng'],['iong','熊','xióng'],['ua','花','huā'],['uo','多','duō'],['uai','快','kuài'],['ui','对','duì'],['uan','晚','wǎn'],['un','春','chūn'],['uang','黄','huáng'],['üe','月','yuè'],['üan','远','yuǎn'],['ün','云','yún']];
 
+// ===== HSK2 =====
+const RAW_HSK2 = `
+# Gia đình & con người
+哥哥|gē ge|anh trai|👦
+姐姐|jiě jie|chị gái|👧
+弟弟|dì di|em trai|🧒
+妹妹|mèi mei|em gái|👧
+丈夫|zhàng fu|chồng|🤵
+妻子|qī zi|vợ|👰
+孩子|hái zi|con, đứa trẻ|🧒
+男人|nán rén|đàn ông|👨
+女人|nǚ rén|phụ nữ|👩
+大家|dà jiā|mọi người|👨‍👩‍👧‍👦
+您|nín|ngài, ông, bà (kính trọng)|🙇
+它|tā|nó (con vật, đồ vật)|🐾
+服务员|fú wù yuán|nhân viên phục vụ|🧑‍🍳
+姓|xìng|họ (tên họ)|🏷️
+身体|shēn tǐ|cơ thể, sức khỏe|💪
+眼睛|yǎn jing|mắt|👁️
+# Ăn uống
+鸡蛋|jī dàn|trứng gà|🥚
+牛奶|niú nǎi|sữa bò|🥛
+羊肉|yáng ròu|thịt cừu|🍖
+鱼|yú|cá|🐟
+西瓜|xī guā|dưa hấu|🍉
+咖啡|kā fēi|cà phê|☕
+好吃|hǎo chī|ngon|😋
+药|yào|thuốc|💊
+# Thời gian
+早上|zǎo shang|buổi sáng sớm|🌅
+晚上|wǎn shang|buổi tối|🌙
+去年|qù nián|năm ngoái|📆
+生日|shēng rì|sinh nhật|🎂
+时间|shí jiān|thời gian|⏳
+小时|xiǎo shí|tiếng (giờ đồng hồ)|⏲️
+已经|yǐ jīng|đã|✅
+正在|zhèng zài|đang|▶️
+# Nơi chốn & đi lại
+宾馆|bīn guǎn|khách sạn|🏨
+房间|fáng jiān|phòng|🛏️
+门|mén|cửa|🚪
+教室|jiào shì|phòng học|🏫
+公司|gōng sī|công ty|🏢
+机场|jī chǎng|sân bay|🛫
+路|lù|đường; tuyến (xe buýt)|🛣️
+旁边|páng biān|bên cạnh|↔️
+左边|zuǒ bian|bên trái|⬅️
+右边|yòu bian|bên phải|➡️
+外|wài|ngoài|🌳
+公共汽车|gōng gòng qì chē|xe buýt|🚌
+自行车|zì xíng chē|xe đạp|🚲
+船|chuán|thuyền, tàu thủy|⛴️
+票|piào|vé|🎫
+离|lí|cách (khoảng cách)|📏
+远|yuǎn|xa|🏔️
+近|jìn|gần|📍
+向|xiàng|hướng về, về phía|🧭
+从|cóng|từ|🔙
+到|dào|đến|🏁
+# Đồ vật, màu sắc, số lượng
+报纸|bào zhǐ|báo|📰
+手表|shǒu biǎo|đồng hồ đeo tay|⌚
+手机|shǒu jī|điện thoại di động|📱
+颜色|yán sè|màu sắc|🎨
+白|bái|trắng|⚪
+黑|hēi|đen|⚫
+红|hóng|đỏ|🔴
+件|jiàn|chiếc, cái (áo, việc)|👕
+张|zhāng|tờ, tấm (lượng từ)|📄
+公斤|gōng jīn|ki-lô-gam, cân|⚖️
+元|yuán|đồng tệ|💴
+百|bǎi|trăm|💯
+千|qiān|nghìn|🔢
+第一|dì yī|thứ nhất|🥇
+次|cì|lần|🔁
+两|liǎng|hai (trước lượng từ)|✌️
+# Thời tiết
+晴|qíng|nắng, quang đãng|☀️
+阴|yīn|râm, nhiều mây|☁️
+雪|xuě|tuyết|❄️
+# Hoạt động
+帮助|bāng zhù|giúp đỡ|🤝
+唱歌|chàng gē|hát|🎤
+跳舞|tiào wǔ|nhảy múa|💃
+跑步|pǎo bù|chạy bộ|🏃
+游泳|yóu yǒng|bơi|🏊
+踢|tī|đá (bóng)|⚽
+打篮球|dǎ lán qiú|chơi bóng rổ|🏀
+运动|yùn dòng|vận động, thể thao|🏋️
+旅游|lǚ yóu|du lịch|🧳
+起床|qǐ chuáng|thức dậy|⏰
+上班|shàng bān|đi làm|💼
+休息|xiū xi|nghỉ ngơi|🛌
+生病|shēng bìng|bị bệnh|🤒
+洗|xǐ|rửa, giặt|🧼
+穿|chuān|mặc, đi (giày)|👟
+出|chū|ra|🚶‍♂️
+进|jìn|vào|🚪
+走|zǒu|đi bộ; rời đi|🚶
+玩|wán|chơi|🎮
+笑|xiào|cười|😄
+送|sòng|tặng; tiễn, đưa|🎁
+给|gěi|cho, đưa|🤲
+卖|mài|bán|🏷️
+找|zhǎo|tìm; trả lại (tiền thừa)|🔍
+等|děng|đợi|⏳
+让|ràng|để, bảo, cho phép|👉
+告诉|gào su|nói cho biết|💬
+介绍|jiè shào|giới thiệu|🙋
+欢迎|huān yíng|chào mừng|🎉
+问|wèn|hỏi|❓
+回答|huí dá|trả lời|🗨️
+开始|kāi shǐ|bắt đầu|🚦
+完|wán|xong, hết|🏁
+准备|zhǔn bèi|chuẩn bị|📋
+考试|kǎo shì|thi, kỳ thi|📝
+希望|xī wàng|hy vọng, mong|🌈
+觉得|jué de|cảm thấy, thấy rằng|🤔
+知道|zhī dào|biết|💡
+懂|dǒng|hiểu|🧠
+可以|kě yǐ|có thể, được phép|👌
+可能|kě néng|có lẽ, có thể|🤷
+要|yào|muốn; phải; cần|👉
+# Tính chất
+高|gāo|cao|🦒
+长|cháng|dài|📏
+快|kuài|nhanh|⚡
+慢|màn|chậm|🐢
+忙|máng|bận|🏃‍♀️
+累|lèi|mệt|😩
+新|xīn|mới|✨
+贵|guì|đắt|💎
+便宜|pián yi|rẻ|🏷️
+快乐|kuài lè|vui vẻ, hạnh phúc|🥳
+真|zhēn|thật|💯
+错|cuò|sai|❌
+# Học tập & công việc
+课|kè|bài học, tiết học|📖
+题|tí|đề, câu hỏi (bài tập)|📝
+问题|wèn tí|câu hỏi; vấn đề|❓
+意思|yì si|ý nghĩa|💭
+事情|shì qing|việc, sự việc|📌
+# Từ ngữ pháp
+吧|ba|nhé, chứ (cuối câu)|💬
+比|bǐ|so với, hơn|⚖️
+别|bié|đừng|✋
+得|de|(trợ từ nối bổ ngữ)|🔗
+着|zhe|(trợ từ: đang, vẫn đang)|⏸️
+还|hái|còn, vẫn|➕
+就|jiù|thì, liền, ngay|⚡
+也|yě|cũng|➕
+再|zài|lại, nữa|🔁
+最|zuì|nhất|🏆
+每|měi|mỗi|🔄
+非常|fēi cháng|vô cùng, rất|‼️
+一起|yì qǐ|cùng nhau|🤝
+因为|yīn wèi|bởi vì|🔎
+所以|suǒ yǐ|cho nên|➡️
+但是|dàn shì|nhưng|↔️
+为|wèi|vì, cho|🎯
+对|duì|đúng; đối với|✔️
+`;
+const LESSONS2 = [
+{id:15, lv:2, icon:'🎂', title:'Sinh nhật', zh:'生日快乐', zpy:'shēng rì kuài lè', who:{A:'Lan',B:'Minh'},
+ scene:'Rủ bạn đến dự tiệc sinh nhật và hỏi muốn quà gì.',
+ tip:'希望 + việc = mong muốn: 你希望我送你什么？ Tính từ/danh từ + 的 thay cho vật đã nói: 白的 = cái màu trắng.',
+ extra:[['坏','huài','hỏng, xấu',3],['祝','zhù','chúc',3]],
+ lines:[
+ ['A','明天是我的生日，你能来吗？','Míng tiān shì wǒ de shēng rì, nǐ néng lái ma?','Mai là sinh nhật mình, bạn đến được không?'],
+ ['B','可以！你希望我送你什么？','Kě yǐ! Nǐ xī wàng wǒ sòng nǐ shén me?','Được chứ! Bạn muốn mình tặng gì?'],
+ ['A','我的手表坏了，我想要一块新手表。','Wǒ de shǒu biǎo huài le, wǒ xiǎng yào yí kuài xīn shǒu biǎo.','Đồng hồ của mình hỏng rồi, mình muốn một chiếc đồng hồ mới.'],
+ ['B','好，你喜欢什么颜色的？','Hǎo, nǐ xǐ huan shén me yán sè de?','Được, bạn thích màu gì?'],
+ ['A','白的、红的都可以。','Bái de, hóng de dōu kě yǐ.','Màu trắng hay màu đỏ đều được.'],
+ ['B','我们几点开始？','Wǒ men jǐ diǎn kāi shǐ?','Mấy giờ chúng ta bắt đầu?'],
+ ['A','晚上七点，大家一起唱歌、跳舞！','Wǎn shang qī diǎn, dà jiā yì qǐ chàng gē, tiào wǔ!','Bảy giờ tối, mọi người cùng hát và nhảy!'],
+ ['B','太好了！祝你生日快乐！','Tài hǎo le! Zhù nǐ shēng rì kuài lè!','Tuyệt quá! Chúc bạn sinh nhật vui vẻ!'],
+]},
+{id:16, lv:2, icon:'🏃', title:'Thể thao, sức khỏe', zh:'运动', zpy:'yùn dòng', who:{A:'Hùng',B:'Lan'},
+ scene:'Hai người bạn kể về thói quen tập thể thao.',
+ tip:'Động từ + 得 + đánh giá: 踢得非常好 = đá rất giỏi. Nếu có tân ngữ thì lặp động từ: 踢足球踢得很好.',
+ extra:[['然后','rán hòu','sau đó',3],['足球','zú qiú','bóng đá',0]],
+ lines:[
+ ['A','你每天早上做什么运动？','Nǐ měi tiān zǎo shang zuò shén me yùn dòng?','Sáng nào bạn cũng tập môn gì?'],
+ ['B','我六点起床，然后去跑步。','Wǒ liù diǎn qǐ chuáng, rán hòu qù pǎo bù.','Mình dậy lúc sáu giờ, sau đó đi chạy bộ.'],
+ ['A','跑多长时间？','Pǎo duō cháng shí jiān?','Chạy bao lâu?'],
+ ['B','一个小时。你呢？你喜欢什么运动？','Yí ge xiǎo shí. Nǐ ne? Nǐ xǐ huan shén me yùn dòng?','Một tiếng. Còn bạn? Bạn thích môn thể thao nào?'],
+ ['A','我喜欢游泳，也喜欢打篮球。','Wǒ xǐ huan yóu yǒng, yě xǐ huan dǎ lán qiú.','Mình thích bơi, cũng thích chơi bóng rổ.'],
+ ['B','我哥哥踢足球踢得非常好。','Wǒ gē ge tī zú qiú tī de fēi cháng hǎo.','Anh trai mình đá bóng cực giỏi.'],
+ ['A','运动对身体很好。我们一起去吧！','Yùn dòng duì shēn tǐ hěn hǎo. Wǒ men yì qǐ qù ba!','Thể thao rất tốt cho sức khỏe. Chúng ta cùng đi nhé!'],
+]},
+{id:17, lv:2, icon:'🏨', title:'Ở khách sạn', zh:'在宾馆', zpy:'zài bīn guǎn', who:{A:'Lễ tân',B:'Khách'},
+ scene:'Nhận phòng ở khách sạn và hỏi thông tin.',
+ tip:'您 là cách nói lịch sự của 你. Hỏi khoảng cách: A 离 B 远吗？ = A cách B có xa không?',
+ extra:[['阮','Ruǎn','họ Nguyễn',0],['上网','shàng wǎng','lên mạng',3],['楼','lóu','tầng; tòa nhà',3],['早饭','zǎo fàn','bữa sáng',0],['半','bàn','nửa',3]],
+ lines:[
+ ['A','您好，欢迎来我们宾馆！','Nín hǎo, huān yíng lái wǒ men bīn guǎn!','Xin chào, chào mừng quý khách đến khách sạn!'],
+ ['B','你好，我姓阮，昨天打电话要了一个房间。','Nǐ hǎo, wǒ xìng Ruǎn, zuó tiān dǎ diàn huà yào le yí ge fáng jiān.','Chào bạn, tôi họ Nguyễn, hôm qua đã gọi điện đặt một phòng.'],
+ ['A','阮先生，您的房间是八零六号。','Ruǎn xiān sheng, nín de fáng jiān shì bā líng liù hào.','Ông Nguyễn, phòng của ông là phòng 806.'],
+ ['B','房间里可以上网吗？','Fáng jiān li kě yǐ shàng wǎng ma?','Trong phòng có lên mạng được không?'],
+ ['A','可以。早上七点到九点，楼下有早饭。','Kě yǐ. Zǎo shang qī diǎn dào jiǔ diǎn, lóu xià yǒu zǎo fàn.','Được ạ. Từ bảy đến chín giờ sáng, dưới tầng có bữa sáng.'],
+ ['B','这儿离机场远吗？','Zhèr lí jī chǎng yuǎn ma?','Chỗ này cách sân bay có xa không?'],
+ ['A','不远，坐出租车半个小时。','Bù yuǎn, zuò chū zū chē bàn ge xiǎo shí.','Không xa, đi taxi mất nửa tiếng.'],
+ ['B','好的，谢谢！','Hǎo de, xiè xie!','Được, cảm ơn!'],
+]},
+{id:18, lv:2, icon:'🛫', title:'Du lịch', zh:'旅游', zpy:'lǚ yóu', who:{A:'Minh',B:'Hoa'},
+ scene:'Kể về chuyến du lịch năm ngoái.',
+ tip:'So sánh: A 比 B + tính từ: 机票比火车票贵 = vé máy bay đắt hơn vé tàu. 是…的 nhấn mạnh cách thức: 是坐飞机去的.',
+ extra:[['这儿','zhèr','ở đây, chỗ này',0],['机票','jī piào','vé máy bay',0]],
+ lines:[
+ ['A','去年你去哪儿旅游了？','Qù nián nǐ qù nǎr lǚ yóu le?','Năm ngoái bạn đi du lịch ở đâu?'],
+ ['B','我和丈夫去了北京。我们是坐飞机去的。','Wǒ hé zhàng fu qù le Běi jīng. Wǒ men shì zuò fēi jī qù de.','Mình với chồng đi Bắc Kinh. Bọn mình đi bằng máy bay.'],
+ ['A','机票贵不贵？','Jī piào guì bu guì?','Vé máy bay có đắt không?'],
+ ['B','不太贵，比火车票贵一点儿。','Bú tài guì, bǐ huǒ chē piào guì yì diǎnr.','Không đắt lắm, đắt hơn vé tàu một chút.'],
+ ['A','从机场到宾馆远吗？','Cóng jī chǎng dào bīn guǎn yuǎn ma?','Từ sân bay đến khách sạn có xa không?'],
+ ['B','很远，坐公共汽车要一个多小时。','Hěn yuǎn, zuò gōng gòng qì chē yào yí ge duō xiǎo shí.','Rất xa, đi xe buýt mất hơn một tiếng.'],
+ ['A','你们玩得高兴吗？','Nǐ men wán de gāo xìng ma?','Các bạn chơi có vui không?'],
+ ['B','非常高兴！明年我还想去。','Fēi cháng gāo xìng! Míng nián wǒ hái xiǎng qù.','Vui lắm! Năm sau mình còn muốn đi nữa.'],
+]},
+{id:19, lv:2, icon:'👕', title:'Mua quần áo', zh:'买衣服', zpy:'mǎi yī fu', who:{A:'Khách',B:'Người bán'},
+ scene:'Mặc cả và thử quần áo ở cửa hàng.',
+ tip:'Lượng từ cho quần áo phía trên là 件: 一件衣服. Mặc cả: 便宜一点儿吧 = bớt chút đi. Động từ lặp lại (试试) = thử một chút.',
+ extra:[['试','shì','thử',3],['有点儿','yǒu diǎnr','hơi, có chút',3],['短','duǎn','ngắn',3],['帮','bāng','giúp',3]],
+ lines:[
+ ['A','这件衣服真漂亮，多少钱？','Zhè jiàn yī fu zhēn piào liang, duō shao qián?','Chiếc áo này đẹp thật, bao nhiêu tiền?'],
+ ['B','三百五十元。','Sān bǎi wǔ shí yuán.','Ba trăm năm mươi tệ.'],
+ ['A','太贵了，便宜一点儿吧。','Tài guì le, pián yi yì diǎnr ba.','Đắt quá, bớt chút đi.'],
+ ['B','三百吧。您要什么颜色的？有白的、黑的和红的。','Sān bǎi ba. Nín yào shén me yán sè de? Yǒu bái de, hēi de hé hóng de.','Ba trăm vậy. Bạn lấy màu gì? Có trắng, đen và đỏ.'],
+ ['A','我要黑的。可以试试吗？','Wǒ yào hēi de. Kě yǐ shì shi ma?','Tôi lấy màu đen. Thử được không?'],
+ ['B','可以，试衣服的房间在左边。','Kě yǐ, shì yī fu de fáng jiān zài zuǒ bian.','Được, phòng thử đồ ở bên trái.'],
+ ['A','这件有点儿长，有短一点儿的吗？','Zhè jiàn yǒu diǎnr cháng, yǒu duǎn yì diǎnr de ma?','Chiếc này hơi dài, có chiếc ngắn hơn không?'],
+ ['B','有，我帮您找一件。','Yǒu, wǒ bāng nín zhǎo yí jiàn.','Có, để tôi tìm giúp bạn một chiếc.'],
+]},
+{id:20, lv:2, icon:'🍳', title:'Bữa sáng ở nhà', zh:'早饭', zpy:'zǎo fàn', who:{A:'Mẹ',B:'Con'},
+ scene:'Buổi sáng mẹ gọi con dậy ăn sáng.',
+ tip:'别 + động từ + 了 = đừng… nữa: 别睡了！ 让 + người + làm gì = để/cho ai làm gì: 让我再睡十分钟.',
+ extra:[['睡','shuì','ngủ',0],['手','shǒu','tay',0]],
+ lines:[
+ ['A','孩子，快起床！七点了。','Hái zi, kuài qǐ chuáng! Qī diǎn le.','Con ơi, dậy nhanh lên! Bảy giờ rồi.'],
+ ['B','妈妈，我太累了，让我再睡十分钟吧。','Mā ma, wǒ tài lèi le, ràng wǒ zài shuì shí fēn zhōng ba.','Mẹ ơi, con mệt quá, cho con ngủ thêm mười phút nữa nhé.'],
+ ['A','别睡了！早饭已经准备好了。','Bié shuì le! Zǎo fàn yǐ jīng zhǔn bèi hǎo le.','Đừng ngủ nữa! Bữa sáng chuẩn bị xong rồi.'],
+ ['B','今天早饭吃什么？','Jīn tiān zǎo fàn chī shén me?','Sáng nay ăn gì hả mẹ?'],
+ ['A','有鸡蛋、牛奶，还有西瓜。','Yǒu jī dàn, niú nǎi, hái yǒu xī guā.','Có trứng, sữa, còn có dưa hấu.'],
+ ['B','我不想喝牛奶，我想喝咖啡。','Wǒ bù xiǎng hē niú nǎi, wǒ xiǎng hē kā fēi.','Con không muốn uống sữa, con muốn uống cà phê.'],
+ ['A','孩子不能喝咖啡！快洗手吃饭。','Hái zi bù néng hē kā fēi! Kuài xǐ shǒu chī fàn.','Trẻ con không được uống cà phê! Mau rửa tay ăn cơm.'],
+]},
+{id:21, lv:2, icon:'🤒', title:'Bị ốm, nghỉ làm', zh:'生病了', zpy:'shēng bìng le', who:{A:'Lan',B:'Minh'},
+ scene:'Hỏi thăm đồng nghiệp bị ốm phải nghỉ làm.',
+ tip:'因为…所以… = vì… nên…. 让 trong câu 医生让我多休息 = bác sĩ bảo tôi nghỉ ngơi nhiều.',
+ extra:[['舒服','shū fu','dễ chịu, khỏe',3],['好好','hǎo hǎo','cho tốt, đàng hoàng',0]],
+ lines:[
+ ['A','你怎么没去上班？','Nǐ zěn me méi qù shàng bān?','Sao bạn không đi làm?'],
+ ['B','我生病了，眼睛很不舒服。','Wǒ shēng bìng le, yǎn jing hěn bù shū fu.','Mình bị ốm, mắt rất khó chịu.'],
+ ['A','你去医院了吗？','Nǐ qù yī yuàn le ma?','Bạn đi bệnh viện chưa?'],
+ ['B','去了。医生说因为我每天看手机看得太多，所以眼睛累了。','Qù le. Yī shēng shuō yīn wèi wǒ měi tiān kàn shǒu jī kàn de tài duō, suǒ yǐ yǎn jing lèi le.','Đi rồi. Bác sĩ nói vì ngày nào mình cũng xem điện thoại quá nhiều nên mắt bị mỏi.'],
+ ['A','你吃药了吗？','Nǐ chī yào le ma?','Bạn uống thuốc chưa?'],
+ ['B','吃了。医生让我多休息。','Chī le. Yī shēng ràng wǒ duō xiū xi.','Uống rồi. Bác sĩ bảo mình nghỉ ngơi nhiều.'],
+ ['A','那你好好休息，别看手机了！','Nà nǐ hǎo hǎo xiū xi, bié kàn shǒu jī le!','Vậy bạn nghỉ ngơi cho tốt, đừng xem điện thoại nữa!'],
+ ['B','知道了，谢谢你！','Zhī dào le, xiè xie nǐ!','Biết rồi, cảm ơn bạn!'],
+]},
+{id:22, lv:2, icon:'🚌', title:'Đi xe buýt, hỏi đường', zh:'坐公共汽车', zpy:'zuò gōng gòng qì chē', who:{A:'Bạn',B:'Người đi đường'},
+ scene:'Hỏi tuyến xe buýt và đường đến ga tàu.',
+ tip:'几路车？ = xe tuyến số mấy? 向 + hướng + 走 = đi về phía: 向右走 = rẽ phải. 从 A 到 B = từ A đến B.',
+ extra:[['路口','lù kǒu','ngã tư, giao lộ',0],['车站','chē zhàn','bến xe',0],['这儿','zhèr','ở đây, chỗ này',0]],
+ lines:[
+ ['A','请问，去火车站坐几路公共汽车？','Qǐng wèn, qù huǒ chē zhàn zuò jǐ lù gōng gòng qì chē?','Xin hỏi, đến ga tàu thì đi xe buýt tuyến số mấy?'],
+ ['B','坐八路。你向前走，到第一个路口向右走。','Zuò bā lù. Nǐ xiàng qián zǒu, dào dì yī ge lù kǒu xiàng yòu zǒu.','Đi tuyến số 8. Bạn đi thẳng, đến ngã tư đầu tiên thì rẽ phải.'],
+ ['A','车站在路的左边还是右边？','Chē zhàn zài lù de zuǒ bian hái shi yòu bian?','Bến xe ở bên trái hay bên phải đường?'],
+ ['B','在右边，商店旁边。','Zài yòu bian, shāng diàn páng biān.','Ở bên phải, cạnh cửa hàng.'],
+ ['A','从这儿到火车站要多长时间？','Cóng zhèr dào huǒ chē zhàn yào duō cháng shí jiān?','Từ đây đến ga tàu mất bao lâu?'],
+ ['B','不太远，二十多分钟就到了。','Bú tài yuǎn, èr shí duō fēn zhōng jiù dào le.','Không xa lắm, hơn hai mươi phút là đến.'],
+ ['A','太谢谢您了！','Tài xiè xie nín le!','Cảm ơn bác nhiều lắm!'],
+ ['B','不客气。','Bú kè qi.','Không có gì.'],
+]},
+{id:23, lv:2, icon:'💼', title:'Ở công ty', zh:'在公司', zpy:'zài gōng sī', who:{A:'Trưởng phòng',B:'Tiểu Vương'},
+ scene:'Trưởng phòng giao việc chuẩn bị cho cuộc họp.',
+ tip:'正在 + động từ = đang làm: 我正在做. Động từ + 完 = làm xong: 做完了. 动词 + 一下 = làm một chút, thử: 准备一下.',
+ extra:[['开会','kāi huì','họp',0],['别的','bié de','cái khác, việc khác',0],['最近','zuì jìn','gần đây',3]],
+ lines:[
+ ['A','小王，那件事情你做完了吗？','Xiǎo Wáng, nà jiàn shì qing nǐ zuò wán le ma?','Tiểu Vương, việc đó em làm xong chưa?'],
+ ['B','还没有。我正在做，下午就能做完。','Hái méi yǒu. Wǒ zhèng zài zuò, xià wǔ jiù néng zuò wán.','Chưa ạ. Em đang làm, chiều là xong.'],
+ ['A','好。明天上午九点开会，你准备一下。','Hǎo. Míng tiān shàng wǔ jiǔ diǎn kāi huì, nǐ zhǔn bèi yí xià.','Được. Chín giờ sáng mai họp, em chuẩn bị nhé.'],
+ ['B','好的。我要介绍什么？','Hǎo de. Wǒ yào jiè shào shén me?','Vâng. Em cần giới thiệu gì ạ?'],
+ ['A','介绍一下我们公司的新手机。','Jiè shào yí xià wǒ men gōng sī de xīn shǒu jī.','Giới thiệu chiếc điện thoại mới của công ty mình.'],
+ ['B','知道了。您还有别的事情吗？','Zhī dào le. Nín hái yǒu bié de shì qing ma?','Em biết rồi. Anh còn việc gì khác không ạ?'],
+ ['A','没有了。最近大家都很忙，你也别太累了。','Méi yǒu le. Zuì jìn dà jiā dōu hěn máng, nǐ yě bié tài lèi le.','Hết rồi. Dạo này mọi người đều bận, em cũng đừng làm mệt quá.'],
+ ['B','谢谢！','Xiè xie!','Cảm ơn anh!'],
+]},
+{id:24, lv:2, icon:'📝', title:'Chuẩn bị thi', zh:'考试', zpy:'kǎo shì', who:{A:'Lan',B:'Thầy giáo'},
+ scene:'Học sinh hỏi thầy trước ngày thi.',
+ tip:'…是什么意思？ = …nghĩa là gì? 第 + số = thứ tự: 第一 = thứ nhất. Lặp động từ hai âm tiết: 准备准备 = chuẩn bị thêm.',
+ extra:[['词','cí','từ',0],['考','kǎo','thi',0],['努力','nǔ lì','chăm chỉ, cố gắng',3],['早','zǎo','sớm',0]],
+ lines:[
+ ['A','老师，明天考试，我有一个问题。','Lǎo shī, míng tiān kǎo shì, wǒ yǒu yí ge wèn tí.','Thầy ơi, mai thi rồi, em có một câu hỏi.'],
+ ['B','什么问题？你问吧。','Shén me wèn tí? Nǐ wèn ba.','Câu hỏi gì? Em hỏi đi.'],
+ ['A','这个题我不懂，这个词是什么意思？','Zhè ge tí wǒ bù dǒng, zhè ge cí shì shén me yì si?','Bài này em không hiểu, từ này nghĩa là gì ạ?'],
+ ['B','这是"快乐"的意思。','Zhè shì "kuài lè" de yì si.','Nó có nghĩa là "vui vẻ".'],
+ ['A','我知道了。我这次考试能考第一吗？','Wǒ zhī dào le. Wǒ zhè cì kǎo shì néng kǎo dì yī ma?','Em hiểu rồi. Lần thi này em có thể đứng thứ nhất không ạ?'],
+ ['B','你学习非常努力，可能会考得很好。','Nǐ xué xí fēi cháng nǔ lì, kě néng huì kǎo de hěn hǎo.','Em học rất chăm, chắc sẽ thi tốt.'],
+ ['A','谢谢老师！我回家再准备准备。','Xiè xie lǎo shī! Wǒ huí jiā zài zhǔn bèi zhǔn bèi.','Cảm ơn thầy! Em về nhà chuẩn bị thêm.'],
+ ['B','别太累了，早点儿睡觉。','Bié tài lèi le, zǎo diǎnr shuì jiào.','Đừng học mệt quá, ngủ sớm một chút.'],
+]},
+{id:25, lv:2, icon:'❄️', title:'Gọi điện về nhà', zh:'给家里打电话', zpy:'gěi jiā li dǎ diàn huà', who:{A:'Hoa',B:'Mẹ'},
+ scene:'Du học sinh gọi điện kể chuyện thời tiết và hỏi thăm gia đình.',
+ tip:'但是 = nhưng. 已经…了 = đã… rồi: 已经会走路了. 希望 = mong: 我希望春节能回家.',
+ extra:[['天','tiān','trời; ngày',0],['春节','Chūn jié','Tết Nguyên đán',0],['走路','zǒu lù','đi bộ, biết đi',0],['词','cí','từ',0]],
+ lines:[
+ ['A','喂，妈妈，北京今天下雪了！','Wèi, mā ma, Běi jīng jīn tiān xià xuě le!','Alô mẹ ơi, hôm nay Bắc Kinh có tuyết!'],
+ ['B','真的吗？冷不冷？你要多穿衣服。','Zhēn de ma? Lěng bu lěng? Nǐ yào duō chuān yī fu.','Thật à? Có lạnh không? Con phải mặc nhiều áo vào.'],
+ ['A','很冷，但是很漂亮。家里天气怎么样？','Hěn lěng, dàn shì hěn piào liang. Jiā li tiān qì zěn me yàng?','Rất lạnh nhưng rất đẹp. Ở nhà thời tiết thế nào ạ?'],
+ ['B','昨天是阴天，今天晴了。','Zuó tiān shì yīn tiān, jīn tiān qíng le.','Hôm qua trời âm u, hôm nay nắng rồi.'],
+ ['A','爸爸、哥哥和妹妹都好吗？','Bà ba, gē ge hé mèi mei dōu hǎo ma?','Bố, anh trai và em gái đều khỏe chứ ạ?'],
+ ['B','都很好。你哥哥的孩子已经会走路了！','Dōu hěn hǎo. Nǐ gē ge de hái zi yǐ jīng huì zǒu lù le!','Đều khỏe. Con của anh con đã biết đi rồi!'],
+ ['A','太好了！我希望春节能回家。','Tài hǎo le! Wǒ xī wàng Chūn jié néng huí jiā.','Tuyệt quá! Con mong Tết được về nhà.'],
+ ['B','好，我们等你回来！','Hǎo, wǒ men děng nǐ huí lái!','Được, cả nhà đợi con về!'],
+]},
+{id:26, lv:2, icon:'🎤', title:'Sở thích', zh:'爱好', zpy:'ài hào', who:{A:'Minh',B:'Lan'},
+ scene:'Trò chuyện về sở thích cuối tuần.',
+ tip:'最 + động từ/tính từ = nhất: 最喜欢. Hỏi số lần: 几次？ 每个星期 = mỗi tuần.',
+ extra:[['周末','zhōu mò','cuối tuần',3],['跳','tiào','nhảy',0],['啊','a','à, nhé (cảm thán)',3]],
+ lines:[
+ ['A','你周末喜欢做什么？','Nǐ zhōu mò xǐ huan zuò shén me?','Cuối tuần bạn thích làm gì?'],
+ ['B','我最喜欢唱歌，也喜欢看报纸。','Wǒ zuì xǐ huan chàng gē, yě xǐ huan kàn bào zhǐ.','Mình thích hát nhất, cũng thích đọc báo.'],
+ ['A','你唱歌唱得怎么样？','Nǐ chàng gē chàng de zěn me yàng?','Bạn hát có hay không?'],
+ ['B','唱得不太好，但是我很快乐。大家听了都笑。','Chàng de bú tài hǎo, dàn shì wǒ hěn kuài lè. Dà jiā tīng le dōu xiào.','Hát không hay lắm, nhưng mình rất vui. Mọi người nghe xong đều cười.'],
+ ['A','我喜欢跳舞，我妻子也喜欢。','Wǒ xǐ huan tiào wǔ, wǒ qī zi yě xǐ huan.','Mình thích khiêu vũ, vợ mình cũng thích.'],
+ ['B','你们每个星期跳几次？','Nǐ men měi ge xīng qī tiào jǐ cì?','Mỗi tuần hai người nhảy mấy lần?'],
+ ['A','两次。这个星期六你和我们一起去玩吧！','Liǎng cì. Zhè ge xīng qī liù nǐ hé wǒ men yì qǐ qù wán ba!','Hai lần. Thứ Bảy này bạn đi chơi cùng bọn mình nhé!'],
+ ['B','好啊！','Hǎo a!','Được thôi!'],
+]},
+{id:27, lv:2, icon:'🐟', title:'Mua cá, mua thịt', zh:'买鱼', zpy:'mǎi yú', who:{A:'Khách',B:'Người bán'},
+ scene:'Đi chợ mua cá và thịt cừu.',
+ tip:'Giá theo cân: 多少钱一公斤？ 元 là cách viết của 块 (đồng tệ). 找 + người + số tiền = thối lại tiền.',
+ extra:[['老板','lǎo bǎn','ông chủ, bà chủ',3],['条','tiáo','con, cái (lượng từ vật dài)',3]],
+ lines:[
+ ['A','老板，这条鱼多少钱一公斤？','Lǎo bǎn, zhè tiáo yú duō shao qián yì gōng jīn?','Chị chủ ơi, con cá này bao nhiêu tiền một cân?'],
+ ['B','四十元。这些鱼是今天早上坐船送来的。','Sì shí yuán. Zhè xiē yú shì jīn tiān zǎo shang zuò chuán sòng lái de.','Bốn mươi tệ. Chỗ cá này sáng nay được chở bằng thuyền đến.'],
+ ['A','羊肉呢？','Yáng ròu ne?','Còn thịt cừu?'],
+ ['B','羊肉六十元一公斤。您要多少？','Yáng ròu liù shí yuán yì gōng jīn. Nín yào duō shao?','Thịt cừu sáu mươi tệ một cân. Anh lấy bao nhiêu?'],
+ ['A','我要两公斤鱼，一公斤羊肉。','Wǒ yào liǎng gōng jīn yú, yì gōng jīn yáng ròu.','Tôi lấy hai cân cá, một cân thịt cừu.'],
+ ['B','一共一百四十元。','Yí gòng yì bǎi sì shí yuán.','Tổng cộng một trăm bốn mươi tệ.'],
+ ['A','给您两张一百的。','Gěi nín liǎng zhāng yì bǎi de.','Gửi chị hai tờ một trăm.'],
+ ['B','找您六十。欢迎再来！','Zhǎo nín liù shí. Huān yíng zài lái!','Thối anh sáu mươi. Lần sau lại ghé nhé!'],
+]},
+{id:28, lv:2, icon:'🏫', title:'Đến lớp muộn', zh:'上课', zpy:'shàng kè', who:{A:'Cô giáo',B:'Minh'},
+ scene:'Học sinh đến lớp muộn và trả lời câu hỏi của cô giáo.',
+ tip:'离 + nơi chốn + 近/远: 你家离学校近吗？ Động từ + 进来/出去 chỉ hướng: 请他进来 = mời bạn ấy vào. 觉得 = thấy rằng, cho rằng.',
+ extra:[['上课','shàng kè','vào học, lên lớp',0],['坏','huài','hỏng, xấu',3],['走路','zǒu lù','đi bộ',0],['慢慢','màn màn','từ từ',0]],
+ lines:[
+ ['A','快进教室吧，已经上课了。','Kuài jìn jiào shì ba, yǐ jīng shàng kè le.','Mau vào lớp đi, vào học rồi.'],
+ ['B','对不起，老师。我的自行车坏了，所以走路来的。','Duì bu qǐ, lǎo shī. Wǒ de zì xíng chē huài le, suǒ yǐ zǒu lù lái de.','Em xin lỗi cô. Xe đạp của em hỏng nên em đi bộ đến.'],
+ ['A','没关系。你家离学校近吗？','Méi guān xi. Nǐ jiā lí xué xiào jìn ma?','Không sao. Nhà em có gần trường không?'],
+ ['B','不太近。我弟弟也在门外，他是新同学。','Bú tài jìn. Wǒ dì di yě zài mén wài, tā shì xīn tóng xué.','Không gần lắm ạ. Em trai em cũng đang đứng ngoài cửa, em ấy là học sinh mới.'],
+ ['A','请他进来吧。大家欢迎！','Qǐng tā jìn lái ba. Dà jiā huān yíng!','Mời em ấy vào. Cả lớp hoan nghênh nào!'],
+ ['A','现在我问一个问题，谁能回答？','Xiàn zài wǒ wèn yí ge wèn tí, shéi néng huí dá?','Bây giờ cô hỏi một câu, ai trả lời được?'],
+ ['B','我觉得是"出"，对吗？','Wǒ jué de shì "chū", duì ma?','Em nghĩ là chữ "ra", đúng không ạ?'],
+ ['A','错了，是"进"。没关系，慢慢来。','Cuò le, shì "jìn". Méi guān xi, màn màn lái.','Sai rồi, là chữ "vào". Không sao, cứ từ từ.'],
+ ['B','谢谢老师的帮助！','Xiè xie lǎo shī de bāng zhù!','Cảm ơn sự giúp đỡ của cô!'],
+]},
+];
+
 </script>
 <script>
 // ===== ỨNG DỤNG =====
 const KEY='hoc-tieng-trung-v1';
-const S=Object.assign({vRepeat:false,done:{},best:{},known:{},wrong:{},slow:false,showPy:true,showVi:true,showMean:true},JSON.parse(localStorage.getItem(KEY)||'{}'));
+const S=Object.assign({lv:1,vRepeat:false,done:{},best:{},known:{},wrong:{},slow:false,showPy:true,showVi:true,showMean:true},JSON.parse(localStorage.getItem(KEY)||'{}'));
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -597,12 +957,20 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random(
 const pick=(a,n)=>shuffle(a).slice(0,n);
 
 // --- Từ điển ---
-const BANK=[],DICT={},TOPICS=[];
-(()=>{let topic='';RAW_HSK1.trim().split('\n').forEach(l=>{l=l.trim();if(!l)return;if(l[0]==='#'){topic=l.slice(1).trim();TOPICS.push(topic);return}
-  const [zh,py,mean,em]=l.split('|');const w={zh,py,mean,em:em||'',topic,lv:1};BANK.push(w);DICT[zh]=w});
-  LESSONS.forEach(L=>(L.extra||[]).forEach(([zh,py,mean,lv])=>{if(!DICT[zh])DICT[zh]={zh,py,mean,em:'',topic:'Từ mở rộng',lv:lv??0}}));})();
+const BANK=[],DICT={},TOPICS={};
+const RAWS={1:RAW_HSK1};if(typeof RAW_HSK2!=='undefined')RAWS[2]=RAW_HSK2;
+if(typeof LESSONS2!=='undefined')LESSONS.push(...LESSONS2);
+function autoWords(L){const ex=new Set((L.extra||[]).map(e=>e[0]));const out=[];L.lines.forEach(l=>segment(l[1]).forEach(z=>{const w=DICT[z];if(w&&(w.lv===L.lv||ex.has(z))&&!out.includes(z))out.push(z)}));return out}
+(()=>{for(const lv in RAWS){let topic='';TOPICS[lv]=[];RAWS[lv].trim().split('\n').forEach(l=>{l=l.trim();if(!l)return;if(l[0]==='#'){topic=l.slice(1).trim();TOPICS[lv].push(topic);return}
+  const [zh,py,mean,em]=l.split('|');if(DICT[zh])return;const w={zh,py,mean,em:em||'',topic,lv:+lv};BANK.push(w);DICT[zh]=w})}
+  LESSONS.forEach(L=>{L.lv=L.lv||1;(L.extra||[]).forEach(([zh,py,mean,lv])=>{if(!DICT[zh])DICT[zh]={zh,py,mean,em:'',topic:'Từ mở rộng',lv:lv??0}})});
+  const c={};LESSONS.forEach(L=>{L.n=c[L.lv]=(c[L.lv]||0)+1;if(!L.words)L.words=autoWords(L)});})();
+LEVELS.forEach(l=>l.ready=BANK.some(w=>w.lv===l.lv));
+let CURLV=1;
+const lvLessons=lv=>LESSONS.filter(L=>L.lv===lv);
+const lvChips=(act,cur)=>`<div class="chips">${LEVELS.map(l=>`<button class="chip ${cur===l.lv?'on':''}" data-act="${act}" data-lv="${l.lv}">HSK${l.lv}${l.ready?'':' ⏳'}</button>`).join('')}</div>`;
 const lessonWords=L=>L.words.map(z=>DICT[z]).filter(Boolean);
-const lvTag=w=>w.lv===1?'':`<span class="tag">${w.lv?'HSK'+w.lv:'mở rộng'}</span>`;
+const lvTag=w=>w.lv===CURLV?'':`<span class="tag">${w.lv?'HSK'+w.lv:'mở rộng'}</span>`;
 
 // --- Pinyin → phiên âm tiếng Việt (gần đúng) ---
 const TM={};'āáǎàa ēéěèe īíǐìi ōóǒòo ūúǔùu ǖǘǚǜü'.split(' ').forEach(g=>{const b=g[4];[...g.slice(0,4)].forEach((c,i)=>TM[c]=[b,i+1])});
@@ -658,13 +1026,13 @@ function applyPrefs(){const b=document.body.classList;b.toggle('hide-py',!S.show
 const voiceWarn=()=>!window.speechSynthesis?`<div class="warn">Trình duyệt này không đọc to được. Hãy mở bằng Chrome hoặc Safari.</div>`:(VOICES.length&&!zhVoice()?`<div class="warn"><b>Máy chưa có giọng đọc tiếng Trung.</b> Android: Cài đặt → Hệ thống → Ngôn ngữ → Chuyển văn bản thành giọng nói → Công cụ của Google → cài "Tiếng Trung (Trung Quốc)". iPhone: Cài đặt → Trợ năng → Nội dung được đọc → Giọng nói → Tiếng Trung.</div>`:'');
 
 // --- Trang chủ ---
-function vHome(){const n=Object.keys(S.done).length,next=LESSONS.find(L=>!S.done[L.id])||LESSONS[0];const known=Object.keys(S.known).length,wrong=Object.keys(S.wrong).length;
+function vHome(){CURLV=S.lv;const n=Object.keys(S.done).length,LL=lvLessons(S.lv),next=LL.find(L=>!S.done[L.id])||LL[0];const known=Object.keys(S.known).length,wrong=Object.keys(S.wrong).length;
  return`${voiceWarn()}<section class="hero"><h2>Học như trẻ em Trung Quốc</h2><p>Trẻ em học nói theo thứ tự: nghe thật nhiều, bắt chước âm thanh, nói theo cả câu, rồi mới nhận mặt chữ. App đi đúng các bước đó.</p>
  <ol class="steps"><li><span>👂</span><b>Nghe</b>Nghe từ và câu nhiều lần</li><li><span>🗣️</span><b>Bắt chước</b>Nói theo, máy chấm phát âm</li><li><span>💬</span><b>Hội thoại</b>Câu dùng hằng ngày, đi làm</li><li><span>🀄</span><b>Nhận chữ</b>Ôn và kiểm tra lại</li></ol></section>
- <a class="cta" href="#lesson/${next.id}/learn"><span class="big">${next.icon}</span><span><small>${n?'Học tiếp':'Bắt đầu'} · Bài ${next.id}</small><b>${esc(next.title)}</b><span class="zh">${next.zh}</span></span><span class="arr">›</span></a>
+ <a class="cta" href="#lesson/${next.id}/learn"><span class="big">${next.icon}</span><span><small>${n?'Học tiếp':'Bắt đầu'} · HSK${next.lv} · Bài ${next.n}</small><b>${esc(next.title)}</b><span class="zh">${next.zh}</span></span><span class="arr">›</span></a>
  ${n===0?`<a class="cta alt" href="#pinyin"><span class="big">拼</span><span><small>Mới bắt đầu? Học trước</small><b>Pinyin và 4 thanh điệu</b></span><span class="arr">›</span></a>`:''}
  <div class="stats"><div><b>${n}/${LESSONS.length}</b>bài đã xong</div><div><b>${known}</b>từ đã thuộc</div><div><b>${wrong}</b>từ cần ôn</div></div>
- <h3>Lộ trình HSK 1 → 6</h3><div class="levels">${LEVELS.map(l=>`<div class="lv ${l.ready?'':'soon'}" ${l.ready?'data-act="go" data-to="#lessons"':''}><b>HSK${l.lv}</b><span>${l.ready?'✅ Đã có':'⏳ Đang soạn'}</span><small>${l.words} từ mới · tổng ${l.total}</small><p>${l.desc}</p></div>`).join('')}</div>`}
+ <h3>Lộ trình HSK 1 → 6</h3><div class="levels">${LEVELS.map(l=>`<div class="lv ${l.ready?'':'soon'}" ${l.ready?`data-act="slv" data-lv="${l.lv}" data-to="#lessons"`:''}><b>HSK${l.lv}</b><span>${l.ready?'✅ Đã có':'⏳ Đang soạn'}</span><small>${l.words} từ mới · tổng ${l.total}</small><p>${l.desc}</p></div>`).join('')}</div>`}
 
 // --- Pinyin ---
 const toneSvg=t=>{const p={1:'M6 8 L54 8',2:'M6 34 L54 6',3:'M6 18 L26 38 L54 10',4:'M6 6 L54 38'}[t];return`<svg viewBox="0 0 60 44" class="tsvg" aria-hidden="true"><path d="${p}"/></svg>`};
@@ -683,10 +1051,10 @@ function tgView(){if(!toneGame)return`<p class="small">Máy đọc một chữ, 
 function tgNew(){const s=Math.random()*5|0,t=Math.random()*4|0;toneGame.cur={zh:TONE_SETS[s][t],py:TONE_SET_PY[s][t],t:t+1};toneGame.ans=null;speak(toneGame.cur.zh)}
 
 // --- Danh sách bài ---
-function vLessons(){return`<h2>Bài học HSK1</h2><p class="lead">Mỗi bài có 5 bước: học từ bằng hình và âm thanh, xem video hoạt cảnh, luyện từng câu hội thoại, xem từ mới trong bài, rồi làm bài kiểm tra. Đạt từ 70% là hoàn thành bài.</p>
- <a class="lrow" href="#pinyin"><span class="li">拼</span><span class="lt"><b>Bài 0 · Pinyin và thanh điệu</b><small>Nền tảng phát âm, học trước tiên</small></span><span class="ls">›</span></a>
- ${LESSONS.map(L=>`<a class="lrow ${S.done[L.id]?'done':''}" href="#lesson/${L.id}/learn"><span class="li">${L.icon}</span><span class="lt"><b>Bài ${L.id} · ${esc(L.title)}</b><small><span class="zh">${L.zh}</span> · ${L.words.length} từ · ${L.lines.length} câu thoại</small></span><span class="ls">${S.done[L.id]?'✅':''}${S.best[L.id]!=null?`<small>${S.best[L.id]}%</small>`:''}</span></a>`).join('')}
- <div class="note">HSK2 đến HSK6 đang được soạn tiếp theo cùng cấu trúc này.</div>`}
+function vLessons(){CURLV=S.lv;const LL=lvLessons(S.lv);return`<h2>Bài học HSK${S.lv}</h2>${lvChips('slv',S.lv)}<p class="lead">Mỗi bài có 5 bước: học từ bằng hình và âm thanh, xem video hoạt cảnh, luyện từng câu hội thoại, xem từ mới trong bài, rồi làm bài kiểm tra. Đạt từ 70% là hoàn thành bài.</p>
+ ${S.lv===1?`<a class="lrow" href="#pinyin"><span class="li">拼</span><span class="lt"><b>Bài 0 · Pinyin và thanh điệu</b><small>Nền tảng phát âm, học trước tiên</small></span><span class="ls">›</span></a>`:''}
+ ${LL.length?'':`<div class="card"><p><b>HSK${S.lv} đang được soạn.</b> Các bài của cấp này sẽ có cùng dạng với HSK1: học từ, video, hội thoại, từ mới và kiểm tra.</p></div>`}${LL.map(L=>`<a class="lrow ${S.done[L.id]?'done':''}" href="#lesson/${L.id}/learn"><span class="li">${L.icon}</span><span class="lt"><b>Bài ${L.n} · ${esc(L.title)}</b><small><span class="zh">${L.zh}</span> · ${L.words.length} từ · ${L.lines.length} câu thoại</small></span><span class="ls">${S.done[L.id]?'✅':''}${S.best[L.id]!=null?`<small>${S.best[L.id]}%</small>`:''}</span></a>`).join('')}
+`}
 
 // --- Thẻ từ (dùng chung) ---
 let C=null,auto=false,autoT=0;
@@ -699,7 +1067,7 @@ function runAuto(){if(!auto||!C)return;const w=C.pool[C.i];speak(w.zh,{onend:()=
 // --- Bài học ---
 let playing=false;
 function lessonTabs(L,tab){const T=[['learn','Học từ'],['video','🎬 Video'],['dialog','Hội thoại'],['new','Từ mới'],['quiz','Kiểm tra']];return`<div class="seg">${T.map(([k,n])=>`<a href="#lesson/${L.id}/${k}" class="${k===tab?'on':''}">${n}</a>`).join('')}</div>`}
-function vLesson(id,tab){const L=LESSONS.find(x=>x.id==id);if(!L)return vLessons();tab=tab||'learn';
+function vLesson(id,tab){const L=LESSONS.find(x=>x.id==id);if(!L)return vLessons();CURLV=L.lv;if(S.lv!==L.lv){S.lv=L.lv;save()}tab=tab||'learn';
  let body='';
  if(tab==='learn'){if(!C||C.key!=='L'+id)C={key:'L'+id,pool:lessonWords(L),i:0};body=`<p class="lead">Nhìn hình, nghe, rồi nói theo từng từ. Bật "Tự động nghe" để nghe lặp lại như trẻ em nghe mẹ nói.</p><div id="cards">${cardView()}</div>`}
  else if(tab==='video'){body=vVideo(L)}
@@ -709,12 +1077,26 @@ function vLesson(id,tab){const L=LESSONS.find(x=>x.id==id);if(!L)return vLessons
  else if(tab==='new'){const ws=lessonWords(L);body=`<p class="lead">${ws.length} từ mới xuất hiện trong bài hội thoại. Từ có nhãn HSK2, HSK3… hoặc "mở rộng" là từ ngoài danh sách HSK1 nhưng cần cho tình huống này.</p>
   ${ws.map(w=>{const ln=L.lines.find(l=>l[1].includes(w.zh));return wordRow(w,ln?`<div class="ctx zh" data-act="say" data-zh="${esc(ln[1])}">${esc(ln[1]).split(esc(w.zh)).join(`<mark>${esc(w.zh)}</mark>`)}</div>`:'')}).join('')}`}
  else if(tab==='quiz'){body=`<p class="lead">Kiểm tra lại từ vựng và câu trong bài: nghe chọn chữ, chọn nghĩa, chọn đúng thanh điệu và sắp xếp câu.${S.best[L.id]!=null?` Điểm cao nhất của bạn: <b>${S.best[L.id]}%</b>.`:''}</p><button class="btn big" data-act="quizLesson" data-id="${L.id}">Bắt đầu kiểm tra (12 câu)</button>`}
- return`<a class="back" href="#lessons">‹ Danh sách bài</a><div class="lhead"><span class="li">${L.icon}</span><div><small>Bài ${L.id}</small><h2>${esc(L.title)} <span class="zh">${L.zh}</span></h2></div></div>${lessonTabs(L,tab)}${body}`}
+ return`<a class="back" href="#lessons">‹ Danh sách bài</a><div class="lhead"><span class="li">${L.icon}</span><div><small>HSK${L.lv} · Bài ${L.n}</small><h2>${esc(L.title)} <span class="zh">${L.zh}</span></h2></div></div>${lessonTabs(L,tab)}${body}`}
 function playAll(L,i=0){if(i===0)playing=true;if(!playing)return;document.querySelectorAll('.bub').forEach(b=>b.classList.remove('cur'));if(i>=L.lines.length){playing=false;return}
  const el=$('#ln'+i);el?.classList.add('cur');el?.scrollIntoView({behavior:'smooth',block:'center'});const sp=L.lines[i][0];speak(L.lines[i][1],{pitch:sp==='A'?1.15:sp==='B'?0.9:0.75,onend:()=>{if(playing)autoT=setTimeout(()=>playAll(L,i+1),700)}})}
 
 // Video YouTube nhúng theo bài (đã kiểm tra cho phép nhúng). [id, mô tả, kênh, thời lượng]
 const YTV={
+15:[['PJeTTsUIJ-I','HSK2 giáo trình chuẩn: 生日快乐','Daily Zhongwen 每日中文','6:09'],['tzzTibSA-F0','Luyện nói phản xạ: chúc mừng sinh nhật','Chạm HSK','7:01']],
+16:[['Vx0ezX3DpM4','HSK2 bài 4: 你们喜欢什么运动','MandarinAi Learn Chinese','8:09'],['wcEOSoMDy7w','Nói về thể thao (HSK 2-3)','Chinese Podcast For Learning','13:49']],
+17:[['q20bGH4oj_E','Hội thoại nhận phòng khách sạn','Learn Chinese Online','10:06'],['e8axxyWFSGQ','办理入住 làm thủ tục nhận phòng','All About Chinese','4:04']],
+18:[['hSNQ14k19y0','HSK2: 旅行计划 kế hoạch du lịch','MandarinBite','6:28'],['SQaWHRJbF8Q','Chuyến du lịch đầu tiên (HSK2, có tiếng Việt)','A Xin Học Tiếng Trung','3:41']],
+19:[['b5vjimWfJw8','Mua quần áo bằng tiếng Trung (HSK 1-2)','Chinese everyday','8:31'],['z8fYuFH9Y7k','15 hội thoại mua quần áo (HSK 1-2)','Learn Chinese with Pipo','34:26']],
+20:[['5yfuRvd4Scg','你每天几点起床？ buổi sáng (HSK 1-2)','Slow Chinese Podcast','6:11'],['87llD5qqUl0','Người Trung Quốc ăn sáng gì?','Chinese with LuLu','5:17']],
+21:[['keEpYPSLK-k','Truyện HSK2: 生病 bị ốm','Mandarin Click','3:55'],['0xOuYnnQlaU','Luyện nghe HSK2: đi khám bệnh (có tiếng Việt)','Trà Chiều Hán Ngữ','7:26']],
+22:[['asvxZ_4gA8s','问路与指路 hỏi và chỉ đường','Mingfay Chinese','11:59'],['gzOp4cMMg00','Bến xe buýt và lịch chạy (HSK 1-2)','Say Mandarin','16:02']],
+23:[['ysSWaCguaQY','Truyện HSK2: 新工作 công việc mới','Mandarin Click','3:18'],['kvG7QF89Ddo','工作面试 phỏng vấn xin việc (HSK 2-3)','Easy Chinese Club','11:04']],
+24:[['cXvRvV9ftwo','Truyện HSK2: 我的大学生活','Chinative','4:49'],['SiE6nz7FQt8','Bài luyện nghe kiểu đề thi HSK2','Mandarin Click','10:50']],
+25:[['5u-Tx8m2-rc','HSK2: 天气 thời tiết','MandarinBite','6:52'],['5aaq6Sz4bq4','Truyện chậm: 天气怎么样 (HSK 2-3)','Alison Mandarin','6:15']],
+26:[['41RQ-2_c2RA','我的爱好 sở thích của tôi (HSK 1-2)','Daily Mandarin Practice','2:48'],['77CsV8OIdXA','Luyện đọc HSK2: 跳舞 (có tiếng Việt)','Hồng Đậu Chinese','5:18']],
+28:[['vWFwmHX6AhE','Ở trường: hội thoại hằng ngày (HSK 1-2)','Chinese Conversation with A Xian','14:01'],['2Cz_OJndh9U','Hội thoại ngày đầu đi học (HSK 1-2)','Otis Chinese','3:22']],
+27:[['szCa0Gmqvp8','Mua rau, trái cây, cá, thịt (HSK 1-2)','Learn Chinese with Xiaobu','13:59'],['kzZwpuHPsp4','菜市场买菜 đi chợ ở Trung Quốc','Tokiwa Chinese','17:21']],
 1:[['jIYwH8FEiaw','HSK1 bài 1: 你好 (giáo trình chuẩn)','Open Chinese','7:25'],['8o_97Terh6Y','Chào hỏi cơ bản: 你好 và 你好吗','Chinese Center','6:25']],
 2:[['i8VMYb9iZ1I','HSK1 bài 3: 你叫什么名字','Mr Sun Mandarin','11:16'],['zfif9B0SCcc','Tự giới thiệu ngắn gọn bằng tiếng Trung','VivaLing','0:58']],
 3:[['nAyMwFIaSOQ','你家有几口人？ hội thoại ngắn','汉语教程','1:06'],['KL6D4ZtiJpw','Nói về gia đình (HSK 1-2)','HSK - Daily Talk','14:21']],
@@ -733,7 +1115,7 @@ const YTV={
 const ytCard=([id,t,c,len])=>`<div class="yt"><button class="ytp" data-act="ytplay" data-id="${id}" aria-label="Phát video ${esc(t)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="ytb">▶</span><span class="ytl">${len}</span></button><div class="ytm"><b>${esc(t)}</b><small>Nguồn: kênh ${esc(c)} trên YouTube · <a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">mở trên YouTube ↗</a></small></div></div>`;
 
 // --- Video hoạt cảnh hội thoại ---
-const SCENES={1:{bg:['#bfe3ff','#e9f7d9'],p:['🏫','🌳','☀️','🚲']},2:{bg:['#ffe3cf','#fff6e8'],p:['☕','🌸','🪴','🖼️']},3:{bg:['#e6dcff','#f7f2ff'],p:['🖼️','🛋️','🪴','☕']},4:{bg:['#ffe9b8','#fff8e1'],p:['🍎','🍵','🧺','🍌']},
+const SCENES={28:{bg:['#fff0c2','#fffaea'],p:['🏫','🚲','🚪','✏️']},15:{bg:['#ffe0ec','#fff5f9'],p:['🎂','🎁','🎈','🎉']},16:{bg:['#d4f1dc','#f1fbf3'],p:['🏃','⚽','🏀','🌳']},17:{bg:['#e9e1d4','#faf6ef'],p:['🏨','🛎️','🛏️','🧳']},18:{bg:['#cfe8ff','#f1f8ff'],p:['✈️','🏯','🧳','☁️']},19:{bg:['#ffe4d6','#fff6f0'],p:['👕','👗','🏷️','🛍️']},20:{bg:['#fff1c9','#fffbec'],p:['🍳','🥛','🍉','☕']},21:{bg:['#d9f3ef','#f2fcfa'],p:['🤒','💊','📱','🛌']},22:{bg:['#d7e8d0','#f3f9ef'],p:['🚌','🚏','🏪','🚦']},23:{bg:['#dde6ef','#f6f9fc'],p:['🏢','💻','📱','📋']},24:{bg:['#fff0c2','#fffaea'],p:['📝','✏️','📚','🏫']},25:{bg:['#dcecff','#f5faff'],p:['❄️','☃️','📞','🏠']},26:{bg:['#f1e0ff','#fbf5ff'],p:['🎤','💃','🎶','📰']},27:{bg:['#d6f0ff','#f3fbff'],p:['🐟','🍖','⚖️','⛴️']},1:{bg:['#bfe3ff','#e9f7d9'],p:['🏫','🌳','☀️','🚲']},2:{bg:['#ffe3cf','#fff6e8'],p:['☕','🌸','🪴','🖼️']},3:{bg:['#e6dcff','#f7f2ff'],p:['🖼️','🛋️','🪴','☕']},4:{bg:['#ffe9b8','#fff8e1'],p:['🍎','🍵','🧺','🍌']},
  5:{bg:['#cdeefd','#f2fbff'],p:['🕘','📅','🌳','☁️']},6:{bg:['#ffd6c9','#fff1ea'],p:['🍜','🍚','🍵','🏮']},7:{bg:['#b9dcff','#e8f4ff'],p:['🌤️','🌧️','🎬','🌳']},8:{bg:['#d7e8d0','#f3f9ef'],p:['🚉','🏥','🚕','🚦']},
  9:{bg:['#dde6ef','#f6f9fc'],p:['🏢','💻','📊','☕']},10:{bg:['#ffe0ec','#fff4f8'],p:['📞','🏠','📱','🕒']},11:{bg:['#d9f3ef','#f2fcfa'],p:['🏥','🩺','💊','💧']},12:{bg:['#fff0c2','#fffaea'],p:['📚','✏️','🀄','🏫']},
  13:{bg:['#e3f4d3','#f6fcef'],p:['🏠','🐶','🪑','🐱']},14:{bg:['#cfe0ff','#f0f5ff'],p:['🏙️','✈️','🛍️','📺']}};
@@ -751,7 +1133,7 @@ function vVideo(L){if(!V||V.id!==L.id)V={id:L.id,i:0,playing:false,started:false
  return`<p class="lead">🎬 Xem hoạt cảnh: nhân vật nói từng câu, phụ đề hiện bên dưới. Bật "Dừng để nói theo" để tập nói lại từng câu giống trẻ em bắt chước người lớn.</p>
  <div class="vplayer" id="vplayer"><div class="vstage" style="--b1:${sc.bg[0]};--b2:${sc.bg[1]}">
   <div class="vprops">${sc.p.map((e,i)=>`<span style="left:${[6,30,62,84][i]}%;top:${[10,4,8,14][i]}%">${e}</span>`).join('')}</div>
-  <div class="vtitle">Bài ${L.id} · ${esc(L.title)} <span class="zh">${L.zh}</span></div>
+  <div class="vtitle">Bài ${L.n} · ${esc(L.title)} <span class="zh">${L.zh}</span></div>
   <div class="vchars">${sp.map((s,k)=>`<div class="vch ${s==='A'?'me':''}" data-s="${s}"><div class="vbub zh" id="vb_${s}"></div>${avatar(L.who[s],s==='A'?0:s==='B'?1:2)}<div class="vname">${ROLE_EM[L.who[s]]||''} ${esc(L.who[s])}</div></div>`).join('')}</div>
   <div class="vfloor"></div>
   <div class="vsub" id="vsub">${V.started?'':`<div class="mean">${esc(L.scene)}</div>`}</div>
@@ -775,7 +1157,7 @@ function vPlayLine(){const L=curL(),l=L.lines[V.i];vShow(V.i);const ch=document.
   if(S.vRepeat){V.playing=false;vBtn();$('#vturn').innerHTML=`<div class="speak"><p><b>🗣️ Đến lượt bạn:</b> nói lại câu này</p><p class="zh vz2">${esc(l[1])}</p>${btnMic(l[1])}<div class="pbar center">${btnSay(l[1],'🔊 Nghe lại','txt')}<button class="btn" data-act="vnext">Câu tiếp ▶</button></div></div>`;return}
   autoT=setTimeout(()=>{if(!V.playing)return;if(V.i+1<L.lines.length){V.i++;vPlayLine()}else vEnd()},900)}})}
 function vEnd(){V.playing=false;vBtn();document.querySelectorAll('.vdot').forEach(d=>d.classList.add('past'));
- $('#vturn').innerHTML=`<div class="card center"><p><b>🎉 Xem xong bài ${V.id}!</b> Xem lại thêm một lần, rồi luyện tiếp.</p><div class="pbar center"><button class="btn ghost" data-act="vgo" data-i="0">🔁 Xem lại</button><a class="btn ghost" href="#lesson/${V.id}/dialog">Luyện từng câu</a><a class="btn" href="#lesson/${V.id}/quiz">Làm kiểm tra</a></div></div>`}
+ $('#vturn').innerHTML=`<div class="card center"><p><b>🎉 Xem xong bài ${curL().n}!</b> Xem lại thêm một lần, rồi luyện tiếp.</p><div class="pbar center"><button class="btn ghost" data-act="vgo" data-i="0">🔁 Xem lại</button><a class="btn ghost" href="#lesson/${V.id}/dialog">Luyện từng câu</a><a class="btn" href="#lesson/${V.id}/quiz">Làm kiểm tra</a></div></div>`}
 function vStop(){if(V)V.playing=false;document.querySelectorAll('.vch.talk').forEach(c=>c.classList.remove('talk'));vBtn()}
 const ACT_V={};Object.assign(ACT_V,{
  vplay:()=>{if(V.playing){stopAll()}else{stopAll();vPlayLine()}},
@@ -787,17 +1169,18 @@ const ACT_V={};Object.assign(ACT_V,{
 });
 
 // --- Từ vựng ---
-let WF={lv:1,topic:'',q:''};
+let WF={lv:S.lv,topic:'',q:''};
 const strip=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').toLowerCase();
-function wordList(){const q=strip(WF.q.trim().replace(/\s+/g,''));return BANK.filter(w=>(!WF.topic||w.topic===WF.topic)&&(!q||w.zh.includes(WF.q.trim())||strip(w.py.replace(/\s/g,'')).includes(q)||strip(w.mean).replace(/\s/g,'').includes(q)))}
-function vWords(){const L=LEVELS.find(l=>l.lv===WF.lv);return`<h2>Từ vựng HSK</h2><div class="chips">${LEVELS.map(l=>`<button class="chip ${WF.lv===l.lv?'on':''}" data-act="wlv" data-lv="${l.lv}">HSK${l.lv}</button>`).join('')}</div>
- ${L.ready?`<input class="search" id="wq" type="search" placeholder="Tìm chữ Hán, pinyin hoặc nghĩa tiếng Việt" value="${esc(WF.q)}"><div class="chips">${['',...TOPICS].map(t=>`<button class="chip sm ${WF.topic===t?'on':''}" data-act="wtopic" data-t="${esc(t)}">${t||'Tất cả'}</button>`).join('')}</div>
- <div id="wl">${wlView()}</div>`:`<div class="card"><p><b>HSK${L.lv}: ${L.words} từ mới (tổng ${L.total} từ).</b> ${L.desc}.</p><p>Phần này đang được soạn và sẽ có cùng dạng: thẻ từ có hình, pinyin, phiên âm Việt, hội thoại theo chủ đề và bài kiểm tra.</p></div>`}`}
+function wordList(){const q=strip(WF.q.trim().replace(/\s+/g,''));return BANK.filter(w=>w.lv===WF.lv&&(!WF.topic||w.topic===WF.topic)&&(!q||w.zh.includes(WF.q.trim())||strip(w.py.replace(/\s/g,'')).includes(q)||strip(w.mean).replace(/\s/g,'').includes(q)))}
+function vWords(){CURLV=WF.lv;const L=LEVELS.find(l=>l.lv===WF.lv);return`<h2>Từ vựng HSK</h2><div class="chips">${LEVELS.map(l=>`<button class="chip ${WF.lv===l.lv?'on':''}" data-act="wlv" data-lv="${l.lv}">HSK${l.lv}</button>`).join('')}</div>
+ ${L.ready?`<input class="search" id="wq" type="search" placeholder="Tìm chữ Hán, pinyin hoặc nghĩa tiếng Việt" value="${esc(WF.q)}"><div class="chips">${['',...(TOPICS[WF.lv]||[])].map(t=>`<button class="chip sm ${WF.topic===t?'on':''}" data-act="wtopic" data-t="${esc(t)}">${t||'Tất cả'}</button>`).join('')}</div>
+ <div id="wl">${wlView()}</div><p class="small">Danh sách từ theo chuẩn HSK 2.0, đối chiếu với bộ dữ liệu mở complete-hsk-vocabulary (giấy phép MIT). Nghĩa tiếng Việt do app biên soạn.</p>`:`<div class="card"><p><b>HSK${L.lv}: ${L.words} từ mới (tổng ${L.total} từ).</b> ${L.desc}.</p><p>Phần này đang được soạn và sẽ có cùng dạng: thẻ từ có hình, pinyin, phiên âm Việt, hội thoại theo chủ đề và bài kiểm tra.</p></div>`}`}
 function wlView(){const ws=wordList();return`<div class="pbar"><span class="small">${ws.length} từ</span>${ws.length?`<button class="btn" data-act="wcards">🃏 Học bằng thẻ</button><button class="btn ghost" data-act="wquiz">📝 Kiểm tra</button>`:''}</div>${ws.map(w=>wordRow(w)).join('')||'<p class="small">Không tìm thấy từ nào.</p>'}`}
 
 // --- Ôn tập ---
-function vReview(){const wr=Object.entries(S.wrong).sort((a,b)=>b[1]-a[1]).map(([z])=>DICT[z]).filter(Boolean);
- return`<h2>Ôn tập & kiểm tra</h2><div class="grid2"><button class="tile" data-act="quizAll"><span>📝</span><b>Kiểm tra tổng hợp HSK1</b><small>20 câu ngẫu nhiên từ toàn bộ từ vựng và hội thoại</small></button>
+function vReview(){CURLV=S.lv;const wr=Object.entries(S.wrong).sort((a,b)=>b[1]-a[1]).map(([z])=>DICT[z]).filter(Boolean);
+ if(!LEVELS.find(l=>l.lv===S.lv).ready)return`<h2>Ôn tập & kiểm tra</h2>${lvChips('slvr',S.lv)}<div class="card"><p>HSK${S.lv} đang được soạn, chưa có bài kiểm tra.</p></div>`;
+ return`<h2>Ôn tập & kiểm tra</h2>${lvChips('slvr',S.lv)}<div class="grid2"><button class="tile" data-act="quizAll"><span>📝</span><b>Kiểm tra tổng hợp HSK${S.lv}</b><small>20 câu ngẫu nhiên từ toàn bộ từ vựng và hội thoại</small></button>
  <button class="tile" data-act="quizWrong" ${wr.length?'':'disabled'}><span>🔁</span><b>Ôn từ hay sai</b><small>${wr.length?wr.length+' từ đang chờ ôn':'Chưa có từ nào. Làm bài kiểm tra trước nhé.'}</small></button>
  <button class="tile" data-act="quizListen"><span>👂</span><b>Luyện nghe</b><small>Chỉ nghe, không nhìn chữ, chọn đáp án đúng</small></button>
  <button class="tile" data-act="quizOrder"><span>🧩</span><b>Sắp xếp câu</b><small>Ghép từ thành câu hội thoại đúng</small></button></div>
@@ -806,7 +1189,7 @@ function vReview(){const wr=Object.entries(S.wrong).sort((a,b)=>b[1]-a[1]).map((
 
 // --- Bài kiểm tra ---
 let Q=null;
-const allLines=()=>LESSONS.flatMap(L=>L.lines);
+const allLines=()=>lvLessons(S.lv).flatMap(L=>L.lines);const lvBank=()=>BANK.filter(w=>w.lv===S.lv);
 function segment(zh){const t=zh.replace(/[^㐀-鿿]/g,'');const out=[];let i=0;while(i<t.length){let k=Math.min(4,t.length-i);for(;k>1;k--)if(DICT[t.substr(i,k)])break;out.push(t.substr(i,k));i+=k}return out}
 const TV={a:'āáǎà',e:'ēéěè',i:'īíǐì',o:'ōóǒò',u:'ūúǔù','ü':'ǖǘǚǜ'};
 function pyMark(base,t){if(t===5)return base;let i=base.search(/[ae]/);if(i<0)i=base.indexOf('ou');if(i<0)for(let k=base.length-1;k>=0;k--)if('iouü'.includes(base[k])){i=k;break}return i<0?base:base.slice(0,i)+TV[base[i]][t-1]+base.slice(i+1)}
@@ -849,7 +1232,7 @@ function render(){const [r,a,b]=location.hash.slice(1).split('/');const route=r|
  switch(route){case'pinyin':h=vPinyin();break;case'lessons':h=vLessons();break;case'lesson':h=vLesson(a,b);break;case'words':h=vWords();break;case'review':h=vReview();break;case'quiz':h=vQuiz();break;case'cards':h=C?`<button class="back" data-act="back">‹ Quay lại</button><h2>${esc(C.title||'Thẻ từ')}</h2><div id="cards">${cardView()}</div>`:vWords();break;default:h=vHome()}
  $('#view').innerHTML=h;applyPrefs();const tab=route==='lesson'?'lessons':route==='quiz'?'review':route==='cards'?'words':route;
  document.querySelectorAll('.tabbar a').forEach(x=>x.classList.toggle('on',x.dataset.t===tab));
- if(route==='quiz'&&Q&&Q.i<Q.qs.length&&Q.ans==null&&Q.qs[Q.i].type==='listen'&&!Q.spoke){Q.spoke=1;setTimeout(()=>speak(Q.qs[Q.i].w.zh),250)}}
+ if(route==='quiz'&&Q&&Q.i<Q.qs.length&&Q.ans==null&&Q.qs[Q.i].type==='listen'&&!Q.spoke){Q.spoke=1;const z=Q.qs[Q.i].w.zh;setTimeout(()=>speak(z),250)}}
 let lastHash='';
 window.addEventListener('hashchange',()=>{const h=location.hash;if(h.split('/')[0]!==lastHash.split('/')[0]||h.split('/')[2]!==lastHash.split('/')[2]){stopAll()}lastHash=h;render();scrollTo(0,0)});
 
@@ -869,14 +1252,16 @@ const ACT={
  tgPlay:()=>speak(toneGame.cur.zh),
  tgAns:b=>{const t=+b.dataset.t;toneGame.ans=t;if(t===toneGame.cur.t)toneGame.score++;$('#tg').innerHTML=tgView()},
  tgNext:()=>{toneGame.i++;if(toneGame.i<10)tgNew();$('#tg').innerHTML=tgView()},
- wlv:b=>{WF.lv=+b.dataset.lv;render()},
+ wlv:b=>{WF.lv=+b.dataset.lv;WF.topic='';render()},
+ slv:b=>{S.lv=+b.dataset.lv;WF.lv=S.lv;WF.topic='';save();if(b.dataset.to&&location.hash!==b.dataset.to)location.hash=b.dataset.to;else render()},
+ slvr:b=>{S.lv=+b.dataset.lv;WF.lv=S.lv;WF.topic='';save();render()},
  wtopic:b=>{WF.topic=b.dataset.t;render()},
- wcards:()=>{C={key:'W',pool:wordList(),i:0,title:WF.topic||'Từ vựng HSK1'};location.hash='#cards'},
+ wcards:()=>{C={key:'W',pool:wordList(),i:0,title:WF.topic||'Từ vựng HSK'+WF.lv};location.hash='#cards'},
  wquiz:()=>{const ws=wordList();startQuiz(ws,{n:Math.min(15,Math.max(4,ws.length)),orders:0,ctx:{}})},
  quizLesson:b=>{const L=LESSONS.find(x=>x.id==b.dataset.id);startQuiz(lessonWords(L),{lines:L.lines,n:12,orders:3,ctx:{lesson:L.id}})},
- quizAll:()=>startQuiz(BANK,{lines:allLines(),n:20,orders:4,ctx:{}}),
+ quizAll:()=>startQuiz(lvBank(),{lines:allLines(),n:20,orders:4,ctx:{}}),
  quizWrong:()=>{const ws=Object.keys(S.wrong).map(z=>DICT[z]).filter(Boolean);startQuiz(ws,{n:Math.min(15,ws.length),orders:0,ctx:{review:1}})},
- quizListen:()=>startQuiz(BANK,{n:15,types:['listen'],orders:0,ctx:{}}),
+ quizListen:()=>startQuiz(lvBank(),{n:15,types:['listen'],orders:0,ctx:{}}),
  quizOrder:()=>startQuiz([],{lines:allLines(),n:8,orders:8,ctx:{}}),
  answer:b=>answer(b.dataset.v),
  pickTok:b=>{Q.qs[Q.i].built.push(+b.dataset.i);render()},
